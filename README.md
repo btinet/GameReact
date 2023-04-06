@@ -31,6 +31,7 @@ den Förderverein des Treptow-Kollegs.*
 
 ### To do
 
+- 🚧 Organisation nach Klassen, zur besseren Lesbarkeit und Wartung des Programmcodes
 - 🚧 Responsive Content Layout (RCL)
 - 🚧 Videointegration
 - 🚧 Audioplayer
