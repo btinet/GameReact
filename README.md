@@ -52,8 +52,8 @@ den Förderverein des Treptow-Kollegs.*
 
 - Windows-, Mac- oder Linux-basiertes Betriebssystem
 - ReacTIVision Engine Software ([https://reactivision.sourceforge.net/](https://reactivision.sourceforge.net/))
-- JAVA FX 19 ([https://www.oracle.com/java/technologies/](https://www.oracle.com/java/technologies/))
-- kompatible USB-Kamera (low latency sowie hohe Bildrate empfohlen)
+- Liberica Full JDK 11.0.18+10 ([https://bell-sw.com/pages/downloads/](https://bell-sw.com/pages/downloads/))
+- kompatible USB-Kamera (Arducam OV2710 empfohlen)
 
 ## iVision Hardware
 
