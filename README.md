@@ -77,8 +77,3 @@ verwenden. Falls du eine Kamera verwenden möchtest, lade dir zusätzlich die
 ReacTIVision Engine herunter. Die Marker findest du entweder als PNG-
 oder SVG-Dateien unter ```/docs/fiducials/```. Diese kannst du dir
 einfach ausdrucken.
-
-Die Marker sehen so aus:
-
-![Marker 0.png](./docs/fiducials/1x/Marker%200.png)
-
