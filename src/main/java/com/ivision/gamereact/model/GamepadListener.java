@@ -1,7 +1,11 @@
-package ivisionfx.interaction.gamepad;
+package com.ivision.gamereact.model;
 
-import TUIO.*;
-import ivisionfx.controller.MainController;
+import com.ivision.gamereact.controller.AppController;
+import com.tuio.TuioBlob;
+import com.tuio.TuioCursor;
+import com.tuio.TuioListener;
+import com.tuio.TuioObject;
+import com.tuio.TuioTime;
 
 import java.util.ArrayList;
 
@@ -13,7 +17,7 @@ public class GamepadListener implements TuioListener {
     ArrayList<TuioCursor> fingers = new ArrayList<TuioCursor>();
     ArrayList<TuioBlob> blobs = new ArrayList<TuioBlob>();
 
-    protected MainController controller;
+    protected AppController controller;
 
     public GamepadListener () {
     }
@@ -54,7 +58,7 @@ public class GamepadListener implements TuioListener {
 
     }
 
-    public void setController (MainController controller) {
+    public void setController (AppController controller) {
         this.controller = controller;
     }
 

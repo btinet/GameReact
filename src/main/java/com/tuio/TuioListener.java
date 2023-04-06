@@ -16,7 +16,7 @@
  License along with this library.
 */
 
-package TUIO;
+package com.tuio;
 
 /**
  * The TuioListener interface provides a simple callback infrastructure which is used by the {@link TuioClient} class 

@@ -16,7 +16,7 @@
  License along with this library.
 */
 
-package TUIO;
+package com.tuio;
 import java.io.Serializable;
 
 /**

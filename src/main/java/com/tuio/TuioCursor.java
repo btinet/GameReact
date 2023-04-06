@@ -16,7 +16,7 @@
  License along with this library.
 */
 
-package TUIO;
+package com.tuio;
 
 /**
  * The TuioCursor class encapsulates /tuio/2Dcur TUIO cursors.

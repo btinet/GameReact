@@ -16,7 +16,7 @@
  License along with this library.
  */
 
-package TUIO;
+package com.tuio;
 
 /**
  * The TuioObject class encapsulates /tuio/2Dobj TUIO objects.

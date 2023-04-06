@@ -1,6 +1,4 @@
-package com.ivision.gamereact.model;
-
-
+package com.ivision.engine;
 
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.DoubleProperty;

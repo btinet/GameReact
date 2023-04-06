@@ -1,6 +1,7 @@
-package ivisionfx.interaction.gamepad;
+package com.ivision.gamereact.model;
 
-import TUIO.TuioClient;
+
+import com.tuio.TuioClient;
 
 public class GamepadClient  extends TuioClient {
 

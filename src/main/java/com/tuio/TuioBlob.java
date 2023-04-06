@@ -16,7 +16,7 @@
  License along with this library.
 */
 
-package TUIO;
+package com.tuio;
 
 /**
  * The TuioBlob class encapsulates /tuio/2Dblb TUIO blobs.

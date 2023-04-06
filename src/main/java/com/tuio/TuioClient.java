@@ -16,7 +16,7 @@
  License along with this library.
 */
 
-package TUIO;
+package com.tuio;
 
 import com.illposed.osc.*;
 import java.util.*;
