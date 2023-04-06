@@ -19,6 +19,8 @@ import javafx.scene.Group;
 import javafx.scene.ParallelCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
@@ -31,6 +33,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -96,6 +101,8 @@ public class AppController implements Initializable {
     Line northBorder = new Line();
     Line southBorder = new Line();
 
+    Group helpImageGroup = new Group();
+
     private Circle ball = new Circle(10);
 
     private double ballSpeed = 10;
@@ -160,6 +167,35 @@ public class AppController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        URL f1Image = getClass().getResource("/png/1x/f1.png");
+        URL f5Image = getClass().getResource("/png/1x/f5.png");
+        URL f11Image = getClass().getResource("/png/1x/f11.png");
+
+        try {
+            assert f1Image != null;
+            Image f1HelpImage = new Image(f1Image.openStream());
+            ImageView f1ImageView = new ImageView();
+            f1ImageView.setImage(f1HelpImage);
+            f1ImageView.setTranslateX(-200);
+
+            assert f5Image != null;
+            Image f5HelpImage = new Image(f5Image.openStream());
+            ImageView f5ImageView = new ImageView();
+            f5ImageView.setImage(f5HelpImage);
+
+            assert f11Image != null;
+            Image f11HelpImage = new Image(f11Image.openStream());
+            ImageView f11ImageView = new ImageView();
+            f11ImageView.setImage(f11HelpImage);
+            f11ImageView.setTranslateX(200);
+
+            helpImageGroup.getChildren().addAll(f1ImageView,f11ImageView,f5ImageView);
+            helpImageGroup.setTranslateY(395);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         FillTransition strafeLeftTransition = new FillTransition(Duration.millis(100),strafeLeft);
         FillTransition strafeRightTransition = new FillTransition(Duration.millis(100),strafeRight);
@@ -731,6 +767,7 @@ public class AppController implements Initializable {
 
     public void togglePause() {
         if(gameLoop.isPaused()) {
+            root.getChildren().remove(helpImageGroup);
             root.getScene().setCamera(camera);
             root.getChildren().remove(leftPauseText);
             root.getChildren().remove(rightPauseText);
@@ -748,6 +785,7 @@ public class AppController implements Initializable {
             });
             musicPlayer.play();
         } else {
+            if(!root.getChildren().contains(helpImageGroup)) root.getChildren().add(helpImageGroup);
             gameLoop.pause();
             if(playOneLife > 0 || playTwoLife > 0) {
                 if(isGameOver) {
