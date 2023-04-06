@@ -28,3 +28,12 @@ Bildschirmrändern mehr Platz zum Ablegen der Marker bieten:
 
 ![img_1.png](img_1.png)
 
+Über einen TUIO-Simulator können wir die Spielfiguren testweise auch
+ohne vorhandene Kamera steuern. Wird kein entsprechendes Marker-Singal
+gesendet, bewegen sich die Paddles selbständig.
+
+![img_2.png](img_2.png)
+
+Über Fingerberührung auf dem Spielfeld kann zwischen Pause- und Spielmodus
+gewechselt werden. Alternativ geschieht das aber auch über die ``F1``-Taste.
+
