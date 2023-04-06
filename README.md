@@ -66,4 +66,16 @@ wird allerdings mit der dedizierten **iVision**-Hardware erzielt.
 
 ## Getting started
 
+Lade das aktuellste Release herunter, um direkt zu starten. Achte darauf,
+dass die oben erwähnte Java-Version installiert ist. Die Anwendung
+nutzt das JavaFX-Modul, das seit Version 12 nicht mehr in den JDKs
+enthalten ist. Die Full-JDK von Bellsoft enthält alles, was du zum
+Starten von **GameReact** benötigst.
+
+Um die Eingabe über Marker zu simulieren, kannst du den TUIO-Simulator
+verwenden. Falls du eine Kamera benötigst, lade dir zusätzlich die
+ReacTIVision Engine herunter. Die Marker findest du entweder als PNG-
+oder SVG-Dateien unter ```/docs/fiducials/```. Diese kannst du dir
+einfach ausdrucken.
+
 
