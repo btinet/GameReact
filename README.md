@@ -54,6 +54,7 @@ den Förderverein des Treptow-Kollegs.*
 - ReacTIVision Engine Software ([https://reactivision.sourceforge.net/](https://reactivision.sourceforge.net/))
 - Liberica Full JDK 11.0.18+10 ([https://bell-sw.com/pages/downloads/](https://bell-sw.com/pages/downloads/))
 - kompatible USB-Kamera (Arducam OV2710 empfohlen)
+- Für Testzwecke wird ein [TUIO-Simulator](http://prdownloads.sourceforge.net/reactivision/TUIO_Simulator-1.4.zip?download) empfohlen
 
 ## iVision Hardware
 
