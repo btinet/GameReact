@@ -13,8 +13,8 @@ gefördert, dass Menschen im Zweiten Bildungsweg zum Abitur begleitet.
 *Besonderer Dank geht an die Schulleitung, die Fachbereiche Physik und Informatik sowie
 den Förderverein des Treptow-Kollegs.*
 
-![GitHub All Releases](https://img.shields.io/github/downloads/btinet/iVisionFX/total?style=rounded)
-![GitHub](https://img.shields.io/github/license/btinet/iVisionFX)
+![GitHub All Releases](https://img.shields.io/github/downloads/btinet/GameReact/total?style=rounded)
+![GitHub](https://img.shields.io/github/license/btinet/GameReact)
 
 1. [Projektstatus](#projektstatus)
    1. [To do](#to-do)
