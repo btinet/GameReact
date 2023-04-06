@@ -1,6 +1,6 @@
 # Beispielanwendungen
 
-1. [Pong](#pong-react)
+1. [Pong React](#pong-react)
 
 ## Pong React
 
@@ -17,3 +17,14 @@ Die Skizze zeigt, wie der Rotationswinkel in Richtung und Geschwindigkeit übers
 Das Spielfeld sieht im ersten Entwurf folgendermaßen aus:
 
 ![draft_pong_react_hui_230327-01.png](./assets/images/sketch/draft_pong_react_hui_230327-01.png)
+
+Da ein Beamer oder ein Monitor normalerweise im Querformat arbeitet, wurde das Layout um 90° gedreht.
+Einige optische Änderungen wurden ebenfalls vorgenommen. So sieht das aktuelle Layout aus:
+
+![img.png](img.png)
+
+Im Vollbildmodus wird die Spielfläche nicht skaliert, wodurch die Kreisausschnitte an den
+Bildschirmrändern mehr Platz zum Ablegen der Marker bieten:
+
+![img_1.png](img_1.png)
+
