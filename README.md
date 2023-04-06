@@ -1,8 +1,9 @@
-# iVision
+# GameReact
 ![tk.png](./docs/assets/images/tk.png) ![reactable.png](./docs/assets/images/reactable.png)
 
-iVision ist eine Software zur intelligenten medialen
-Unterstützung von Vorträgen, Referaten und Präsentationen.
+GameReact ist eine Software zur intelligenten medialen
+Unterstützung von Vorträgen, Referaten und Präsentationen,
+aber auch für innovative Game-Steuerung.
 iVision basiert auf dem Markerkonzept von
 [ReacTIVision](https://reactivision.sourceforge.net/)
 und
