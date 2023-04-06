@@ -73,7 +73,7 @@ enthalten ist. Die Full-JDK von Bellsoft enthält alles, was du zum
 Starten von **GameReact** benötigst.
 
 Um die Eingabe über Marker zu simulieren, kannst du den TUIO-Simulator
-verwenden. Falls du eine Kamera benötigst, lade dir zusätzlich die
+verwenden. Falls du eine Kamera verwenden möchtest, lade dir zusätzlich die
 ReacTIVision Engine herunter. Die Marker findest du entweder als PNG-
 oder SVG-Dateien unter ```/docs/fiducials/```. Diese kannst du dir
 einfach ausdrucken.
