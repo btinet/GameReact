@@ -4,7 +4,7 @@
 GameReact ist eine Software zur intelligenten medialen
 Unterstützung von Vorträgen, Referaten und Präsentationen,
 aber auch für innovative Game-Steuerung.
-iVision basiert auf dem Markerkonzept von
+GameReact basiert auf dem Markerkonzept von
 [ReacTIVision](https://reactivision.sourceforge.net/)
 und
 [TUIO](https://tuio.org).
