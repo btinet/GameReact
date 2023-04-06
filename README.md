@@ -80,6 +80,6 @@ einfach ausdrucken.
 
 Die Marker sehen so aus:
 
-![Marker 0](./docs/fiducials/1x/Marker 0.png)
+![Marker 0](./docs/fiducials/1x/Marker%200.png)
 
 
