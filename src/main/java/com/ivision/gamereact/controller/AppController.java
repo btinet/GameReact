@@ -178,17 +178,20 @@ public class AppController implements Initializable {
             ImageView f1ImageView = new ImageView();
             f1ImageView.setImage(f1HelpImage);
             f1ImageView.setTranslateX(-200);
+            f1ImageView.setScaleX(-1);
 
             assert f5Image != null;
             Image f5HelpImage = new Image(f5Image.openStream());
             ImageView f5ImageView = new ImageView();
             f5ImageView.setImage(f5HelpImage);
+            f5ImageView.setScaleX(-1);
 
             assert f11Image != null;
             Image f11HelpImage = new Image(f11Image.openStream());
             ImageView f11ImageView = new ImageView();
             f11ImageView.setImage(f11HelpImage);
             f11ImageView.setTranslateX(200);
+            f11ImageView.setScaleX(-1);
 
             helpImageGroup.getChildren().addAll(f1ImageView,f11ImageView,f5ImageView);
             helpImageGroup.setTranslateY(395);
@@ -240,38 +243,44 @@ public class AppController implements Initializable {
         leftText.setFont(font2);
         leftText.setRotate(90);
         leftText.setTranslateX(-200);
-        leftText.setTranslateY(5);
+        leftText.setTranslateY(-5);
+        leftText.setScaleX(-1);
 
         rightText.setFont(font2);
         rightText.setRotate(-90);
         rightText.setTranslateX(200);
-        rightText.setTranslateY(-5);
+        rightText.setTranslateY(5);
+        rightText.setScaleX(-1);
 
         leftPauseText.setFont(font);
         leftPauseText.setRotate(90);
         leftPauseText.setTranslateX(-100);
-        leftPauseText.setTranslateY(5);
+        leftPauseText.setTranslateY(-5);
+        leftPauseText.setScaleX(-1);
 
         rightPauseText.setFont(font);
         rightPauseText.setRotate(-90);
         rightPauseText.setTranslateX(100);
-        rightPauseText.setTranslateY(-5);
+        rightPauseText.setTranslateY(5);
+        rightPauseText.setScaleX(-1);
 
         p1PointsText.setText(String.valueOf(pointsPlayerOne));
         p1PointsText.setTranslateX(-485);
-        p1PointsText.setTranslateY(7);
+        p1PointsText.setTranslateY(-7);
         p1PointsText.setTextAlignment(TextAlignment.CENTER);
         p1PointsText.setRotate(90);
         p1PointsText.setFont(font);
         p1PointsText.setFill(new Color(1,1,1,1));
+        p1PointsText.setScaleX(-1);
 
         p2PointsText.setText(String.valueOf(pointsPlayerTwo));
         p2PointsText.setTranslateX(485);
-        p2PointsText.setTranslateY(-7);
+        p2PointsText.setTranslateY(7);
         p2PointsText.setTextAlignment(TextAlignment.CENTER);
         p2PointsText.setRotate(-90);
         p2PointsText.setFont(font);
         p2PointsText.setFill(new Color(1,1,1,1));
+        p2PointsText.setScaleX(-1);
 
         leftPauseText.setFill(new Color(1,1,1,1));
         rightPauseText.setFill(new Color(1,1,1,1));
