@@ -58,6 +58,9 @@ den Förderverein des Treptow-Kollegs.*
 - kompatible USB-Kamera (Arducam OV2710 empfohlen)
 - Für Testzwecke wird ein [TUIO-Simulator](http://prdownloads.sourceforge.net/reactivision/TUIO_Simulator-1.4.zip?download) empfohlen
 
+Die Kamera sollte eine hohe Bildwiederholrate sowie eine geringe Latenz aufweisen. Der Chipsatz OV2710 hat sich als gute Wahl im unteren Preissegment erwiesen:
+[ELP 1080P Optical Zoom Webcam](https://www.amazon.de/gp/product/B019BTCBSE/ref=ppx_yo_dt_b_asin_title_o00?ie=UTF8&psc=1)
+
 ## iVision Hardware
 
 Es ist möglich, diese Software mit einem herkömmlichen Computer mit einem
