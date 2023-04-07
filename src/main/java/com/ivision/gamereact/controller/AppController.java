@@ -440,10 +440,15 @@ public class AppController implements Initializable {
             @Override
             public void handle(long now) {
                 super.handle(now);
+
+                // TODO: Tastatur generell in dieser Methode abfragen. Nicht in tick();
+                // Im Pausenmodus Tastatur abfragen
                 if(isPaused()) {
                         getUserInput();
                 }
 
+                // TODO: Ball-Handling in eigene Klasse übertragen
+                // Ball geht ins Aus:
                 if(!playground.getBoundsInParent().intersects(ball.getBoundsInParent())) {
                     togglePause();
 
@@ -629,12 +634,17 @@ public class AppController implements Initializable {
                             p2hp1.setFill(new Color(0.392,0.567,0.988,.25));
                     }
 
+                    if (ballAngle < 0) {
+                        ballAngle = 1.5;
+                    } else {
+                        ballAngle = -1.5;
+                    }
                     ball.setTranslateY(0);
                 }
 
+                // Fingereingabe verarbeiten:
                 cursors = gamepadListener.getFingers();
                 Iterator<TuioCursor> cursorIterator = cursors.iterator();
-
                 while (cursorIterator.hasNext()) {
                     int i = root.getChildren().size();
                     root.getChildren().remove(i-1);
@@ -648,34 +658,35 @@ public class AppController implements Initializable {
                     setAndPlayColorTransition(fingerCircle);
                     cursorIterator.remove();
                     togglePause();
-
                 }
 
 
             }
 
+            // Spielzeit generieren
             @Override
             public void tick(float secondsSinceLastFrame) {
 
-
-
-                // Spiel-Timer-Loop
+                // TODO: Abfrage nach handle(); übertragen
+                // Tastaturabfrage
                 getUserInput();
 
+                // Intro Audio abspielen, danach nicht mehr!
                 if(intro) {
                     if (!isGameOver) pongReactMedia.play();
                     intro = false;
                     togglePause();
                 }
 
+                // TODO: Ball-Interaktion mit Spielern in eigene Klasse oder Methode übertragen
+                // Zufallsfaktor generieren
                 double random;
-
                 if(Math.random() < .5) {
                     random = -(Math.random()*50+5);
                 } else {
                     random = (Math.random()*50+5);
                 }
-
+                // Ballinteraktion mit Spielern
                 if(playerOne.getBoundsInParent().intersects(ball.getBoundsInParent())) {
                     currentPlayer = playerOne;
                     MediaPlayer mediaPlayer = new MediaPlayer(sound1);
@@ -683,43 +694,22 @@ public class AppController implements Initializable {
 
                     ballAngle = -Math.sin(Math.toRadians(playerOne.getTranslateY()-ball.getTranslateY()+random))*5;
                     ballSpeed = Math.abs(ballSpeed);
-                } else if (playerTwo.getBoundsInParent().intersects(ball.getBoundsInParent())) {
+                }
+                else if (playerTwo.getBoundsInParent().intersects(ball.getBoundsInParent())) {
                     currentPlayer = playerTwo;
                     MediaPlayer mediaPlayer = new MediaPlayer(sound2);
                     mediaPlayer.play();
                     ballAngle = -Math.sin(Math.toRadians(playerTwo.getTranslateY()-ball.getTranslateY()+random))*5;
                     ballSpeed = -Math.abs(ballSpeed);;
                 }
-
-
-
+                // Ballinteraktion mit Seitenbanden
                 if(northBorder.getBoundsInParent().intersects(ball.getBoundsInParent())) {
-
                     TranslateTransition shakeNorth = new TranslateTransition(new Duration(100),camera);
                     shakeNorth.setFromY(5);
                     shakeNorth.setToY(0);
                     shakeNorth.setCycleCount(1);
                     shakeNorth.setAutoReverse(true);
                     shakeNorth.play();
-
-                    MediaPlayer mediaPlayer = new MediaPlayer(sound3);
-                    mediaPlayer.play();
-
-                    if (ballAngle < 0) {
-                        ballAngle = Math.abs(ballAngle);
-                    } else {
-                        ballAngle = -ballAngle;
-                    }
-
-                } else if (southBorder.getBoundsInParent().intersects(ball.getBoundsInParent())) {
-
-                    TranslateTransition shakeSouth = new TranslateTransition(new Duration(100),camera);
-                    shakeSouth.setFromY(-5);
-                    shakeSouth.setToY(0);
-                    shakeSouth.setCycleCount(1);
-                    shakeSouth.setAutoReverse(true);
-                    shakeSouth.play();
-
                     MediaPlayer mediaPlayer = new MediaPlayer(sound3);
                     mediaPlayer.play();
                     if (ballAngle < 0) {
@@ -728,29 +718,51 @@ public class AppController implements Initializable {
                         ballAngle = -ballAngle;
                     }
                 }
-
+                else if (southBorder.getBoundsInParent().intersects(ball.getBoundsInParent())) {
+                    TranslateTransition shakeSouth = new TranslateTransition(new Duration(100),camera);
+                    shakeSouth.setFromY(-5);
+                    shakeSouth.setToY(0);
+                    shakeSouth.setCycleCount(1);
+                    shakeSouth.setAutoReverse(true);
+                    shakeSouth.play();
+                    MediaPlayer mediaPlayer = new MediaPlayer(sound3);
+                    mediaPlayer.play();
+                    if (ballAngle < 0) {
+                        ballAngle = Math.abs(ballAngle);
+                    } else {
+                        ballAngle = -ballAngle;
+                    }
+                }
                 ball.setTranslateY(ball.getTranslateY()+ballAngle);
                 ball.setTranslateX(ball.getTranslateX()+ballSpeed);
 
+                // Position der Spielfiguren aktualisieren
                 updatePlayer();
 
             }
         };
 
-
+        // Hintergrundfarbe der Szene
         root.setStyle("-fx-background-color: #883c77");
+
+        // Spiel starten
         gameLoop.start();
-
-
     }
 
+    /**
+     * Tastaturabfrage
+     * @param currentScene Szene (Fenster), in der die Keyboardabfrage stattfinden soll.
+     */
     public void setPolling(Scene currentScene) {
         KeyPolling.getInstance().pollScene(currentScene);
     }
 
+    /**
+     * Transition setzen und einmalig sofort abspielen.
+     * @param shape Form, der eine FillTransition zugeordnet werden soll.
+     */
     public void setAndPlayColorTransition(Shape shape) {
         FillTransition fingerTransition = new FillTransition(Duration.millis(300),shape);
-
         fingerTransition.setFromValue(new Color(0.992,0.967,0.3,.6));
         fingerTransition.setToValue(new Color(0.992,0.967,0.3,0));
         fingerTransition.setCycleCount(1);
@@ -758,9 +770,13 @@ public class AppController implements Initializable {
         fingerTransition.play();
     }
 
+    /**
+     * Konfiguration der Tastatursteuerung
+     */
     public void getUserInput () {
 
         // Periodische Tastenabfragen
+        // z.B. keys.down(KeyCode)
 
         // einmalige Tastenabfragen (innerhalb Anschlagverzögerung)
         if (keys.isPressed(ButtonConfig.toggleFullscreen))          toggleFullscreen();
@@ -774,6 +790,11 @@ public class AppController implements Initializable {
         }
     }
 
+
+    // TODO: Methoden für GameOver auslagern.
+    /**
+     * Zwischen Pausen- und Spielmodus wechseln.
+     */
     public void togglePause() {
         if(gameLoop.isPaused()) {
             root.getChildren().remove(helpImageGroup);
@@ -834,9 +855,13 @@ public class AppController implements Initializable {
     public void updatePlayer() {
 
 
+        // Aktive Marker ermitteln.
         gamepads = gamepadListener.getGamepads();
+
+        // Fingereingabe ermitteln.
         cursors = gamepadListener.getFingers();
 
+        // CPU-Steuerung für Spieler 1
         if(!playerOneIsPresent) {
             if(!northBorder.getBoundsInParent().intersects(playerOne.getBoundsInParent())) {
                 if (playerOne.getTranslateY()-ball.getTranslateY() > 100) {
@@ -876,6 +901,7 @@ public class AppController implements Initializable {
             }
         }
 
+        // CPU-Steuerung für Spieler 2
         if(!playerTwoIsPresent) {
             if(!northBorder.getBoundsInParent().intersects(playerTwo.getBoundsInParent())) {
                 if (playerTwo.getTranslateY() - ball.getTranslateY() > 100) {
@@ -912,9 +938,8 @@ public class AppController implements Initializable {
             }
         }
 
+        // Manuelle Steuerung für jeden aktiven Spieler
         for (TuioObject gamepad : gamepads) {
-
-
             switch (gamepad.getSymbolID()) {
                 case 1:
                     double figure = playerOne.getTranslateY();
@@ -946,8 +971,8 @@ public class AppController implements Initializable {
             }
         }
 
+        // Steuerung für jede Fingereingabe
         Iterator<TuioCursor> cursorIterator = cursors.iterator();
-
         while (cursorIterator.hasNext()) {
             int i = root.getChildren().size();
             root.getChildren().remove(i-1);
@@ -965,11 +990,19 @@ public class AppController implements Initializable {
 
     }
 
+    /**
+     *
+     * @param angleDegrees Winkel in Grad
+     * @return Sinus eines Winkels
+     */
     private double getSpeed(float angleDegrees) {
         double x = Math.sin(Math.toRadians(angleDegrees-90));
         return x*20;
     }
 
+    /**
+     * Zwischen Fenster- und Vollbildmodus wechseln.
+     */
     @FXML
     protected void toggleFullscreen() {
 
