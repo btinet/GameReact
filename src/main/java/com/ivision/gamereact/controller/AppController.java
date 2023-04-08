@@ -4,6 +4,7 @@ import com.ivision.engine.ButtonConfig;
 import com.ivision.engine.GameLoopTimer;
 import com.ivision.engine.KeyPolling;
 import com.ivision.gamereact.ReactApplication;
+import com.ivision.gamereact.entity.Paddle;
 import com.ivision.gamereact.model.GamepadListener;
 import com.tuio.TuioClient;
 import com.tuio.TuioCursor;
@@ -14,10 +15,7 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Camera;
-import javafx.scene.Group;
-import javafx.scene.ParallelCamera;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -78,8 +76,8 @@ public class AppController implements Initializable {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
 
-    Line playerOne = new Line();
-    Line playerTwo = new Line();
+    Line playerOne = new Paddle(5);
+    Line playerTwo = new Paddle(5);
 
     Circle p1hp1 = new Circle(10);
     Circle p1hp2 = new Circle(10);
@@ -167,6 +165,8 @@ public class AppController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        root.setCursor(Cursor.NONE);
 
         URL f1Image = getClass().getResource("/png/1x/f1.png");
         URL f5Image = getClass().getResource("/png/1x/f5.png");
@@ -420,7 +420,8 @@ public class AppController implements Initializable {
                 p1hpGroup,
                 p2hpGroup,
                 northBorder,
-                southBorder
+                southBorder,
+                ((Paddle) playerOne).getHealthPointGroup()
         );
 
 
