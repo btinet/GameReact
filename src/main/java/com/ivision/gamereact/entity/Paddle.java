@@ -1,14 +1,14 @@
 package com.ivision.gamereact.entity;
 
+import com.ivision.engine.AudioFX;
+import com.ivision.engine.PaddlePosition;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Objects;
 
 public class Paddle extends Line {
 
@@ -19,35 +19,128 @@ public class Paddle extends Line {
     protected Color secondaryColor;
     protected Integer px;
     protected Integer py;
-    protected Double currentDirectionY;
     protected Integer healthPoints;
+    protected Integer currentHealthPoints;
     protected ArrayList<Circle> healthPointCircles = new ArrayList<>();
     protected Group healthPointGroup;
-    protected Integer matchPoints;
-    protected AudioClip primarySound;
-    protected AudioClip secondarySound;
+    protected Integer matchPoints = 0;
+    protected AudioFX primarySound;
+    protected AudioFX secondarySound;
 
 
     // Constructors
 
-    public Paddle(int healthPoints) {
+    public Paddle(PaddlePosition position, int healthPoints, Color primaryColor) {
+
         this.healthPoints = healthPoints;
+        this.currentHealthPoints = healthPoints;
+        this.primaryColor = primaryColor;
+        this.secondaryColor = Color.BLACK;
 
         healthPointGroup = new Group();
 
-        for (int i = 0;i < healthPoints;i++) {
-            healthPointCircles.add(new Circle(100,Color.WHITE));
-            healthPointGroup.getChildren().add(healthPointCircles.get(i));
+        addHealthPointCircles();
+
+        switch (position) {
+            case LEFT:
+                primarySound = AudioFX.SFX1;
+                primarySound.setBalance(-0.75);
+                healthPointGroup.setTranslateX(-600);
+                healthPointGroup.setScaleX(-1);
+                break;
+            case RIGHT:
+                primarySound = AudioFX.SFX2;
+                primarySound.setBalance(0.75);
+                healthPointGroup.setTranslateX(600);
+                break;
         }
 
-        healthPointCircles.get(4).setFill(Color.GREEN);
-
-        System.out.printf("Dem Spieler wurden %s Punkte zugewiesen. ",healthPoints);
-        System.out.printf("Deshalb gibt es %s Kreise in der Sammlung.%n",healthPointGroup.getChildren().size());
     }
+
+    // Methoden
+
+    private void addHealthPointCircles() {
+
+        int y = 0;
+        double x = 0;
+        for (int i = 0;i < healthPoints;i++) {
+
+            healthPointCircles.add(new Circle(10,primaryColor));
+            healthPointGroup.getChildren().add(healthPointCircles.get(i));
+
+            if(i % 2 != 0) {
+                y = y + 25;
+                x = 4*Math.log(1+i*0.125)+i;
+                System.out.println(x);
+            }
+
+            healthPointCircles.get(i).setTranslateY(y);
+            healthPointCircles.get(i).setTranslateX(x);
+
+            if(i % 2 == 0 && i > 0) {
+                healthPointCircles.get(i).setTranslateY(-healthPointCircles.get(i-1).getTranslateY());
+                healthPointCircles.get(i).setTranslateX(healthPointCircles.get(i-1).getTranslateX());
+            }
+
+        }
+
+        updateHealthPointCircles();
+
+    }
+
+    private void updateHealthPointCircles () {
+
+        if(!Objects.equals(currentHealthPoints, healthPoints)) {
+            for (int i = healthPoints-1; i >= currentHealthPoints; i--) {
+                ((Circle) this.healthPointGroup.getChildren().get(i)).setOpacity(.2);
+            }
+        } else {
+            for (int i = 0; i < healthPoints; i++) {
+                ((Circle) this.healthPointGroup.getChildren().get(i)).setOpacity(1);
+            }
+        }
+
+    }
+
+    public void increaseHealthPoints () {
+        if(currentHealthPoints < healthPoints) {
+            currentHealthPoints++;
+            updateHealthPointCircles();
+        }
+    }
+
+    public void decreaseHealthPoints () {
+        if(currentHealthPoints > 0) {
+            currentHealthPoints--;
+            updateHealthPointCircles();
+        }
+    }
+
+    public void increaseMatchPoints () {
+            matchPoints++;
+    }
+
+    public void decreaseMatchPoints () {
+        if(matchPoints > 0) {
+            matchPoints--;
+        }
+    }
+
+    public void resetCurrentHealthPoints() {
+        this.currentHealthPoints = healthPoints;
+        updateHealthPointCircles();
+    }
+
 
     // Getter und Setter für die Klassenattribute
 
+    public Integer getCurrentHealthPoints() {
+        return currentHealthPoints;
+    }
+
+    public void setCurrentHealthPoints(Integer currentHealthPoints) {
+        this.currentHealthPoints = currentHealthPoints;
+    }
 
     public ArrayList<Circle> getHealthPointCircles() {
         return healthPointCircles;
@@ -105,14 +198,6 @@ public class Paddle extends Line {
         this.py = py;
     }
 
-    public Double getCurrentDirectionY() {
-        return currentDirectionY;
-    }
-
-    public void setCurrentDirectionY(Double currentDirectionY) {
-        this.currentDirectionY = currentDirectionY;
-    }
-
     public Integer getHealthPoints() {
         return healthPoints;
     }
@@ -129,19 +214,19 @@ public class Paddle extends Line {
         this.matchPoints = matchPoints;
     }
 
-    public AudioClip getPrimarySound() {
+    public AudioFX getPrimarySound() {
         return primarySound;
     }
 
-    public void setPrimarySound(AudioClip primarySound) {
+    public void setPrimarySound(AudioFX primarySound) {
         this.primarySound = primarySound;
     }
 
-    public AudioClip getSecondarySound() {
+    public AudioFX getSecondarySound() {
         return secondarySound;
     }
 
-    public void setSecondarySound(AudioClip secondarySound) {
+    public void setSecondarySound(AudioFX secondarySound) {
         this.secondarySound = secondarySound;
     }
 }

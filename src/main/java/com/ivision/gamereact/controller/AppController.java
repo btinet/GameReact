@@ -3,6 +3,7 @@ package com.ivision.gamereact.controller;
 import com.ivision.engine.ButtonConfig;
 import com.ivision.engine.GameLoopTimer;
 import com.ivision.engine.KeyPolling;
+import com.ivision.engine.PaddlePosition;
 import com.ivision.gamereact.ReactApplication;
 import com.ivision.gamereact.entity.Paddle;
 import com.ivision.gamereact.model.GamepadListener;
@@ -11,7 +12,6 @@ import com.tuio.TuioCursor;
 import com.tuio.TuioObject;
 import javafx.animation.FadeTransition;
 import javafx.animation.FillTransition;
-import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,9 +30,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -57,16 +54,8 @@ public class AppController implements Initializable {
     ArrayList<TuioCursor> cursors = new ArrayList<>();
     public boolean playerOneIsPresent = false;
     public boolean playerTwoIsPresent = false;
-
-    public int playOneLife = 5;
-    public int playTwoLife = 5;
-
     public Line currentPlayer;
-
     public boolean isGameOver = false;
-
-    private double playerOneDirectionY;
-    private double playerTwoDirectionY;
     private final TuioClient client = new TuioClient();
     private final KeyPolling keys = KeyPolling.getInstance();
     @FXML
@@ -76,20 +65,8 @@ public class AppController implements Initializable {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
 
-    Line playerOne = new Paddle(5);
-    Line playerTwo = new Paddle(5);
-
-    Circle p1hp1 = new Circle(10);
-    Circle p1hp2 = new Circle(10);
-    Circle p1hp3 = new Circle(10);
-    Circle p1hp4 = new Circle(10);
-    Circle p1hp5 = new Circle(10);
-
-    Circle p2hp1 = new Circle(10);
-    Circle p2hp2 = new Circle(10);
-    Circle p2hp3 = new Circle(10);
-    Circle p2hp4 = new Circle(10);
-    Circle p2hp5 = new Circle(10);
+    Line playerOne = new Paddle(PaddlePosition.LEFT, 5,new Color(0.988,0.266,0.392,1));
+    Line playerTwo = new Paddle(PaddlePosition.RIGHT, 5, new Color(0.392,0.567,0.988,1));
     Circle strafeLeft = new Circle(ReactApplication.height);
     Circle strafeLeftStroke = new Circle(ReactApplication.height+200);
     Circle strafeRight = new Circle(ReactApplication.height);
@@ -101,7 +78,7 @@ public class AppController implements Initializable {
 
     Group helpImageGroup = new Group();
 
-    private Circle ball = new Circle(10);
+    private final Circle ball = new Circle(10);
 
     private double ballSpeed = 10;
 
@@ -115,10 +92,6 @@ public class AppController implements Initializable {
 
     Camera camera = new ParallelCamera();
 
-    String sfx1 = "/wav/b1.wav";
-    Media sound1;
-
-    String sfx2 = "/wav/b2.wav";
     String sfx3 = "/wav/b3.wav";
     String bgm2_1 = "/wav/tmp_maze2.stm.mp3";
     String bgm2_2 = "/wav/tmp_maze2.stm.mp3";
@@ -133,7 +106,6 @@ public class AppController implements Initializable {
     AudioClip rwMedia;
     AudioClip bhMedia;
     AudioClip rhMedia;
-    Media sound2;
     Media sound3;
     Media music1;
     Media music2_part1;
@@ -154,9 +126,6 @@ public class AppController implements Initializable {
     Text p1PointsText = new Text();
     Text p2PointsText = new Text();
 
-    int pointsPlayerOne = 0;
-    int pointsPlayerTwo = 0;
-
     FadeTransition p1t;
     FadeTransition p2t;
 
@@ -165,6 +134,12 @@ public class AppController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        Line connection = new Line();
+        connection.setStroke(Color.RED);
+        connection.setStrokeWidth(1);
+
+
 
         root.setCursor(Cursor.NONE);
 
@@ -220,9 +195,8 @@ public class AppController implements Initializable {
         pongReactMedia = new AudioClip(Objects.requireNonNull(getClass().getResource(pongReactSFX).toExternalForm()));
 
 
-        sound1 = new Media(Objects.requireNonNull(getClass().getResource(sfx1).toExternalForm()));
+
         sound3 = new Media(Objects.requireNonNull(getClass().getResource(sfx3).toExternalForm()));
-        sound2 = new Media(Objects.requireNonNull(getClass().getResource(sfx2).toExternalForm()));
         music1 = new Media(Objects.requireNonNull(getClass().getResource(bgm2_2).toExternalForm()));
         music2_part1 = new Media(Objects.requireNonNull(getClass().getResource(bgm2_1).toExternalForm()));
         music2_part2 = new Media(Objects.requireNonNull(getClass().getResource(bgm2_2).toExternalForm()));
@@ -264,7 +238,7 @@ public class AppController implements Initializable {
         rightPauseText.setTranslateY(5);
         rightPauseText.setScaleX(-1);
 
-        p1PointsText.setText(String.valueOf(pointsPlayerOne));
+        p1PointsText.setText(String.valueOf(((Paddle)playerOne).getMatchPoints()));
         p1PointsText.setTranslateX(-485);
         p1PointsText.setTranslateY(-7);
         p1PointsText.setTextAlignment(TextAlignment.CENTER);
@@ -273,7 +247,7 @@ public class AppController implements Initializable {
         p1PointsText.setFill(new Color(1,1,1,1));
         p1PointsText.setScaleX(-1);
 
-        p2PointsText.setText(String.valueOf(pointsPlayerTwo));
+        p2PointsText.setText(String.valueOf(((Paddle)playerTwo).getMatchPoints()));
         p2PointsText.setTranslateX(485);
         p2PointsText.setTranslateY(7);
         p2PointsText.setTextAlignment(TextAlignment.CENTER);
@@ -326,43 +300,6 @@ public class AppController implements Initializable {
         playground.setFill(new Color(0,0,0,.1));
         playground.setArcHeight(40);
         playground.setArcWidth(40);
-
-        p1hp1.setTranslateY(-50);
-        p1hp2.setTranslateY(-25);
-        p1hp2.setTranslateX(+2);
-        p1hp3.setTranslateY(0);
-        p1hp3.setTranslateX(+3);
-        p1hp4.setTranslateY(25);
-        p1hp4.setTranslateX(+2);
-        p1hp5.setTranslateY(50);
-
-        p2hp1.setTranslateY(-50);
-        p2hp2.setTranslateY(-25);
-        p2hp2.setTranslateX(-2);
-        p2hp3.setTranslateY(0);
-        p2hp3.setTranslateX(-3);
-        p2hp4.setTranslateY(25);
-        p2hp4.setTranslateX(-2);
-        p2hp5.setTranslateY(50);
-
-        p1hp1.setFill(new Color(0.988,0.266,0.392,1));
-        p1hp2.setFill(new Color(0.988,0.266,0.392,1));
-        p1hp3.setFill(new Color(0.988,0.266,0.392,1));
-        p1hp4.setFill(new Color(0.988,0.266,0.392,1));
-        p1hp5.setFill(new Color(0.988,0.266,0.392,1));
-
-        p2hp1.setFill(new Color(0.392,0.567,0.988,1));
-        p2hp2.setFill(new Color(0.392,0.567,0.988,1));
-        p2hp3.setFill(new Color(0.392,0.567,0.988,1));
-        p2hp4.setFill(new Color(0.392,0.567,0.988,1));
-        p2hp5.setFill(new Color(0.392,0.567,0.988,1));
-
-        Group p1hpGroup = new Group();
-        Group p2hpGroup = new Group();
-        p1hpGroup.getChildren().addAll(p1hp1,p1hp2,p1hp3,p1hp4,p1hp5);
-        p2hpGroup.getChildren().addAll(p2hp1,p2hp2,p2hp3,p2hp4,p2hp5);
-        p1hpGroup.setTranslateX(-600);
-        p2hpGroup.setTranslateX(600);
 
         strafeLeft.setTranslateX(-width);
         strafeLeft.setFill(new Color(0,0,0,.1));
@@ -417,11 +354,10 @@ public class AppController implements Initializable {
                 ball,
                 strafeLeft,
                 strafeRight,
-                p1hpGroup,
-                p2hpGroup,
                 northBorder,
                 southBorder,
-                ((Paddle) playerOne).getHealthPointGroup()
+                ((Paddle) playerOne).getHealthPointGroup(),
+                ((Paddle) playerTwo).getHealthPointGroup()
         );
 
 
@@ -462,15 +398,14 @@ public class AppController implements Initializable {
 
                     switch (currentPlayer.getId()) {
                         case "ROT":
-                            if(playTwoLife > 1) {
-                                playTwoLife--;
+                            ((Paddle) playerTwo).decreaseHealthPoints();
+                            if(((Paddle)playerTwo).getCurrentHealthPoints() > 1) {
                                 leftText.setText("Rot trifft!");
                                 leftText.setFill(new Color(0.988,0.266,0.392,1));
                                 rightText.setText("Rot trifft!");
                                 rightText.setFill(new Color(0.988,0.266,0.392,1));
                                 rhMedia.play();
                             } else {
-                                playTwoLife--;
                                 leftText.setText("Rot gewinnt!");
                                 leftText.setFill(new Color(0.988,0.266,0.392,1));
                                 rightText.setText("Rot gewinnt!");
@@ -479,10 +414,10 @@ public class AppController implements Initializable {
                                 System.out.println("ROT GEWINNT!");
                                 isGameOver = true;
                                 gameLoop.stop();
-                                playOneLife = 5;
-                                playTwoLife = 5;
-                                pointsPlayerOne++;
-                                p1PointsText.setText(String.valueOf(pointsPlayerOne));
+                                ((Paddle) playerOne).resetCurrentHealthPoints();
+                                ((Paddle) playerTwo).resetCurrentHealthPoints();
+                                ((Paddle) playerOne).increaseMatchPoints();
+                                p1PointsText.setText(String.valueOf(((Paddle) playerOne).getMatchPoints()));
                                 playerOne.setTranslateY(0);
                                 playerTwo.setTranslateY(0);
                                 intro = true;
@@ -496,15 +431,14 @@ public class AppController implements Initializable {
                             cameraShake.setToX(0);
                             break;
                         case "BLAU":
-                            if(playOneLife > 1) {
-                                playOneLife--;
+                            ((Paddle) playerOne).decreaseHealthPoints();
+                            if(((Paddle)playerOne).getCurrentHealthPoints() > 1) {
                                 leftText.setText("Blau trifft!");
                                 leftText.setFill(new Color(0.392,0.567,0.988,1));
                                 rightText.setText("Blau trifft!");
                                 rightText.setFill(new Color(0.392,0.567,0.988,1));
                                 bhMedia.play();
                             } else {
-                                playOneLife--;
                                 leftText.setText("Blau gewinnt!");
                                 leftText.setFill(new Color(0.392,0.567,0.988,1));
                                 rightText.setText("Blau gewinnt!");
@@ -513,10 +447,10 @@ public class AppController implements Initializable {
                                 System.out.println("BLAU GEWINNT!");
                                 isGameOver = true;
                                 gameLoop.stop();
-                                playOneLife = 5;
-                                playTwoLife = 5;
-                                pointsPlayerTwo++;
-                                p2PointsText.setText(String.valueOf(pointsPlayerTwo));
+                                ((Paddle) playerOne).resetCurrentHealthPoints();
+                                ((Paddle) playerTwo).resetCurrentHealthPoints();
+                                ((Paddle) playerTwo).increaseMatchPoints();
+                                p2PointsText.setText(String.valueOf(((Paddle) playerTwo).getMatchPoints()));
                                 playerOne.setTranslateY(0);
                                 playerTwo.setTranslateY(0);
                                 intro = true;
@@ -546,94 +480,6 @@ public class AppController implements Initializable {
                     ft2.play();
                     if(!root.getChildren().contains(leftText)) root.getChildren().add(leftText);
                     if(!root.getChildren().contains(rightText)) root.getChildren().add(rightText);
-
-                    switch (playOneLife) {
-                        case 5:
-                            p1hp5.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp4.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp3.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp2.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp1.setFill(new Color(0.988,0.266,0.392,1));
-                            break;
-                        case 4:
-                            p1hp5.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp4.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp3.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp2.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp1.setFill(new Color(0.988,0.266,0.392,1));
-                            break;
-                        case 3:
-                            p1hp5.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp4.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp3.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp2.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp1.setFill(new Color(0.988,0.266,0.392,1));
-                            break;
-                        case 2:
-                            p1hp5.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp4.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp3.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp2.setFill(new Color(0.988,0.266,0.392,1));
-                            p1hp1.setFill(new Color(0.988,0.266,0.392,1));
-                            break;
-                        case 1:
-                            p1hp5.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp4.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp3.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp2.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp1.setFill(new Color(0.988,0.266,0.392,1));
-                            break;
-                        default:
-                            p1hp5.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp4.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp3.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp2.setFill(new Color(0.988,0.266,0.392,.25));
-                            p1hp1.setFill(new Color(0.988,0.266,0.392,.25));
-                    }
-
-                    switch (playTwoLife) {
-                        case 5:
-                            p2hp5.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp4.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp3.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp2.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp1.setFill(new Color(0.392,0.567,0.988,1));
-                            break;
-                        case 4:
-                            p2hp5.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp4.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp3.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp2.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp1.setFill(new Color(0.392,0.567,0.988,1));
-                            break;
-                        case 3:
-                            p2hp5.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp4.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp3.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp2.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp1.setFill(new Color(0.392,0.567,0.988,1));
-                            break;
-                        case 2:
-                            p2hp5.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp4.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp3.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp2.setFill(new Color(0.392,0.567,0.988,1));
-                            p2hp1.setFill(new Color(0.392,0.567,0.988,1));
-                            break;
-                        case 1:
-                            p2hp5.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp4.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp3.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp2.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp1.setFill(new Color(0.392,0.567,0.988,1));
-                            break;
-                        default:
-                            p2hp5.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp4.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp3.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp2.setFill(new Color(0.392,0.567,0.988,.25));
-                            p2hp1.setFill(new Color(0.392,0.567,0.988,.25));
-                    }
 
                     if (ballAngle < 0) {
                         ballAngle = 1.5;
@@ -671,6 +517,12 @@ public class AppController implements Initializable {
                 // TODO: Abfrage nach handle(); übertragen
                 // Tastaturabfrage
                 getUserInput();
+                connection.setTranslateY((playerOne.getTranslateY()+playerTwo.getTranslateY())/2);
+                connection.setStartX(playerOne.getTranslateX());
+                connection.setStartY(connection.getTranslateY()+playerOne.getTranslateY());
+                connection.setEndX(playerTwo.getTranslateX());
+                connection.setEndY(connection.getTranslateY()+playerTwo.getTranslateY());
+
 
                 // Intro Audio abspielen, danach nicht mehr!
                 if(intro) {
@@ -690,16 +542,14 @@ public class AppController implements Initializable {
                 // Ballinteraktion mit Spielern
                 if(playerOne.getBoundsInParent().intersects(ball.getBoundsInParent())) {
                     currentPlayer = playerOne;
-                    MediaPlayer mediaPlayer = new MediaPlayer(sound1);
-                    mediaPlayer.play();
+                    ((Paddle) playerOne).getPrimarySound().play();
 
                     ballAngle = -Math.sin(Math.toRadians(playerOne.getTranslateY()-ball.getTranslateY()+random))*5;
                     ballSpeed = Math.abs(ballSpeed);
                 }
                 else if (playerTwo.getBoundsInParent().intersects(ball.getBoundsInParent())) {
                     currentPlayer = playerTwo;
-                    MediaPlayer mediaPlayer = new MediaPlayer(sound2);
-                    mediaPlayer.play();
+                    ((Paddle) playerTwo).getPrimarySound().play();
                     ballAngle = -Math.sin(Math.toRadians(playerTwo.getTranslateY()-ball.getTranslateY()+random))*5;
                     ballSpeed = -Math.abs(ballSpeed);;
                 }
@@ -818,7 +668,7 @@ public class AppController implements Initializable {
         } else {
             if(!root.getChildren().contains(helpImageGroup)) root.getChildren().add(helpImageGroup);
             gameLoop.pause();
-            if(playOneLife > 0 || playTwoLife > 0) {
+            if(((Paddle)playerOne).getHealthPoints() > 0 || ((Paddle)playerTwo).getHealthPoints() > 0) {
                 if(isGameOver) {
                     leftPauseText.setText("Game over");
                     rightPauseText.setText("Game over");
@@ -880,7 +730,7 @@ public class AppController implements Initializable {
                     playerOne.setTranslateY(playerOne.getTranslateY());
                 }
             } else {
-                playerOne.setTranslateY(playerOne.getTranslateY()+playerOneDirectionY);
+                playerOne.setTranslateY(playerOne.getTranslateY());
             }
             if(!southBorder.getBoundsInParent().intersects(playerOne.getBoundsInParent())) {
                 if (playerOne.getTranslateY()-ball.getTranslateY() < -100) {
@@ -898,7 +748,7 @@ public class AppController implements Initializable {
                     playerOne.setTranslateY(playerOne.getTranslateY());
                 }
             } else {
-                playerOne.setTranslateY(playerOne.getTranslateY()-playerOneDirectionY);
+                playerOne.setTranslateY(playerOne.getTranslateY());
             }
         }
 
@@ -917,7 +767,7 @@ public class AppController implements Initializable {
                     playerTwo.setTranslateY(playerTwo.getTranslateY());
                 }
             } else {
-                playerTwo.setTranslateY(playerTwo.getTranslateY()+playerTwoDirectionY);
+                playerTwo.setTranslateY(playerTwo.getTranslateY());
             }
             if(!southBorder.getBoundsInParent().intersects(playerTwo.getBoundsInParent())) {
                 if (playerTwo.getTranslateY()-ball.getTranslateY() < -100) {
@@ -935,7 +785,7 @@ public class AppController implements Initializable {
                     playerTwo.setTranslateY(playerTwo.getTranslateY());
                 }
             } else {
-                playerTwo.setTranslateY(playerTwo.getTranslateY()-playerTwoDirectionY);
+                playerTwo.setTranslateY(playerTwo.getTranslateY());
             }
         }
 
@@ -998,7 +848,7 @@ public class AppController implements Initializable {
      */
     private double getSpeed(float angleDegrees) {
         double x = Math.sin(Math.toRadians(angleDegrees-90));
-        return x*20;
+        return x*7;
     }
 
     /**
