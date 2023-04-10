@@ -2,6 +2,7 @@ package com.ivision.gamereact.controller;
 
 import com.ivision.engine.*;
 import com.ivision.gamereact.ReactApplication;
+import com.ivision.gamereact.entity.Ball;
 import com.ivision.gamereact.entity.Paddle;
 import com.ivision.gamereact.model.GamepadListener;
 import com.tuio.TuioClient;
@@ -13,14 +14,9 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.*;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
@@ -31,22 +27,20 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static com.ivision.gamereact.ReactApplication.*;
-
 
 public class AppController implements Initializable {
 
     @FXML
     private Pane root;
-    // Attribute
+
+    // Spielattribute
     GameLoopTimer gameLoop;
     GamepadListener gamepadListener;
     protected double stageWidth;
     protected double stageHeight;
-
     ArrayList<TuioObject> gamepads = new ArrayList<>();
     ArrayList<TuioCursor> cursors = new ArrayList<>();
     public boolean playerOneIsPresent = false;
@@ -66,6 +60,11 @@ public class AppController implements Initializable {
      * Paddle 2
      */
     Paddle playerTwo = new Paddle(PaddlePosition.RIGHT, 5, new Color(0.392,0.567,0.988,1));
+
+    /**
+     * Ball
+     */
+    private final Ball ball = new Ball(10);
 
     // Dekoration
     Circle strafeLeft = new Circle(ReactApplication.height);
@@ -92,10 +91,7 @@ public class AppController implements Initializable {
     Text p1PointsText = new Text();
     Text p2PointsText = new Text();
 
-    // Spielball
-    private final Circle ball = new Circle(10);
-    private double ballSpeed = 10;
-    private double ballAngle = 3;
+
 
     // Fingereingabe
     private Circle fingerCircle;
@@ -111,12 +107,7 @@ public class AppController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        Line connection = new Line();
-        connection.setStroke(Color.RED);
-        connection.setStrokeWidth(1);
-
-
-
+        ball.setBallSpeed(9);
         root.setCursor(Cursor.NONE);
 
         URL f1Image = getClass().getResource("/png/1x/f1.png");
@@ -370,8 +361,7 @@ public class AppController implements Initializable {
                                 intro = true;
                                 gameLoop.start();
                             }
-                            ball.setTranslateX(360);
-                            ballSpeed = -10;
+                            ball.setStartPosition(PaddlePosition.RIGHT);
                             currentPlayer = playerTwo;
                             strafeRightTransition.play();
                             cameraShake.setFromX(-5);
@@ -403,8 +393,7 @@ public class AppController implements Initializable {
                                 intro = true;
                                 gameLoop.start();
                             }
-                            ball.setTranslateX(-360);
-                            ballSpeed = 10;
+                            ball.setStartPosition(PaddlePosition.LEFT);
                             currentPlayer = playerOne;
                             strafeLeftTransition.play();
                             cameraShake.setFromX(5);
@@ -428,12 +417,11 @@ public class AppController implements Initializable {
                     if(!root.getChildren().contains(leftText)) root.getChildren().add(leftText);
                     if(!root.getChildren().contains(rightText)) root.getChildren().add(rightText);
 
-                    if (ballAngle < 0) {
-                        ballAngle = 1.5;
+                    if (ball.getBallAngle() < 0) {
+                        ball.setBallAngle(1.5);
                     } else {
-                        ballAngle = -1.5;
+                        ball.setBallAngle(-1.5);
                     }
-                    ball.setTranslateY(0);
                 }
 
                 // Fingereingabe verarbeiten:
@@ -464,12 +452,6 @@ public class AppController implements Initializable {
                 // TODO: Abfrage nach handle(); übertragen
                 // Tastaturabfrage
                 getUserInput();
-                connection.setTranslateY((playerOne.getTranslateY()+playerTwo.getTranslateY())/2);
-                connection.setStartX(playerOne.getTranslateX());
-                connection.setStartY(connection.getTranslateY()+playerOne.getTranslateY());
-                connection.setEndX(playerTwo.getTranslateX());
-                connection.setEndY(connection.getTranslateY()+playerTwo.getTranslateY());
-
 
                 // Intro Audio abspielen, danach nicht mehr!
                 if(intro) {
@@ -491,14 +473,14 @@ public class AppController implements Initializable {
                     currentPlayer = playerOne;
                     playerOne.getPrimarySound().play();
 
-                    ballAngle = -Math.sin(Math.toRadians(playerOne.getTranslateY()-ball.getTranslateY()+random))*5;
-                    ballSpeed = Math.abs(ballSpeed);
+                    ball.setBallAngle(-Math.sin(Math.toRadians(playerOne.getTranslateY()-ball.getTranslateY()+random))*5);
+                    ball.setBallSpeed(PaddlePosition.LEFT);
                 }
                 else if (playerTwo.getBoundsInParent().intersects(ball.getBoundsInParent())) {
                     currentPlayer = playerTwo;
                     playerTwo.getPrimarySound().play();
-                    ballAngle = -Math.sin(Math.toRadians(playerTwo.getTranslateY()-ball.getTranslateY()+random))*5;
-                    ballSpeed = -Math.abs(ballSpeed);;
+                    ball.setBallAngle(-Math.sin(Math.toRadians(playerTwo.getTranslateY()-ball.getTranslateY()+random))*5);
+                    ball.setBallSpeed(PaddlePosition.RIGHT);
                 }
                 // Ballinteraktion mit Seitenbanden
                 if(northBorder.getBoundsInParent().intersects(ball.getBoundsInParent())) {
@@ -509,11 +491,7 @@ public class AppController implements Initializable {
                     shakeNorth.setAutoReverse(true);
                     shakeNorth.play();
                     AudioFX.SFX3.play();
-                    if (ballAngle < 0) {
-                        ballAngle = Math.abs(ballAngle);
-                    } else {
-                        ballAngle = -ballAngle;
-                    }
+                    ball.reflect();
                 }
                 else if (southBorder.getBoundsInParent().intersects(ball.getBoundsInParent())) {
                     TranslateTransition shakeSouth = new TranslateTransition(new Duration(100),camera);
@@ -523,18 +501,10 @@ public class AppController implements Initializable {
                     shakeSouth.setAutoReverse(true);
                     shakeSouth.play();
                     AudioFX.SFX3.play();
-                    if (ballAngle < 0) {
-                        ballAngle = Math.abs(ballAngle);
-                    } else {
-                        ballAngle = -ballAngle;
-                    }
+                    ball.reflect();
                 }
-                ball.setTranslateY(ball.getTranslateY()+ballAngle);
-                ball.setTranslateX(ball.getTranslateX()+ballSpeed);
-
                 // Position der Spielfiguren aktualisieren
                 updatePlayer();
-
             }
         };
 
@@ -637,6 +607,7 @@ public class AppController implements Initializable {
 
     public void updatePlayer() {
 
+        ball.move();
 
         // Aktive Marker ermitteln.
         gamepads = gamepadListener.getGamepads();
