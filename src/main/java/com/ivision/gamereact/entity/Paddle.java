@@ -43,12 +43,16 @@ public class Paddle extends Line {
 
         switch (position) {
             case LEFT:
+                setTranslateX(-400);
+                setId("ROT");
                 primarySound = AudioFX.SFX1;
                 primarySound.setBalance(-0.75);
                 healthPointGroup.setTranslateX(-600);
                 healthPointGroup.setScaleX(-1);
                 break;
             case RIGHT:
+                setTranslateX(400);
+                setId("BLAU");
                 primarySound = AudioFX.SFX2;
                 primarySound.setBalance(0.75);
                 healthPointGroup.setTranslateX(600);
@@ -92,11 +96,11 @@ public class Paddle extends Line {
 
         if(!Objects.equals(currentHealthPoints, healthPoints)) {
             for (int i = healthPoints-1; i >= currentHealthPoints; i--) {
-                ((Circle) this.healthPointGroup.getChildren().get(i)).setOpacity(.2);
+                this.healthPointGroup.getChildren().get(i).setOpacity(.2);
             }
         } else {
             for (int i = 0; i < healthPoints; i++) {
-                ((Circle) this.healthPointGroup.getChildren().get(i)).setOpacity(1);
+                this.healthPointGroup.getChildren().get(i).setOpacity(1);
             }
         }
 

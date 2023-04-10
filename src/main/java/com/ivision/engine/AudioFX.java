@@ -8,7 +8,12 @@ public enum AudioFX {
 
     SFX1 ("/wav/b1.wav"),
     SFX2 ("/wav/b2.wav"),
-    SFX3 ("/wav/b3.wav");
+    SFX3 ("/wav/b3.wav"),
+    bWinSFX ( "/wav/bWin.wav"),
+    rWinSFX ("/wav/rWin.wav"),
+    bHitSFX ("/wav/bHit.wav"),
+    rHitSFX ("/wav/rHit.wav"),
+    pongReactSFX ("/wav/pongReact.wav");
 
     private final AudioClip sfx;
 
