@@ -21,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
@@ -88,10 +87,6 @@ public class AppController implements Initializable {
     Text rightText = new Text();
     Text leftPauseText = new Text();
     Text rightPauseText = new Text();
-    Text p1PointsText = new Text();
-    Text p2PointsText = new Text();
-
-
 
     // Fingereingabe
     private Circle fingerCircle;
@@ -179,49 +174,13 @@ public class AppController implements Initializable {
         rightPauseText.setTranslateY(5);
         rightPauseText.setScaleX(-1);
 
-        p1PointsText.setText(String.valueOf(((Paddle)playerOne).getMatchPoints()));
-        p1PointsText.setTranslateX(-485);
-        p1PointsText.setTranslateY(-7);
-        p1PointsText.setTextAlignment(TextAlignment.CENTER);
-        p1PointsText.setRotate(90);
-        p1PointsText.setFont(font);
-        p1PointsText.setFill(new Color(1,1,1,1));
-        p1PointsText.setScaleX(-1);
-
-        p2PointsText.setText(String.valueOf(((Paddle)playerTwo).getMatchPoints()));
-        p2PointsText.setTranslateX(485);
-        p2PointsText.setTranslateY(7);
-        p2PointsText.setTextAlignment(TextAlignment.CENTER);
-        p2PointsText.setRotate(-90);
-        p2PointsText.setFont(font);
-        p2PointsText.setFill(new Color(1,1,1,1));
-        p2PointsText.setScaleX(-1);
-
         leftPauseText.setFill(new Color(1,1,1,1));
         rightPauseText.setFill(new Color(1,1,1,1));
 
         p1t = new FadeTransition(Duration.millis(500), leftPauseText);
         p2t = new FadeTransition(Duration.millis(500), rightPauseText);
 
-
         currentPlayer = playerOne;
-
-
-        playerOne.setStroke(new Color(1,1,1,1));
-        playerTwo.setStroke(new Color(1,1,1,1));
-
-        ball.setTranslateX(-360);
-        ball.setFill(Color.WHITE);
-
-        playerTwo.setStartY(0);
-        playerTwo.setEndY(70);
-        playerTwo.setStrokeWidth(8);
-        playerTwo.strokeLineCapProperty().setValue(StrokeLineCap.ROUND);
-
-        playerOne.setStartY(0);
-        playerOne.setEndY(70);
-        playerOne.setStrokeWidth(8);
-        playerOne.strokeLineCapProperty().setValue(StrokeLineCap.ROUND);
 
         northBorder.setStartX(0);
         northBorder.setStartX(900);
@@ -283,8 +242,8 @@ public class AppController implements Initializable {
                 playground,
                 leftSide,
                 rightSide,
-                p1PointsText,
-                p2PointsText,
+                playerOne.getPointsText(),
+                playerTwo.getPointsText(),
                 middleCircleBig,
                 middleLine,
                 playerOne,
@@ -350,16 +309,7 @@ public class AppController implements Initializable {
                                 rightText.setFill(new Color(0.988,0.266,0.392,1));
                                 AudioFX.rWinSFX.play();
                                 System.out.println("ROT GEWINNT!");
-                                isGameOver = true;
-                                gameLoop.stop();
-                                playerOne.resetCurrentHealthPoints();
-                                playerTwo.resetCurrentHealthPoints();
-                                playerOne.increaseMatchPoints();
-                                p1PointsText.setText(String.valueOf(((Paddle) playerOne).getMatchPoints()));
-                                playerOne.setTranslateY(0);
-                                playerTwo.setTranslateY(0);
-                                intro = true;
-                                gameLoop.start();
+                                gameOver(playerOne);
                             }
                             ball.setStartPosition(PaddlePosition.RIGHT);
                             currentPlayer = playerTwo;
@@ -382,16 +332,7 @@ public class AppController implements Initializable {
                                 rightText.setFill(new Color(0.392,0.567,0.988,1));
                                 AudioFX.bWinSFX.play();
                                 System.out.println("BLAU GEWINNT!");
-                                isGameOver = true;
-                                gameLoop.stop();
-                                playerOne.resetCurrentHealthPoints();
-                                playerTwo.resetCurrentHealthPoints();
-                                playerTwo.increaseMatchPoints();
-                                p2PointsText.setText(String.valueOf(playerTwo.getMatchPoints()));
-                                playerOne.setTranslateY(0);
-                                playerTwo.setTranslateY(0);
-                                intro = true;
-                                gameLoop.start();
+                                gameOver(playerTwo);
                             }
                             ball.setStartPosition(PaddlePosition.LEFT);
                             currentPlayer = playerOne;
@@ -512,6 +453,18 @@ public class AppController implements Initializable {
         root.setStyle("-fx-background-color: #883c77");
 
         // Spiel starten
+        gameLoop.start();
+    }
+
+    private void gameOver(Paddle player) {
+        isGameOver = true;
+        intro = true;
+
+        player.increaseMatchPoints();
+        playerOne.reset();
+        playerTwo.reset();
+
+        gameLoop.stop();
         gameLoop.start();
     }
 

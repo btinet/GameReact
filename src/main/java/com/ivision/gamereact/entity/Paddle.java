@@ -1,11 +1,15 @@
 package com.ivision.gamereact.entity;
 
 import com.ivision.engine.AudioFX;
+import com.ivision.engine.Fonts;
 import com.ivision.engine.PaddlePosition;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -27,6 +31,8 @@ public class Paddle extends Line {
     protected AudioFX primarySound;
     protected AudioFX secondarySound;
 
+    Text pointsText = new Text(String.valueOf(matchPoints));
+
 
     // Constructors
 
@@ -36,6 +42,12 @@ public class Paddle extends Line {
         this.currentHealthPoints = healthPoints;
         this.primaryColor = primaryColor;
         this.secondaryColor = Color.BLACK;
+
+        setStartY(0);
+        setEndY(70);
+        setStroke(Color.WHITE);
+        setStrokeWidth(8);
+        strokeLineCapProperty().setValue(StrokeLineCap.ROUND);
 
         healthPointGroup = new Group();
 
@@ -49,6 +61,9 @@ public class Paddle extends Line {
                 primarySound.setBalance(-0.75);
                 healthPointGroup.setTranslateX(-600);
                 healthPointGroup.setScaleX(-1);
+                pointsText.setTranslateX(-485);
+                pointsText.setTranslateY(-7);
+                pointsText.setRotate(90);
                 break;
             case RIGHT:
                 setTranslateX(400);
@@ -56,8 +71,17 @@ public class Paddle extends Line {
                 primarySound = AudioFX.SFX2;
                 primarySound.setBalance(0.75);
                 healthPointGroup.setTranslateX(600);
+                pointsText.setTranslateX(485);
+                pointsText.setTranslateY(7);
+                pointsText.setRotate(-90);
                 break;
         }
+
+
+        pointsText.setTextAlignment(TextAlignment.CENTER);
+        pointsText.setFont(Fonts.REGULAR_46.getFont());
+        pointsText.setFill(Color.WHITE);
+        pointsText.setScaleX(-1);
 
     }
 
@@ -122,11 +146,13 @@ public class Paddle extends Line {
 
     public void increaseMatchPoints () {
             matchPoints++;
+            setPointsText(matchPoints);
     }
 
     public void decreaseMatchPoints () {
         if(matchPoints > 0) {
             matchPoints--;
+            setPointsText(matchPoints);
         }
     }
 
@@ -202,6 +228,11 @@ public class Paddle extends Line {
         this.py = py;
     }
 
+    public void reset () {
+        setTranslateY(0);
+        resetCurrentHealthPoints();
+    }
+
     public Integer getHealthPoints() {
         return healthPoints;
     }
@@ -232,5 +263,13 @@ public class Paddle extends Line {
 
     public void setSecondarySound(AudioFX secondarySound) {
         this.secondarySound = secondarySound;
+    }
+
+    public Text getPointsText() {
+        return pointsText;
+    }
+
+    public void setPointsText(int value) {
+        this.pointsText.setText(String.valueOf(value));
     }
 }
