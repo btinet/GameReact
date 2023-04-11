@@ -4,6 +4,7 @@ import com.ivision.engine.AudioFX;
 import com.ivision.engine.Fonts;
 import com.ivision.engine.PaddlePosition;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -86,6 +87,10 @@ public class Paddle extends Line {
     }
 
     // Methoden
+
+    public Boolean intersects (Node node) {
+        return this.getBoundsInParent().intersects(node.getBoundsInParent());
+    }
 
     private void addHealthPointCircles() {
 

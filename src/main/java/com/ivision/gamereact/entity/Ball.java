@@ -1,6 +1,7 @@
 package com.ivision.gamereact.entity;
 
 import com.ivision.engine.PaddlePosition;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -33,6 +34,10 @@ public class Ball extends Circle {
         }
         setTranslateX(startPosition);
         setTranslateY(0);
+    }
+
+    public Boolean intersects (Node node) {
+        return this.getBoundsInParent().intersects(node.getBoundsInParent());
     }
 
     public void reflect() {

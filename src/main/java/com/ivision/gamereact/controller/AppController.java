@@ -2,6 +2,7 @@ package com.ivision.gamereact.controller;
 
 import com.ivision.engine.*;
 import com.ivision.gamereact.entity.Ball;
+import com.ivision.gamereact.entity.Curt;
 import com.ivision.gamereact.entity.Paddle;
 import com.ivision.gamereact.model.GamepadListener;
 import com.ivision.gamereact.view.GameBoardDecoration;
@@ -40,36 +41,26 @@ public class AppController implements Initializable {
     ArrayList<TuioCursor> cursors = new ArrayList<>();
     public boolean playerOneIsPresent = false;
     public boolean playerTwoIsPresent = false;
+    public boolean playerOneHasKeyboard = false;
+    public boolean playerTwoHasKeyboard = false;
     public Line currentPlayer;
     public boolean isGameOver = false;
     boolean intro = true;
     private final TuioClient client = new TuioClient();
     private final KeyPolling keys = KeyPolling.getInstance();
 
-    /**
-     * Paddle 1
-     */
-    Paddle playerOne = new Paddle(PaddlePosition.LEFT, 5,new Color(0.988,0.266,0.392,1));
-
-    /**
-     * Paddle 2
-     */
-    Paddle playerTwo = new Paddle(PaddlePosition.RIGHT, 5, new Color(0.392,0.567,0.988,1));
-
-    /**
-     * Ball
-     */
+    // Spielobjekte
+    Paddle playerOne = new Paddle(PaddlePosition.LEFT, 5,GameColor.RED);
+    Paddle playerTwo = new Paddle(PaddlePosition.RIGHT, 5, GameColor.BLUE);
     private final Ball ball = new Ball(10);
-
-    // Spielfeld
-    Rectangle playground = new Rectangle(880,720);
-    Line northBorder = new Line();
-    Line southBorder = new Line();
+    Curt curt = new Curt();
+    GameBoardDecoration gbd;
 
     // Spielfeldkamera
     Camera camera = new ParallelCamera();
     TranslateTransition cameraTranslateTransition = Transitions.createTranslateTransition(200,camera);
 
+    // Zusätzliches View
     PauseScreen pauseScreen;
 
     // Fingereingabe
@@ -83,40 +74,26 @@ public class AppController implements Initializable {
 
         currentPlayer = playerOne;
 
-        // funktionales Spielfeld
-        northBorder.setStartX(0);
-        northBorder.setStartX(900);
-        northBorder.setStroke(Color.TRANSPARENT);
-        northBorder.setStrokeWidth(1);
-        northBorder.setTranslateY(-360);
+        Rectangle background = new Rectangle(2500,2500,GameColor.VIOLETT);
 
-        southBorder.setStartX(0);
-        southBorder.setStartX(900);
-        southBorder.setStroke(Color.TRANSPARENT);
-        southBorder.setStrokeWidth(1);
-        southBorder.setTranslateY(360);
-
-        playground.setFill(new Color(0,0,0,.1));
-        playground.setArcHeight(40);
-        playground.setArcWidth(40);
-
-        Rectangle background = new Rectangle(2500,2500,new Color(0.533,0.235,0.466,1));
-
+        // Spielfeld auf Bühne platzieren
         root.getChildren().addAll(
                 background,
-                playground
+                curt
         );
 
-        GameBoardDecoration gbd = new GameBoardDecoration(root, playerOne, playerTwo);
+        // Spielfeld dekorieren
+        gbd = new GameBoardDecoration(root, playerOne, playerTwo);
 
+        // Spielfiguren, Banden und Anzeigen platzieren
         root.getChildren().addAll(
                 playerOne.getPointsText(),
                 playerTwo.getPointsText(),
                 playerOne,
                 playerTwo,
                 ball,
-                northBorder,
-                southBorder,
+                curt.getNorthBorder(),
+                curt.getSouthBorder(),
                 playerOne.getHealthPointGroup(),
                 playerTwo.getHealthPointGroup()
         );
@@ -140,7 +117,7 @@ public class AppController implements Initializable {
 
                 getUserInput();
                 getFingerInput();
-                getEntityInteractions(gbd);
+                getEntityInteractions();
 
             }
 
@@ -219,13 +196,26 @@ public class AppController implements Initializable {
         // Periodische Tastenabfragen
         // z.B. keys.down(KeyCode)
 
+
         // einmalige Tastenabfragen (innerhalb Anschlagverzögerung)
-        if (keys.isPressed(ButtonConfig.toggleFullscreen))          toggleFullscreen();
-        if (keys.isPressed(ButtonConfig.actionTertiary))                 togglePause();
+        if (keys.isPressed(ButtonConfig.toggleFullscreen))         toggleFullscreen();
+        if (keys.isPressed(ButtonConfig.actionTertiary))           togglePause();
+        if (keys.isPressed(ButtonConfig.toggleP1))                 toggleKeyboardControl(1);
+        if (keys.isPressed(ButtonConfig.toggleP2))                 toggleKeyboardControl(2);
     }
 
 
-    // TODO: Methoden für GameOver auslagern.
+    public void toggleKeyboardControl (int player) {
+        switch (player) {
+            case 1:
+                playerOneHasKeyboard = !playerOneHasKeyboard;
+                break;
+            case 2:
+                playerTwoHasKeyboard = !playerTwoHasKeyboard;
+                break;
+        }
+    }
+
     /**
      * Zwischen Pausen- und Spielmodus wechseln.
      */
@@ -252,10 +242,10 @@ public class AppController implements Initializable {
         }
     }
 
-    public void getEntityInteractions (GameBoardDecoration gbd) {
+    public void getEntityInteractions () {
 
         // Ball geht ins Aus:
-        if(!playground.getBoundsInParent().intersects(ball.getBoundsInParent())) {
+        if(!ball.intersects(curt)) {
 
             if (currentPlayer.equals(playerOne)) {
                 playerTwo.decreaseHealthPoints();
@@ -302,21 +292,21 @@ public class AppController implements Initializable {
             random = (Math.random()*50+5);
         }
         // Ballinteraktion mit Spielern
-        if(playerOne.getBoundsInParent().intersects(ball.getBoundsInParent())) {
+        if(ball.intersects(playerOne)) {
             currentPlayer = playerOne;
             playerOne.getPrimarySound().play();
 
             ball.setBallAngle(-Math.sin(Math.toRadians(playerOne.getTranslateY()-ball.getTranslateY()+random))*5);
             ball.setBallSpeed(PaddlePosition.LEFT);
         }
-        else if (playerTwo.getBoundsInParent().intersects(ball.getBoundsInParent())) {
+        else if (ball.intersects(playerTwo)) {
             currentPlayer = playerTwo;
             playerTwo.getPrimarySound().play();
             ball.setBallAngle(-Math.sin(Math.toRadians(playerTwo.getTranslateY()-ball.getTranslateY()+random))*5);
             ball.setBallSpeed(PaddlePosition.RIGHT);
         }
         // Ballinteraktion mit Seitenbanden
-        if(northBorder.getBoundsInParent().intersects(ball.getBoundsInParent())) {
+        if(ball.intersects(curt.getNorthBorder())) {
             TranslateTransition shakeNorth = new TranslateTransition(new Duration(100),camera);
             shakeNorth.setFromY(5);
             shakeNorth.setToY(0);
@@ -326,7 +316,7 @@ public class AppController implements Initializable {
             AudioFX.SFX3.play();
             ball.reflect();
         }
-        else if (southBorder.getBoundsInParent().intersects(ball.getBoundsInParent())) {
+        else if (ball.intersects(curt.getSouthBorder())) {
             TranslateTransition shakeSouth = new TranslateTransition(new Duration(100),camera);
             shakeSouth.setFromY(-5);
             shakeSouth.setToY(0);
@@ -345,80 +335,106 @@ public class AppController implements Initializable {
         // Aktive Marker ermitteln.
         gamepads = gamepadListener.getGamepads();
 
-        // CPU-Steuerung für Spieler 1
+
         if(!playerOneIsPresent) {
-            if(!northBorder.getBoundsInParent().intersects(playerOne.getBoundsInParent())) {
-                if (playerOne.getTranslateY()-ball.getTranslateY() > 100) {
-                    playerOne.setTranslateY(playerOne.getTranslateY()-10);
-                } else
-                if (playerOne.getTranslateY()-ball.getTranslateY() > 50) {
-                    playerOne.setTranslateY(playerOne.getTranslateY()-4.5);
-                }  else
-                if (playerOne.getTranslateY()-ball.getTranslateY() > 10)  {
-                    playerOne.setTranslateY(playerOne.getTranslateY()-.5);
-                }  else
-                if (playerOne.getTranslateY()-ball.getTranslateY() > 1) {
-                    playerOne.setTranslateY(playerOne.getTranslateY() - .1);
+            if(!playerOneHasKeyboard) {
+                // CPU-Steuerung für Spieler 1
+                if(!playerOne.intersects(curt.getNorthBorder())) {
+                    if (playerOne.getTranslateY()-ball.getTranslateY() > 100) {
+                        playerOne.setTranslateY(playerOne.getTranslateY()-10);
+                    } else
+                    if (playerOne.getTranslateY()-ball.getTranslateY() > 50) {
+                        playerOne.setTranslateY(playerOne.getTranslateY()-4.5);
+                    }  else
+                    if (playerOne.getTranslateY()-ball.getTranslateY() > 10)  {
+                        playerOne.setTranslateY(playerOne.getTranslateY()-.5);
+                    }  else
+                    if (playerOne.getTranslateY()-ball.getTranslateY() > 1) {
+                        playerOne.setTranslateY(playerOne.getTranslateY() - .1);
+                    } else {
+                        playerOne.setTranslateY(playerOne.getTranslateY());
+                    }
+                } else {
+                    playerOne.setTranslateY(playerOne.getTranslateY());
+                }
+                if(!playerOne.intersects(curt.getSouthBorder())) {
+                    if (playerOne.getTranslateY()-ball.getTranslateY() < -100) {
+                        playerOne.setTranslateY(playerOne.getTranslateY()+10);
+                    } else
+                    if (playerOne.getTranslateY()-ball.getTranslateY() < -50) {
+                        playerOne.setTranslateY(playerOne.getTranslateY()+4.7);
+                    }  else
+                    if (playerOne.getTranslateY()-ball.getTranslateY() < -10)  {
+                        playerOne.setTranslateY(playerOne.getTranslateY()+.5);
+                    }  else
+                    if (playerOne.getTranslateY()-ball.getTranslateY() < -1) {
+                        playerOne.setTranslateY(playerOne.getTranslateY() + .1);
+                    } else {
+                        playerOne.setTranslateY(playerOne.getTranslateY());
+                    }
                 } else {
                     playerOne.setTranslateY(playerOne.getTranslateY());
                 }
             } else {
-                playerOne.setTranslateY(playerOne.getTranslateY());
-            }
-            if(!southBorder.getBoundsInParent().intersects(playerOne.getBoundsInParent())) {
-                if (playerOne.getTranslateY()-ball.getTranslateY() < -100) {
-                    playerOne.setTranslateY(playerOne.getTranslateY()+10);
-                } else
-                if (playerOne.getTranslateY()-ball.getTranslateY() < -50) {
-                    playerOne.setTranslateY(playerOne.getTranslateY()+4.7);
-                }  else
-                if (playerOne.getTranslateY()-ball.getTranslateY() < -10)  {
-                    playerOne.setTranslateY(playerOne.getTranslateY()+.5);
-                }  else
-                if (playerOne.getTranslateY()-ball.getTranslateY() < -1) {
-                    playerOne.setTranslateY(playerOne.getTranslateY() + .1);
-                } else {
-                    playerOne.setTranslateY(playerOne.getTranslateY());
+                // Manuelle Keyboard-Steuerung
+                if(keys.isDown(ButtonConfig.north2)) {
+                    if(!playerOne.intersects(curt.getNorthBorder())) {
+                        playerOne.setTranslateY(playerOne.getTranslateY()-6);
+                    }
                 }
-            } else {
-                playerOne.setTranslateY(playerOne.getTranslateY());
+                if(keys.isDown(ButtonConfig.south2)) {
+                    if(!playerOne.intersects(curt.getSouthBorder())) {
+                        playerOne.setTranslateY(playerOne.getTranslateY()+6);
+                    }
+                }
             }
         }
 
-        // CPU-Steuerung für Spieler 2
         if(!playerTwoIsPresent) {
-            if(!northBorder.getBoundsInParent().intersects(playerTwo.getBoundsInParent())) {
-                if (playerTwo.getTranslateY() - ball.getTranslateY() > 100) {
-                    playerTwo.setTranslateY(playerTwo.getTranslateY() - 7.4);
-                } else if (playerTwo.getTranslateY() - ball.getTranslateY() > 50) {
-                    playerTwo.setTranslateY(playerTwo.getTranslateY() - 5.2);
-                } else if (playerTwo.getTranslateY() - ball.getTranslateY() > 10) {
-                    playerTwo.setTranslateY(playerTwo.getTranslateY() - 2);
-                } else if (playerTwo.getTranslateY() - ball.getTranslateY() > 1) {
-                    playerTwo.setTranslateY(playerTwo.getTranslateY() - .1);
+            if(!playerTwoHasKeyboard) {
+                // CPU-Steuerung für Spieler 2
+                if (!playerTwo.intersects(curt.getNorthBorder())) {
+                    if (playerTwo.getTranslateY() - ball.getTranslateY() > 100) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY() - 7.4);
+                    } else if (playerTwo.getTranslateY() - ball.getTranslateY() > 50) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY() - 5.2);
+                    } else if (playerTwo.getTranslateY() - ball.getTranslateY() > 10) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY() - 2);
+                    } else if (playerTwo.getTranslateY() - ball.getTranslateY() > 1) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY() - .1);
+                    } else {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY());
+                    }
+                } else {
+                    playerTwo.setTranslateY(playerTwo.getTranslateY());
+                }
+                if (!playerTwo.intersects(curt.getSouthBorder())) {
+                    if (playerTwo.getTranslateY() - ball.getTranslateY() < -100) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY() + 8);
+                    } else if (playerTwo.getTranslateY() - ball.getTranslateY() < -50) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY() + 4.4);
+                    } else if (playerTwo.getTranslateY() - ball.getTranslateY() < -10) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY() + 2);
+                    } else if (playerTwo.getTranslateY() - ball.getTranslateY() < -1) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY() + .1);
+                    } else {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY());
+                    }
                 } else {
                     playerTwo.setTranslateY(playerTwo.getTranslateY());
                 }
             } else {
-                playerTwo.setTranslateY(playerTwo.getTranslateY());
-            }
-            if(!southBorder.getBoundsInParent().intersects(playerTwo.getBoundsInParent())) {
-                if (playerTwo.getTranslateY()-ball.getTranslateY() < -100) {
-                    playerTwo.setTranslateY(playerTwo.getTranslateY()+8);
-                } else
-                if (playerTwo.getTranslateY()-ball.getTranslateY() < -50) {
-                    playerTwo.setTranslateY(playerTwo.getTranslateY()+4.4);
-                }  else
-                if (playerTwo.getTranslateY()-ball.getTranslateY() < -10)  {
-                    playerTwo.setTranslateY(playerTwo.getTranslateY()+2);
-                }  else
-                if (playerTwo.getTranslateY()-ball.getTranslateY() < -1) {
-                    playerTwo.setTranslateY(playerTwo.getTranslateY() + .1);
-                } else {
-                    playerTwo.setTranslateY(playerTwo.getTranslateY());
+                // Manuelle Keyboard-Steuerung
+                if(keys.isDown(ButtonConfig.north)) {
+                    if(!playerTwo.intersects(curt.getNorthBorder())) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY()-6);
+                    }
                 }
-            } else {
-                playerTwo.setTranslateY(playerTwo.getTranslateY());
+                if(keys.isDown(ButtonConfig.south)) {
+                    if(!playerTwo.intersects(curt.getSouthBorder())) {
+                        playerTwo.setTranslateY(playerTwo.getTranslateY()+6);
+                    }
+                }
             }
         }
 
@@ -427,10 +443,10 @@ public class AppController implements Initializable {
             switch (gamepad.getSymbolID()) {
                 case 1:
                     double figure = playerOne.getTranslateY();
-                    if(northBorder.getBoundsInParent().intersects(playerOne.getBoundsInParent()))
+                    if(playerOne.intersects(curt.getNorthBorder()))
                     {
                         playerOne.setTranslateY(figure+Math.abs(getSpeed(gamepad.getAngleDegrees())));
-                    } else if(southBorder.getBoundsInParent().intersects(playerOne.getBoundsInParent()))
+                    } else if(playerOne.intersects(curt.getSouthBorder()))
                     {
                         playerOne.setTranslateY(figure-Math.abs(getSpeed(gamepad.getAngleDegrees())));
                     } else {
@@ -440,10 +456,10 @@ public class AppController implements Initializable {
                     break;
                 case 2:
                     double figure2 = playerTwo.getTranslateY();
-                    if(northBorder.getBoundsInParent().intersects(playerTwo.getBoundsInParent()))
+                    if(playerTwo.intersects(curt.getNorthBorder()))
                     {
                         playerTwo.setTranslateY(figure2+Math.abs(getSpeed(gamepad.getAngleDegrees())));
-                    } else if(southBorder.getBoundsInParent().intersects(playerTwo.getBoundsInParent()))
+                    } else if(playerTwo.intersects(curt.getSouthBorder()))
                     {
                         playerTwo.setTranslateY(figure2-Math.abs(getSpeed(gamepad.getAngleDegrees())));
                     } else {
