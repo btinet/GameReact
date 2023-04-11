@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
@@ -45,6 +46,8 @@ public class AppController implements Initializable {
     public boolean playerOneHasKeyboard = false;
     public ImageView p1kbdID;
     public ImageView p2kbdID;
+    public AudioFX confirm = AudioFX.confirm;
+    public AudioFX cancel = AudioFX.cancel;
     public boolean playerTwoHasKeyboard = false;
     public Line currentPlayer;
     public boolean isGameOver = false;
@@ -211,8 +214,12 @@ public class AppController implements Initializable {
             p1kbdID.setRotate(90);
             if(!root.getChildren().contains(p1kbdID)) {
                 root.getChildren().add(p1kbdID);
+                confirm.setBalance(-0.75);
+                confirm.play();
             } else {
                 root.getChildren().remove(p1kbdID);
+                cancel.setBalance(-0.75);
+                cancel.play();
             }
         }
         if (keys.isPressed(ButtonConfig.toggleP2)) {
@@ -223,8 +230,12 @@ public class AppController implements Initializable {
             p2kbdID.setRotate(-90);
             if(!root.getChildren().contains(p2kbdID)) {
                 root.getChildren().add(p2kbdID);
+                confirm.setBalance(0.75);
+                confirm.play();
             } else {
                 root.getChildren().remove(p2kbdID);
+                cancel.setBalance(0.75);
+                cancel.play();
             }
         }
     }

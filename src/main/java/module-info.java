@@ -7,5 +7,6 @@ module com.ivision.gamereact {
     opens com.ivision.gamereact to javafx.fxml;
     exports com.ivision.gamereact;
     exports com.ivision.gamereact.controller;
+    exports com.ivision.engine;
     opens com.ivision.gamereact.controller to javafx.fxml;
 }
