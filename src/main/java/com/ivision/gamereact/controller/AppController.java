@@ -68,9 +68,9 @@ public class AppController implements Initializable {
     public boolean isGameOver = false;
     boolean intro = true;
     boolean hasPowerUp = false;
-    ImageView powerUp;
+    Group powerUp;
 
-    AudioFX pikachu = AudioFX.pikachu;
+    AudioFX pikachu = AudioFX.collect;
 
     FadeTransition powerUpVanish;
     int powerUpTimer = 1000;
@@ -212,7 +212,32 @@ public class AppController implements Initializable {
                     if (!hasPowerUp) {
                         System.out.println("Power Up landet auf dem Spielfeld");
                         ball.resetBallHits();
-                        powerUp = ImageFX.getImage(ImageFiles.pikachu);
+
+                        Rectangle powerUpCircle = new Rectangle(36,36,GameColor.VIOLETT.darker());
+                        powerUpCircle.setArcWidth(16);
+                        powerUpCircle.setArcHeight(16);
+                        ImageView powerUpItem = null;
+                        switch (ThreadLocalRandom.current().nextInt(1, 5 + 1)) {
+                            case 1:
+                                powerUpItem = ImageFX.getImage(ImageFiles.heart);
+                                break;
+                            case 2:
+                                powerUpItem = ImageFX.getImage(ImageFiles.death);
+                                break;
+                            case 3:
+                                powerUpItem = ImageFX.getImage(ImageFiles.stretch);
+                                break;
+                            case 4:
+                                powerUpItem = ImageFX.getImage(ImageFiles.shrink);
+                                break;
+                            case 5:
+                                powerUpItem = ImageFX.getImage(ImageFiles.shuffle);
+                                break;
+                        }
+                        assert powerUpItem != null;
+                        powerUpItem.setTranslateX(2);
+                        powerUpItem.setTranslateY(2);
+                        powerUp = new Group(powerUpCircle,powerUpItem);
                         powerUp.setTranslateX(ThreadLocalRandom.current().nextInt(-140, 140 + 1));
                         powerUp.setTranslateY(ThreadLocalRandom.current().nextInt(-270, 270 + 1));
                         powerUpVanish = Transitions.createFadeTransition(200,powerUp,.5,.1);

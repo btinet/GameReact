@@ -17,7 +17,7 @@ public enum AudioFX {
     confirm ("/wav/confirm.wav"),
     cancel ("/wav/cancel.wav"),
     click ("/wav/click.wav"),
-    pikachu ("/wav/pikachu.mp3");
+    collect ("/wav/collect.wav");
 
     private final AudioClip sfx;
 
