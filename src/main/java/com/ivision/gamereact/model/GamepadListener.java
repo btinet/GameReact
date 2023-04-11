@@ -69,7 +69,6 @@ public class GamepadListener implements TuioListener {
         if(tobj.getSymbolID() == 1) controller.playerOneIsPresent = true;
         if(tobj.getSymbolID() == 2) controller.playerTwoIsPresent = true;
 
-
         if(verbose) {
             System.out.printf("Objekt mit Symbol-ID %s hinzugefügt.%n",tobj.getSymbolID());
         }

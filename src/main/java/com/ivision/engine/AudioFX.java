@@ -15,7 +15,8 @@ public enum AudioFX {
     rHitSFX ("/wav/rHit.wav"),
     pongReactSFX ("/wav/pongReact.wav"),
     confirm ("/wav/confirm.wav"),
-    cancel ("/wav/cancel.wav");
+    cancel ("/wav/cancel.wav"),
+    click ("/wav/click.wav");
 
     private final AudioClip sfx;
 

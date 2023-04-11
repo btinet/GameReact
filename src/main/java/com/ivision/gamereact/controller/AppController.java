@@ -18,7 +18,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
@@ -46,8 +45,22 @@ public class AppController implements Initializable {
     public boolean playerOneHasKeyboard = false;
     public ImageView p1kbdID;
     public ImageView p2kbdID;
+    public ImageView fidBlue;
+    public ImageView fidRed;
+
+    boolean markerOneAdded = false;
+    boolean markerTwoAdded = false;
+
+    {
+        assert ImageFiles.fidBlue != null;
+        fidBlue = ImageFX.getImage(ImageFiles.fidBlue);
+        fidRed = ImageFX.getImage(ImageFiles.fidBlue);
+    }
+
+
     public AudioFX confirm = AudioFX.confirm;
     public AudioFX cancel = AudioFX.cancel;
+    public AudioFX click = AudioFX.click;
     public boolean playerTwoHasKeyboard = false;
     public Line currentPlayer;
     public boolean isGameOver = false;
@@ -125,6 +138,32 @@ public class AppController implements Initializable {
                 getFingerInput();
                 getEntityInteractions();
 
+
+
+                if(playerOneIsPresent) {
+                    addMarkerIconRed();
+                    confirm.setBalance(-0.75);
+                    if(!markerOneAdded) confirm.play();
+                    markerOneAdded = true;
+                } else {
+                    removeMarkerIconRed();
+                    cancel.setBalance(-0.75);
+                    if(markerOneAdded) cancel.play();
+                    markerOneAdded = false;
+                }
+
+                if(playerTwoIsPresent) {
+                    addMarkerIconBlue();
+                    confirm.setBalance(0.75);
+                    if(!markerTwoAdded) confirm.play();
+                    markerTwoAdded = true;
+                } else {
+                    removeMarkerIconBlue();
+                    cancel.setBalance(0.75);
+                    if(markerTwoAdded) cancel.play();
+                    markerTwoAdded = false;
+                }
+
             }
 
             // Spielzeit generieren
@@ -189,6 +228,7 @@ public class AppController implements Initializable {
             fingerCircle.setTranslateY((int)(cursor.getScreenY(height)-height/2));
             if(!root.getChildren().contains(fingerCircle)) root.getChildren().add(fingerCircle);
             setAndPlayFillTransition(fingerCircle);
+            click.play();
             cursorIterator.remove();
             togglePause();
         }
@@ -205,12 +245,16 @@ public class AppController implements Initializable {
 
         // einmalige Tastenabfragen (innerhalb Anschlagverzögerung)
         if (keys.isPressed(ButtonConfig.toggleFullscreen))         toggleFullscreen();
-        if (keys.isPressed(ButtonConfig.actionTertiary))           togglePause();
+        if (keys.isPressed(ButtonConfig.actionTertiary)) {
+            click.play();
+            togglePause();
+        }
         if (keys.isPressed(ButtonConfig.toggleP1)) {
             toggleKeyboardControl(1);
             assert ImageFiles.kbd != null;
             if(null == p1kbdID) p1kbdID = ImageFX.getImage(ImageFiles.kbd);
-            p1kbdID.setTranslateX(-640);
+            p1kbdID.setTranslateX(-660);
+            p1kbdID.setTranslateY(30);
             p1kbdID.setRotate(90);
             if(!root.getChildren().contains(p1kbdID)) {
                 root.getChildren().add(p1kbdID);
@@ -226,7 +270,8 @@ public class AppController implements Initializable {
             toggleKeyboardControl(2);
             assert ImageFiles.kbd != null;
             if(null == p2kbdID) p2kbdID = ImageFX.getImage(ImageFiles.kbd);
-            p2kbdID.setTranslateX(640);
+            p2kbdID.setTranslateX(660);
+            p2kbdID.setTranslateY(-30);
             p2kbdID.setRotate(-90);
             if(!root.getChildren().contains(p2kbdID)) {
                 root.getChildren().add(p2kbdID);
@@ -507,6 +552,26 @@ public class AppController implements Initializable {
             }
         }
 
+    }
+
+    public void addMarkerIconBlue () {
+        fidBlue.setTranslateX(660);
+        fidBlue.setTranslateY(30);
+        if(!root.getChildren().contains(fidBlue)) root.getChildren().add(fidBlue);
+    }
+
+    public void removeMarkerIconBlue () {
+        root.getChildren().remove(fidBlue);
+    }
+
+    public void addMarkerIconRed () {
+        fidRed.setTranslateX(-660);
+        fidRed.setTranslateY(-30);
+        if(!root.getChildren().contains(fidRed)) root.getChildren().add(fidRed);
+    }
+
+    public void removeMarkerIconRed () {
+        root.getChildren().remove(fidRed);
     }
 
     /**
