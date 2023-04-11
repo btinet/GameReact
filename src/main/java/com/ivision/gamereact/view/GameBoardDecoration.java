@@ -29,11 +29,15 @@ public class GameBoardDecoration {
 
     FillTransition leftTransition;
     FillTransition rightTransition;
+    FillTransition leftPowerUpTransition;
+    FillTransition rightPowerupTransition;
 
     public GameBoardDecoration (Pane root, Paddle playerOne, Paddle playerTwo) {
         this.root = root;
         leftTransition =  Transitions.createFillTransition(150,strafeLeft,GameColor.VIOLETT.darker(),playerTwo.getPrimaryColor(),4);
         rightTransition =  Transitions.createFillTransition(150,strafeRight,GameColor.VIOLETT.darker(),playerOne.getPrimaryColor(),4);
+        leftPowerUpTransition =  Transitions.createFillTransition(150,strafeLeft,GameColor.VIOLETT.darker(),GameColor.YELLOW,4);
+        rightPowerupTransition =  Transitions.createFillTransition(150,strafeRight,GameColor.VIOLETT.darker(),GameColor.YELLOW,4);
         paint();
         addToStage();
     }
@@ -85,6 +89,17 @@ public class GameBoardDecoration {
                 leftSide,
                 rightSide
         );
+    }
+
+    public void playPowerUpAnimation (PaddlePosition position) {
+        switch (position) {
+            case LEFT:
+                leftPowerUpTransition.play();
+                break;
+            case RIGHT:
+                rightPowerupTransition.play();
+                break;
+        }
     }
 
     public void playStrafeAnimation (PaddlePosition position) {

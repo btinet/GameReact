@@ -5,11 +5,15 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Ball extends Circle {
 
     private double ballSpeed = 10;
     private double ballAngle = 3;
     private double startPosition = -360;
+
+    private int ballHits = 0;
 
     public Ball(double radius) {
         setRadius(radius);
@@ -46,6 +50,18 @@ public class Ball extends Circle {
         } else {
             setBallAngle(PaddlePosition.RIGHT);
         }
+    }
+
+    public void increaseBallHits () {
+        this.ballHits = ballHits + ThreadLocalRandom.current().nextInt(1, 13 + 1);
+    }
+
+    public void resetBallHits () {
+        this.ballHits = 0;
+    }
+
+    public Boolean triggerByBallHits() {
+        return ballHits % 7 == 0 && ballHits > 0;
     }
 
     public void moveX() {

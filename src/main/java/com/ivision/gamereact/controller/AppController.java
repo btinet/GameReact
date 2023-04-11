@@ -11,6 +11,7 @@ import com.ivision.gamereact.view.Transitions;
 import com.tuio.TuioClient;
 import com.tuio.TuioCursor;
 import com.tuio.TuioObject;
+import javafx.animation.FadeTransition;
 import javafx.animation.FillTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
@@ -25,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.ivision.gamereact.ReactApplication.*;
 
@@ -62,9 +64,17 @@ public class AppController implements Initializable {
     public AudioFX cancel = AudioFX.cancel;
     public AudioFX click = AudioFX.click;
     public boolean playerTwoHasKeyboard = false;
-    public Line currentPlayer;
+    public Paddle currentPlayer;
     public boolean isGameOver = false;
     boolean intro = true;
+    boolean hasPowerUp = false;
+    ImageView powerUp;
+
+    AudioFX pikachu = AudioFX.pikachu;
+
+    FadeTransition powerUpVanish;
+    int powerUpTimer = 1000;
+    int startTime = 0;
     private final TuioClient client = new TuioClient();
     private final KeyPolling keys = KeyPolling.getInstance();
 
@@ -175,6 +185,40 @@ public class AppController implements Initializable {
                     if (!isGameOver) AudioFX.pongReactSFX.play();
                     intro = false;
                     togglePause();
+                }
+
+                if(hasPowerUp && startTime < powerUpTimer) {
+                    startTime++;
+                    if(powerUpTimer-startTime == 200) powerUpVanish.play();
+
+                    if(ball.intersects(powerUp)) {
+                        root.getChildren().remove(powerUp);
+                        pikachu.play();
+                        startTime = 0;
+                        hasPowerUp = false;
+                        currentPlayer.resetCurrentHealthPoints();
+                        gbd.playPowerUpAnimation(currentPlayer.getPosition());
+                        System.out.println("Power Up aufgesammelt!");
+                    }
+
+                } else {
+                    if (hasPowerUp) System.out.println("Power Up verschwunden!");
+                    root.getChildren().remove(powerUp);
+                    startTime = 0;
+                    hasPowerUp = false;
+                }
+
+                if(ball.triggerByBallHits()) {
+                    if (!hasPowerUp) {
+                        System.out.println("Power Up landet auf dem Spielfeld");
+                        ball.resetBallHits();
+                        powerUp = ImageFX.getImage(ImageFiles.pikachu);
+                        powerUp.setTranslateX(ThreadLocalRandom.current().nextInt(-140, 140 + 1));
+                        powerUp.setTranslateY(ThreadLocalRandom.current().nextInt(-270, 270 + 1));
+                        powerUpVanish = Transitions.createFadeTransition(200,powerUp,.5,.1);
+                        root.getChildren().add(powerUp);
+                        hasPowerUp = true;
+                    }
                 }
 
                 // Position der Spielfiguren aktualisieren
@@ -325,8 +369,16 @@ public class AppController implements Initializable {
 
     public void getEntityInteractions () {
 
+
+
         // Ball geht ins Aus:
         if(!ball.intersects(curt)) {
+
+            ball.resetBallHits();
+            hasPowerUp = false;
+            startTime = 0;
+            root.getChildren().remove(powerUp);
+
 
             if (currentPlayer.equals(playerOne)) {
                 playerTwo.decreaseHealthPoints();
@@ -361,7 +413,11 @@ public class AppController implements Initializable {
             }
             togglePause();
             cameraTranslateTransition.play();
-            ball.reflect();
+            if(ball.getBallAngle() > 0) {
+                ball.setBallAngle(-1.5);
+            } else {
+                ball.setBallAngle(1.5);
+            }
         }
 
         // TODO: Ball-Interaktion mit Spielern in eigene Klasse oder Methode übertragen
@@ -376,13 +432,14 @@ public class AppController implements Initializable {
         if(ball.intersects(playerOne)) {
             currentPlayer = playerOne;
             playerOne.getPrimarySound().play();
-
+            ball.increaseBallHits();
             ball.setBallAngle(-Math.sin(Math.toRadians(playerOne.getTranslateY()-ball.getTranslateY()+random))*5);
             ball.setBallSpeed(PaddlePosition.LEFT);
         }
         else if (ball.intersects(playerTwo)) {
             currentPlayer = playerTwo;
             playerTwo.getPrimarySound().play();
+            ball.increaseBallHits();
             ball.setBallAngle(-Math.sin(Math.toRadians(playerTwo.getTranslateY()-ball.getTranslateY()+random))*5);
             ball.setBallSpeed(PaddlePosition.RIGHT);
         }

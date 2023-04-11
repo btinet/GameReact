@@ -24,6 +24,8 @@ public class Paddle extends Line {
     protected Color secondaryColor;
     protected Integer px;
     protected Integer py;
+
+    PaddlePosition position;
     protected Integer healthPoints;
     protected Integer currentHealthPoints;
     protected ArrayList<Circle> healthPointCircles = new ArrayList<>();
@@ -39,6 +41,7 @@ public class Paddle extends Line {
 
     public Paddle(PaddlePosition position, int healthPoints, Color primaryColor) {
 
+        this.position = position;
         this.healthPoints = healthPoints;
         this.currentHealthPoints = healthPoints;
         this.primaryColor = primaryColor;
@@ -54,7 +57,7 @@ public class Paddle extends Line {
 
         addHealthPointCircles();
 
-        switch (position) {
+        switch (this.position) {
             case LEFT:
                 setTranslateX(-400);
                 setId("ROT");
@@ -168,6 +171,15 @@ public class Paddle extends Line {
 
 
     // Getter und Setter für die Klassenattribute
+
+
+    public PaddlePosition getPosition() {
+        return position;
+    }
+
+    public void setPosition(PaddlePosition position) {
+        this.position = position;
+    }
 
     public Integer getCurrentHealthPoints() {
         return currentHealthPoints;

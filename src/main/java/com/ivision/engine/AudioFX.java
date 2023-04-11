@@ -16,7 +16,8 @@ public enum AudioFX {
     pongReactSFX ("/wav/pongReact.wav"),
     confirm ("/wav/confirm.wav"),
     cancel ("/wav/cancel.wav"),
-    click ("/wav/click.wav");
+    click ("/wav/click.wav"),
+    pikachu ("/wav/pikachu.mp3");
 
     private final AudioClip sfx;
 
