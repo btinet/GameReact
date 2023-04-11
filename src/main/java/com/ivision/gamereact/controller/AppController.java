@@ -16,6 +16,7 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -42,6 +43,8 @@ public class AppController implements Initializable {
     public boolean playerOneIsPresent = false;
     public boolean playerTwoIsPresent = false;
     public boolean playerOneHasKeyboard = false;
+    public ImageView p1kbdID;
+    public ImageView p2kbdID;
     public boolean playerTwoHasKeyboard = false;
     public Line currentPlayer;
     public boolean isGameOver = false;
@@ -200,8 +203,30 @@ public class AppController implements Initializable {
         // einmalige Tastenabfragen (innerhalb Anschlagverzögerung)
         if (keys.isPressed(ButtonConfig.toggleFullscreen))         toggleFullscreen();
         if (keys.isPressed(ButtonConfig.actionTertiary))           togglePause();
-        if (keys.isPressed(ButtonConfig.toggleP1))                 toggleKeyboardControl(1);
-        if (keys.isPressed(ButtonConfig.toggleP2))                 toggleKeyboardControl(2);
+        if (keys.isPressed(ButtonConfig.toggleP1)) {
+            toggleKeyboardControl(1);
+            assert ImageFiles.kbd != null;
+            if(null == p1kbdID) p1kbdID = ImageFX.getImage(ImageFiles.kbd);
+            p1kbdID.setTranslateX(-640);
+            p1kbdID.setRotate(90);
+            if(!root.getChildren().contains(p1kbdID)) {
+                root.getChildren().add(p1kbdID);
+            } else {
+                root.getChildren().remove(p1kbdID);
+            }
+        }
+        if (keys.isPressed(ButtonConfig.toggleP2)) {
+            toggleKeyboardControl(2);
+            assert ImageFiles.kbd != null;
+            if(null == p2kbdID) p2kbdID = ImageFX.getImage(ImageFiles.kbd);
+            p2kbdID.setTranslateX(640);
+            p2kbdID.setRotate(-90);
+            if(!root.getChildren().contains(p2kbdID)) {
+                root.getChildren().add(p2kbdID);
+            } else {
+                root.getChildren().remove(p2kbdID);
+            }
+        }
     }
 
 
