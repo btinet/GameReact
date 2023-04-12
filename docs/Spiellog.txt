@@ -1,0 +1,46 @@
+Gedrückte Taste: F2 				Spieler 2 aktiviert Tastatursteuerung
+Gedrückte Taste: Space 			Spiel gestartet
+Power Up landet auf dem Spielfeld
+Power-Up-System zurückgesetzt!		
+Power Up aufgesammelt!			Spieler erhält Herz-PowerUp
+Lebenspunkte aufgefrischt!
+Power-Up-System zurückgesetzt!		Treffer gelandet
+Gedrückte Taste: Space 
+PowerUp-Wirkung hat nachgelassen.	Neues PowerUp darf kommen
+Power Up landet auf dem Spielfeld
+Power-Up-System zurückgesetzt!
+Power Up aufgesammelt!			Spieler erhält Herz-PowerUp
+Lebenspunkte aufgefrischt!
+PowerUp-Wirkung hat nachgelassen.	Neues PowerUp darf kommen
+Power Up landet auf dem Spielfeld
+Power-Up-System zurückgesetzt!		Treffer gelandet
+Gedrückte Taste: Space 
+Power Up landet auf dem Spielfeld
+Power-Up-System zurückgesetzt!		Treffer gelandet
+Gedrückte Taste: Space 
+Power Up landet auf dem Spielfeld
+Power-Up-System zurückgesetzt!
+Power Up aufgesammelt!			Spieler erhält Stretch-PowerUp
+Gewachsen!
+PowerUp-Wirkung hat nachgelassen.	Neues PowerUp darf kommen
+Power-Up-System zurückgesetzt!		Treffer gelandet
+Gedrückte Taste: Space 
+Power-Up-System zurückgesetzt!		Treffer gelandet
+Gedrückte Taste: Space 
+Power-Up-System zurückgesetzt!		Treffer gelandet
+Gedrückte Taste: Space 
+Power-Up-System zurückgesetzt!		Treffer gelandet
+Gedrückte Taste: Space 
+Power Up landet auf dem Spielfeld
+Power-Up-System zurückgesetzt!
+Power Up aufgesammelt!			Spieler erhält Stretch-PowerUp
+Gewachsen!
+Power-Up-System zurückgesetzt!		Treffer gelandet
+Gedrückte Taste: Space 
+PowerUp-Wirkung hat nachgelassen.	Neues PowerUp darf kommen
+Power Up landet auf dem Spielfeld
+Power-Up-System zurückgesetzt!
+Power Up aufgesammelt!			Spieler erhält Herz-PowerUp
+Lebenspunkte aufgefrischt!
+PowerUp-Wirkung hat nachgelassen.	Neues PowerUp darf kommen
+Power-Up-System zurückgesetzt!

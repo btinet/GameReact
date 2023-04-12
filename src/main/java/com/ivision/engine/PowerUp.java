@@ -21,5 +21,7 @@ public interface PowerUp {
      * Wendet PowerUp auf den Spieler an, der es einsammelte.
      * @param affectedPlayer Vom PowerUp betroffener Spieler.
      */
-    void doAction (Paddle affectedPlayer);
+    boolean doAction (Paddle affectedPlayer);
+
+    boolean isActive();
 }

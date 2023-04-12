@@ -2,6 +2,7 @@ package com.ivision.gamereact.entity;
 
 import com.ivision.engine.AudioFX;
 import com.ivision.engine.Fonts;
+import com.ivision.engine.PaddleManipulation;
 import com.ivision.engine.PaddlePosition;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -24,7 +25,7 @@ public class Paddle extends Line {
     protected Color secondaryColor;
     protected Integer px;
     protected Integer py;
-
+    PaddleManipulation manipulation;
     PaddlePosition position;
     protected Integer healthPoints;
     protected Integer currentHealthPoints;
@@ -172,6 +173,13 @@ public class Paddle extends Line {
 
     // Getter und Setter für die Klassenattribute
 
+    public PaddleManipulation getManipulation() {
+        return manipulation;
+    }
+
+    public void setManipulation(PaddleManipulation manipulation) {
+        this.manipulation = manipulation;
+    }
 
     public PaddlePosition getPosition() {
         return position;
@@ -187,6 +195,7 @@ public class Paddle extends Line {
 
     public void setCurrentHealthPoints(Integer currentHealthPoints) {
         this.currentHealthPoints = currentHealthPoints;
+        updateHealthPointCircles();
     }
 
     public ArrayList<Circle> getHealthPointCircles() {

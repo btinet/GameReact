@@ -5,7 +5,6 @@ import com.ivision.engine.AudioFX;
 import com.ivision.engine.GameColor;
 import com.ivision.gamereact.view.GameBoardDecoration;
 import com.ivision.gamereact.view.Transitions;
-import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
@@ -41,7 +40,7 @@ public class PowerUpSystem extends Group {
     }
 
     public void setPowerUp () {
-        if (!powerUpSpawned) {
+        if (!powerUpSpawned && !powerUpCollected) {
             System.out.println("Power Up landet auf dem Spielfeld");
             ball.resetBallHits();
 
@@ -103,11 +102,11 @@ public class PowerUpSystem extends Group {
                 powerUpCollected = true;
 
                 // TODO: Timer für eingesammelten Power Up starten und doAction() vom PowerUp ausführen!
-                currentPlayer.resetCurrentHealthPoints();
                 // Ende
 
                 gbd.playPowerUpAnimation(currentPlayer.getPosition());
                 System.out.println("Power Up aufgesammelt!");
+                doAction(currentPlayer);
             }
         } else {
             if (powerUpSpawned) {
@@ -116,6 +115,32 @@ public class PowerUpSystem extends Group {
             }
 
         }
+    }
+
+    public void doAction (Paddle affectedPlayer) {
+        while (true) {
+            if (powerUp.doAction(affectedPlayer)) break;
+        }
+    }
+
+    public void runPowerUpTimer (Paddle affectedPlayer) {
+        if(startTime < 1000) {
+            startTime++;
+        } else {
+            this.powerUpCollected = false;
+            this.startTime = 0;
+            System.out.println("PowerUp-Wirkung hat nachgelassen.");
+            switch (affectedPlayer.getManipulation()) {
+                case WIDTH:
+                    affectedPlayer.setEndY(70);
+                    break;
+                case CONFUSE:
+                    // TODO: Umkehrung der Steuerung aufheben.
+                    break;
+            }
+            affectedPlayer.setManipulation(null);
+        }
+
     }
 
 }

@@ -7,6 +7,8 @@ public abstract class PowerUpItem implements PowerUp {
 
     ImageView icon;
 
+    boolean isActive = true;
+
     public PowerUpItem (ImageView icon) {
         setIcon(icon);
     }
@@ -23,4 +25,18 @@ public abstract class PowerUpItem implements PowerUp {
 
     }
 
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    protected void setIsActive (boolean value) {
+        this.isActive = value;
+    }
+
+    @Override
+    public boolean doAction(Paddle affectedPlayer) {
+        System.out.println("Standard Power Up ausgeführt!");
+        return true;
+    }
 }

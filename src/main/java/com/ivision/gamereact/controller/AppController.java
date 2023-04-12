@@ -180,6 +180,14 @@ public class AppController implements Initializable {
                     togglePause();
                 }
 
+                if(playerOne.getManipulation() != null) {
+                    powerUpSystem.runPowerUpTimer(playerOne);
+                }
+
+                if(playerTwo.getManipulation() != null) {
+                    powerUpSystem.runPowerUpTimer(playerTwo);
+                }
+
                 // START: Power Ups
                 powerUpSystem.run(currentPlayer);
 
