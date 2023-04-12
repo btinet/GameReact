@@ -32,7 +32,7 @@ den Förderverein des Treptow-Kollegs.*
 
 ### To do
 
-- 🚧 Organisation nach Klassen, zur besseren Lesbarkeit und Wartung des Programmcodes
+- 🚧 Funktionen der Power Ups implementieren (Pong React)
 - 🚧 Responsive Content Layout (RCL)
 - 🚧 Videointegration
 - 🚧 Audioplayer
@@ -41,6 +41,8 @@ den Förderverein des Treptow-Kollegs.*
 ### Ready
 
 - ✅ Feedback-Indikator (Präsentationsfolien)
+- ✅ Power Up System (Pong React)
+- ✅ Organisation nach Klassen, zur besseren Lesbarkeit und Wartung des Programmcodes
 - ✅ Feedback-Beamer Output
 - ✅ Game Engine
 - ✅ Keyboard User Input

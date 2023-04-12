@@ -613,11 +613,7 @@ public class AppController implements Initializable {
         stageWidth = root.getWidth();
         stageHeight = root.getHeight();
 
-        if(stage.isFullScreen()) {
-            stage.setFullScreen(false);
-        } else {
-            stage.setFullScreen(true);
-        }
+        stage.setFullScreen(!stage.isFullScreen());
     }
 
 }
