@@ -35,16 +35,16 @@ den Förderverein des Treptow-Kollegs.*
 - 🚧 Funktionen der Power Ups implementieren (Pong React)
 - 🚧 GamePad-Steuerung (Pong React)
 - 🚧 Responsive Content Layout (RCL)
+- 🚧 Feedback-Indikator (Präsentationsfolien)
+- 🚧 Feedback-Beamer Output
 - 🚧 Videointegration
 - 🚧 Audioplayer
 - ❌ Reactable-Mode (Max MSP)
 
 ### Ready
 
-- ✅ Feedback-Indikator (Präsentationsfolien)
 - ✅ Power Up System (Pong React)
 - ✅ Organisation nach Klassen, zur besseren Lesbarkeit und Wartung des Programmcodes
-- ✅ Feedback-Beamer Output
 - ✅ Game Engine
 - ✅ Keyboard User Input
 - ✅ ReacTIVision User Input
