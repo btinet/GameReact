@@ -22,7 +22,7 @@ public class PowerUpSystem extends Group {
     Rectangle powerUpCircle = new Rectangle(36, 36, GameColor.VIOLETT.darker());
     AudioFX powerUpFX = AudioFX.collect;
     FadeTransition powerUpVanish;
-    int powerUpTimer = 400;
+    int powerUpTimer = 1000;
     int startTime = 0;
     boolean powerUpSpawned = false;
     boolean powerUpCollected = false;
