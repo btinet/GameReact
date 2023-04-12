@@ -23,6 +23,7 @@ public class PowerUpSystem extends Group {
     FadeTransition powerUpVanish;
     int powerUpTimer = 1000;
     int startTime = 0;
+    int powerUpTime = 0;
     boolean powerUpSpawned = false;
     boolean powerUpCollected = false;
 
@@ -124,11 +125,11 @@ public class PowerUpSystem extends Group {
     }
 
     public void runPowerUpTimer (Paddle affectedPlayer) {
-        if(startTime < 1000) {
-            startTime++;
+        if(powerUpTime < 1000) {
+            powerUpTime++;
         } else {
             this.powerUpCollected = false;
-            this.startTime = 0;
+            this.powerUpTime = 0;
             System.out.println("PowerUp-Wirkung hat nachgelassen.");
             switch (affectedPlayer.getManipulation()) {
                 case WIDTH:
