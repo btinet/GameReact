@@ -4,6 +4,7 @@ import com.ivision.engine.*;
 import com.ivision.gamereact.entity.Ball;
 import com.ivision.gamereact.entity.Curt;
 import com.ivision.gamereact.entity.Paddle;
+import com.ivision.gamereact.entity.PowerUpSystem;
 import com.ivision.gamereact.model.GamepadListener;
 import com.ivision.gamereact.view.GameBoardDecoration;
 import com.ivision.gamereact.view.PauseScreen;
@@ -11,7 +12,6 @@ import com.ivision.gamereact.view.Transitions;
 import com.tuio.TuioClient;
 import com.tuio.TuioCursor;
 import com.tuio.TuioObject;
-import javafx.animation.FadeTransition;
 import javafx.animation.FillTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
@@ -26,7 +26,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static com.ivision.gamereact.ReactApplication.*;
 
@@ -59,7 +58,6 @@ public class AppController implements Initializable {
         fidRed = ImageFX.getImage(ImageFiles.fidBlue);
     }
 
-
     public AudioFX confirm = AudioFX.confirm;
     public AudioFX cancel = AudioFX.cancel;
     public AudioFX click = AudioFX.click;
@@ -67,14 +65,8 @@ public class AppController implements Initializable {
     public Paddle currentPlayer;
     public boolean isGameOver = false;
     boolean intro = true;
-    boolean hasPowerUp = false;
-    Group powerUp;
 
-    AudioFX pikachu = AudioFX.collect;
-
-    FadeTransition powerUpVanish;
-    int powerUpTimer = 1000;
-    int startTime = 0;
+    PowerUpSystem powerUpSystem;
     private final TuioClient client = new TuioClient();
     private final KeyPolling keys = KeyPolling.getInstance();
 
@@ -98,7 +90,7 @@ public class AppController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        ball.setBallSpeed(9);
+        ball.setBallSpeed(10);
         root.setCursor(Cursor.NONE);
 
         currentPlayer = playerOne;
@@ -127,6 +119,7 @@ public class AppController implements Initializable {
                 playerTwo.getHealthPointGroup()
         );
 
+        powerUpSystem = new PowerUpSystem(root,ball, gbd);
         pauseScreen =  new PauseScreen(root);
 
         // Verarbeitung der Benutzereingabe über Reactable-Marker.
@@ -187,64 +180,13 @@ public class AppController implements Initializable {
                     togglePause();
                 }
 
-                if(hasPowerUp && startTime < powerUpTimer) {
-                    startTime++;
-                    if(powerUpTimer-startTime == 200) powerUpVanish.play();
-
-                    if(ball.intersects(powerUp)) {
-                        root.getChildren().remove(powerUp);
-                        pikachu.play();
-                        startTime = 0;
-                        hasPowerUp = false;
-                        currentPlayer.resetCurrentHealthPoints();
-                        gbd.playPowerUpAnimation(currentPlayer.getPosition());
-                        System.out.println("Power Up aufgesammelt!");
-                    }
-
-                } else {
-                    if (hasPowerUp) System.out.println("Power Up verschwunden!");
-                    root.getChildren().remove(powerUp);
-                    startTime = 0;
-                    hasPowerUp = false;
-                }
+                // START: Power Ups
+                powerUpSystem.run(currentPlayer);
 
                 if(ball.triggerByBallHits()) {
-                    if (!hasPowerUp) {
-                        System.out.println("Power Up landet auf dem Spielfeld");
-                        ball.resetBallHits();
-
-                        Rectangle powerUpCircle = new Rectangle(36,36,GameColor.VIOLETT.darker());
-                        powerUpCircle.setArcWidth(16);
-                        powerUpCircle.setArcHeight(16);
-                        ImageView powerUpItem = null;
-                        switch (ThreadLocalRandom.current().nextInt(1, 5 + 1)) {
-                            case 1:
-                                powerUpItem = ImageFX.getImage(ImageFiles.heart);
-                                break;
-                            case 2:
-                                powerUpItem = ImageFX.getImage(ImageFiles.death);
-                                break;
-                            case 3:
-                                powerUpItem = ImageFX.getImage(ImageFiles.stretch);
-                                break;
-                            case 4:
-                                powerUpItem = ImageFX.getImage(ImageFiles.shrink);
-                                break;
-                            case 5:
-                                powerUpItem = ImageFX.getImage(ImageFiles.shuffle);
-                                break;
-                        }
-                        assert powerUpItem != null;
-                        powerUpItem.setTranslateX(2);
-                        powerUpItem.setTranslateY(2);
-                        powerUp = new Group(powerUpCircle,powerUpItem);
-                        powerUp.setTranslateX(ThreadLocalRandom.current().nextInt(-140, 140 + 1));
-                        powerUp.setTranslateY(ThreadLocalRandom.current().nextInt(-270, 270 + 1));
-                        powerUpVanish = Transitions.createFadeTransition(200,powerUp,.5,.1);
-                        root.getChildren().add(powerUp);
-                        hasPowerUp = true;
-                    }
+                    powerUpSystem.setPowerUp();
                 }
+                // ENDE: Power Ups
 
                 // Position der Spielfiguren aktualisieren
                 updatePlayer();
@@ -399,15 +341,11 @@ public class AppController implements Initializable {
         // Ball geht ins Aus:
         if(!ball.intersects(curt)) {
 
-            ball.resetBallHits();
-            hasPowerUp = false;
-            startTime = 0;
-            root.getChildren().remove(powerUp);
-
+            powerUpSystem.shutDown();
 
             if (currentPlayer.equals(playerOne)) {
                 playerTwo.decreaseHealthPoints();
-                if (playerTwo.getCurrentHealthPoints() > 1) {
+                if (playerTwo.getCurrentHealthPoints() >= 1) {
                     pauseScreen.showText("Rot trifft!", playerOne.getPrimaryColor());
                     AudioFX.rHitSFX.play();
                 } else {
@@ -422,7 +360,7 @@ public class AppController implements Initializable {
                 cameraTranslateTransition.setToX(0);
             } else if (currentPlayer.equals(playerTwo)) {
                 playerOne.decreaseHealthPoints();
-                if (playerOne.getCurrentHealthPoints() > 1) {
+                if (playerOne.getCurrentHealthPoints() >= 1) {
                     pauseScreen.showText("Blau trifft!", playerTwo.getPrimaryColor());
                     AudioFX.bHitSFX.play();
                 } else {
