@@ -33,6 +33,7 @@ den Förderverein des Treptow-Kollegs.*
 ### To do
 
 - 🚧 Funktionen der Power Ups implementieren (Pong React)
+- 🚧 GamePad-Steuerung (Pong React)
 - 🚧 Responsive Content Layout (RCL)
 - 🚧 Videointegration
 - 🚧 Audioplayer
