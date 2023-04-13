@@ -1,8 +1,9 @@
-package com.ivision.gamereact.entity;
+package com.ivision.engine;
 
 
 import com.ivision.engine.AudioFX;
 import com.ivision.engine.GameColor;
+import com.ivision.gamereact.entity.*;
 import com.ivision.gamereact.view.GameBoardDecoration;
 import com.ivision.gamereact.view.Transitions;
 import javafx.animation.FadeTransition;

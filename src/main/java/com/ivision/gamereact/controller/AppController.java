@@ -4,7 +4,7 @@ import com.ivision.engine.*;
 import com.ivision.gamereact.entity.Ball;
 import com.ivision.gamereact.entity.Curt;
 import com.ivision.gamereact.entity.Paddle;
-import com.ivision.gamereact.entity.PowerUpSystem;
+import com.ivision.engine.PowerUpSystem;
 import com.ivision.gamereact.model.GamepadListener;
 import com.ivision.gamereact.view.GameBoardDecoration;
 import com.ivision.gamereact.view.PauseScreen;

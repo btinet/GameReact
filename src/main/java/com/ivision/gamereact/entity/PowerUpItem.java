@@ -5,7 +5,7 @@ import javafx.scene.image.ImageView;
 
 public abstract class PowerUpItem implements PowerUp {
 
-    ImageView icon;
+    public ImageView icon;
 
     boolean isActive = true;
 
