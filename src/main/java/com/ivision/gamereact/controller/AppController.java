@@ -116,7 +116,9 @@ public class AppController implements Initializable {
                 curt.getNorthBorder(),
                 curt.getSouthBorder(),
                 playerOne.getHealthPointGroup(),
-                playerTwo.getHealthPointGroup()
+                playerTwo.getHealthPointGroup(),
+                playerOne.getTimerIndicator(),
+                playerTwo.getTimerIndicator()
         );
 
         powerUpSystem = new PowerUpSystem(root,ball, gbd);

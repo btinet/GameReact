@@ -1,15 +1,10 @@
 package com.ivision.gamereact.entity;
 
-import com.ivision.engine.AudioFX;
-import com.ivision.engine.Fonts;
-import com.ivision.engine.PaddleManipulation;
-import com.ivision.engine.PaddlePosition;
+import com.ivision.engine.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -30,6 +25,9 @@ public class Paddle extends Line {
     protected Integer healthPoints;
     protected Integer currentHealthPoints;
     protected ArrayList<Circle> healthPointCircles = new ArrayList<>();
+
+    protected Arc timerIndicator = new Arc();
+    protected Arc placeHolder = new Arc();
     protected Group healthPointGroup;
     protected Integer matchPoints = 0;
     protected AudioFX primarySound;
@@ -48,6 +46,16 @@ public class Paddle extends Line {
         this.primaryColor = primaryColor;
         this.secondaryColor = Color.BLACK;
 
+        this.timerIndicator.setType(ArcType.OPEN);
+        this.timerIndicator.setStartAngle(0);
+        this.timerIndicator.setRadiusX(10);
+        this.timerIndicator.setRadiusY(10);
+        this.timerIndicator.setStroke(GameColor.YELLOW);
+        this.timerIndicator.setFill(null);
+        this.timerIndicator.setStrokeWidth(3);
+        this.timerIndicator.setStrokeLineCap(StrokeLineCap.ROUND);
+        this.timerIndicator.setLength(0);
+
         setStartY(0);
         setEndY(70);
         setStroke(Color.WHITE);
@@ -65,6 +73,7 @@ public class Paddle extends Line {
                 primarySound = AudioFX.SFX1;
                 primarySound.setBalance(-0.75);
                 healthPointGroup.setTranslateX(-600);
+                this.timerIndicator.setTranslateX(-630);
                 healthPointGroup.setScaleX(-1);
                 pointsText.setTranslateX(-485);
                 pointsText.setTranslateY(-7);
@@ -76,6 +85,7 @@ public class Paddle extends Line {
                 primarySound = AudioFX.SFX2;
                 primarySound.setBalance(0.75);
                 healthPointGroup.setTranslateX(600);
+                this.timerIndicator.setTranslateX(630);
                 pointsText.setTranslateX(485);
                 pointsText.setTranslateY(7);
                 pointsText.setRotate(-90);
@@ -94,6 +104,14 @@ public class Paddle extends Line {
 
     public Boolean intersects (Node node) {
         return this.getBoundsInParent().intersects(node.getBoundsInParent());
+    }
+
+    public Arc getTimerIndicator () {
+        return timerIndicator;
+    }
+
+    public void increaseTimerIndicator (double length) {
+        if(length >= 0 && length <= 360) this.timerIndicator.setLength(length);
     }
 
     private void addHealthPointCircles() {

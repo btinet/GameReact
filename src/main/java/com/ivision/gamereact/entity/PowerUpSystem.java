@@ -125,9 +125,13 @@ public class PowerUpSystem extends Group {
     }
 
     public void runPowerUpTimer (Paddle affectedPlayer) {
+
         if(powerUpTime < 1000) {
+            double radius = 360 - Math.floorDiv(powerUpTime * 360,1000);
+            affectedPlayer.increaseTimerIndicator(radius);
             powerUpTime++;
         } else {
+            affectedPlayer.increaseTimerIndicator(0);
             this.powerUpCollected = false;
             this.powerUpTime = 0;
             System.out.println("PowerUp-Wirkung hat nachgelassen.");
