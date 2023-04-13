@@ -27,7 +27,6 @@ public class Paddle extends Line {
     protected ArrayList<Circle> healthPointCircles = new ArrayList<>();
 
     protected Arc timerIndicator = new Arc();
-    protected Arc placeHolder = new Arc();
     protected Group healthPointGroup;
     protected Integer matchPoints = 0;
     protected AudioFX primarySound;
@@ -49,6 +48,7 @@ public class Paddle extends Line {
         this.timerIndicator.setType(ArcType.OPEN);
         this.timerIndicator.setStartAngle(0);
         this.timerIndicator.setRadiusX(10);
+        timerIndicator.setCenterX(10);
         this.timerIndicator.setRadiusY(10);
         this.timerIndicator.setStroke(GameColor.YELLOW);
         this.timerIndicator.setFill(null);
@@ -74,6 +74,7 @@ public class Paddle extends Line {
                 primarySound.setBalance(-0.75);
                 healthPointGroup.setTranslateX(-600);
                 this.timerIndicator.setTranslateX(-630);
+                timerIndicator.setScaleY(-1);
                 healthPointGroup.setScaleX(-1);
                 pointsText.setTranslateX(-485);
                 pointsText.setTranslateY(-7);
@@ -86,6 +87,7 @@ public class Paddle extends Line {
                 primarySound.setBalance(0.75);
                 healthPointGroup.setTranslateX(600);
                 this.timerIndicator.setTranslateX(630);
+                timerIndicator.setScaleX(-1);
                 pointsText.setTranslateX(485);
                 pointsText.setTranslateY(7);
                 pointsText.setRotate(-90);
