@@ -17,7 +17,8 @@ public enum AudioFX {
     confirm ("/wav/confirm.wav"),
     cancel ("/wav/cancel.wav"),
     click ("/wav/click.wav"),
-    collect ("/wav/collect.wav");
+    collect ("/wav/collect.wav"),
+    second ("/wav/second.wav");
 
     private final AudioClip sfx;
 

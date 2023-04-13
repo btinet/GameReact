@@ -211,13 +211,15 @@ public class AppController implements Initializable {
     }
 
     private void gameOver(Paddle player) {
+        gameLoop.stop();
+        gameLoop.start();
         isGameOver = true;
         intro = true;
+        powerUpSystem.removeCollectedPowerUps();
         player.increaseMatchPoints();
         playerOne.reset();
         playerTwo.reset();
-        gameLoop.stop();
-        gameLoop.start();
+
     }
 
     /**
@@ -488,14 +490,27 @@ public class AppController implements Initializable {
                 }
             } else {
                 // Manuelle Keyboard-Steuerung
-                if(keys.isDown(ButtonConfig.north2)) {
-                    if(!playerOne.intersects(curt.getNorthBorder())) {
-                        playerOne.setTranslateY(playerOne.getTranslateY()-6);
+                if (playerOne.getInverter() > 0) {
+                    if (keys.isDown(ButtonConfig.north2)) {
+                        if (!playerOne.intersects(curt.getNorthBorder())) {
+                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() - 6);
+                        }
                     }
-                }
-                if(keys.isDown(ButtonConfig.south2)) {
-                    if(!playerOne.intersects(curt.getSouthBorder())) {
-                        playerOne.setTranslateY(playerOne.getTranslateY()+6);
+                    if (keys.isDown(ButtonConfig.south2)) {
+                        if (!playerOne.intersects(curt.getSouthBorder())) {
+                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() + 6);
+                        }
+                    }
+                } else {
+                    if (keys.isDown(ButtonConfig.south2)) {
+                        if (!playerOne.intersects(curt.getNorthBorder())) {
+                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() - 6);
+                        }
+                    }
+                    if (keys.isDown(ButtonConfig.north2)) {
+                        if (!playerOne.intersects(curt.getSouthBorder())) {
+                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() + 6);
+                        }
                     }
                 }
             }
@@ -536,16 +551,30 @@ public class AppController implements Initializable {
                 }
             } else {
                 // Manuelle Keyboard-Steuerung
-                if(keys.isDown(ButtonConfig.north)) {
-                    if(!playerTwo.intersects(curt.getNorthBorder())) {
-                        playerTwo.setTranslateY(playerTwo.getTranslateY()-6);
+                if(playerTwo.getInverter() > 0) {
+                    if(keys.isDown(ButtonConfig.north)) {
+                        if(!playerTwo.intersects(curt.getNorthBorder())) {
+                            playerTwo.setTranslateY(playerTwo.getTranslateY()-6);
+                        }
+                    }
+                    if(keys.isDown(ButtonConfig.south)) {
+                        if(!playerTwo.intersects(curt.getSouthBorder())) {
+                            playerTwo.setTranslateY(playerTwo.getTranslateY()+6);
+                        }
+                    }
+                } else {
+                    if(keys.isDown(ButtonConfig.south)) {
+                        if(!playerTwo.intersects(curt.getNorthBorder())) {
+                            playerTwo.setTranslateY(playerTwo.getTranslateY()-6);
+                        }
+                    }
+                    if(keys.isDown(ButtonConfig.north)) {
+                        if(!playerTwo.intersects(curt.getSouthBorder())) {
+                            playerTwo.setTranslateY(playerTwo.getTranslateY()+6);
+                        }
                     }
                 }
-                if(keys.isDown(ButtonConfig.south)) {
-                    if(!playerTwo.intersects(curt.getSouthBorder())) {
-                        playerTwo.setTranslateY(playerTwo.getTranslateY()+6);
-                    }
-                }
+
             }
         }
 
@@ -554,27 +583,30 @@ public class AppController implements Initializable {
             switch (gamepad.getSymbolID()) {
                 case 1:
                     double figure = playerOne.getTranslateY();
-                    if(playerOne.intersects(curt.getNorthBorder()))
-                    {
-                        playerOne.setTranslateY(figure+Math.abs(getSpeed(gamepad.getAngleDegrees())));
-                    } else if(playerOne.intersects(curt.getSouthBorder()))
-                    {
-                        playerOne.setTranslateY(figure-Math.abs(getSpeed(gamepad.getAngleDegrees())));
+                    if(playerOne.intersects(curt.getNorthBorder())) {
+                        if(getSpeed(gamepad.getAngleDegrees(),playerOne) > 0) {
+                            playerOne.setTranslateY( figure + getSpeed(gamepad.getAngleDegrees(),playerOne) );
+                        }
+                    } else if(playerOne.intersects(curt.getSouthBorder())) {
+                        if(getSpeed(gamepad.getAngleDegrees(),playerOne) < 0) {
+                            playerOne.setTranslateY( figure + getSpeed(gamepad.getAngleDegrees(),playerOne) );
+                        }
                     } else {
-                        playerOne.setTranslateY(figure+getSpeed(gamepad.getAngleDegrees()));
+                        playerOne.setTranslateY( figure + getSpeed(gamepad.getAngleDegrees(),playerOne)  );
                     }
-
                     break;
                 case 2:
                     double figure2 = playerTwo.getTranslateY();
-                    if(playerTwo.intersects(curt.getNorthBorder()))
-                    {
-                        playerTwo.setTranslateY(figure2+Math.abs(getSpeed(gamepad.getAngleDegrees())));
-                    } else if(playerTwo.intersects(curt.getSouthBorder()))
-                    {
-                        playerTwo.setTranslateY(figure2-Math.abs(getSpeed(gamepad.getAngleDegrees())));
+                    if(playerTwo.intersects(curt.getNorthBorder())) {
+                        if(getSpeed(gamepad.getAngleDegrees(),playerTwo) > 0) {
+                            playerTwo.setTranslateY( figure2 + getSpeed(gamepad.getAngleDegrees(),playerTwo));
+                        }
+                    } else if(playerTwo.intersects(curt.getSouthBorder())) {
+                        if(getSpeed(gamepad.getAngleDegrees(),playerTwo) < 0) {
+                            playerTwo.setTranslateY( figure2 + getSpeed(gamepad.getAngleDegrees(),playerTwo));
+                        }
                     } else {
-                        playerTwo.setTranslateY(figure2+getSpeed(gamepad.getAngleDegrees()));
+                        playerTwo.setTranslateY( figure2 + getSpeed(gamepad.getAngleDegrees(),playerTwo));
                     }
                     break;
                 default:
@@ -609,9 +641,10 @@ public class AppController implements Initializable {
      * @param angleDegrees Winkel in Grad
      * @return Sinus eines Winkels
      */
-    private double getSpeed(float angleDegrees) {
+    private double getSpeed(float angleDegrees, Paddle currentPlayer) {
+
         double x = Math.sin(Math.toRadians(angleDegrees-90));
-        return x*7;
+        return currentPlayer.getInverter() * x * 12;
     }
 
     /**

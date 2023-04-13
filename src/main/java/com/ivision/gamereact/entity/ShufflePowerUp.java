@@ -15,6 +15,7 @@ public class ShufflePowerUp extends PowerUpItem {
     @Override
     public boolean doAction(Paddle affectedPlayer) {
         affectedPlayer.setManipulation(PaddleManipulation.CONFUSE);
+        affectedPlayer.setInverter(-1);
         System.out.println("Verwirrt!");
         return true;
     }

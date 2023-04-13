@@ -20,13 +20,16 @@ public class Paddle extends Line {
     protected Color secondaryColor;
     protected Integer px;
     protected Integer py;
+    protected int inverter = 1;
     PaddleManipulation manipulation;
     PaddlePosition position;
     protected Integer healthPoints;
     protected Integer currentHealthPoints;
     protected ArrayList<Circle> healthPointCircles = new ArrayList<>();
 
-    protected Arc timerIndicator = new Arc();
+    protected Group timerIndicator = new Group();
+
+    protected ArrayList<Rectangle> timerIndicatorLeds = new ArrayList<>();
     protected Group healthPointGroup;
     protected Integer matchPoints = 0;
     protected AudioFX primarySound;
@@ -45,22 +48,13 @@ public class Paddle extends Line {
         this.primaryColor = primaryColor;
         this.secondaryColor = Color.BLACK;
 
-        this.timerIndicator.setType(ArcType.OPEN);
-        this.timerIndicator.setStartAngle(0);
-        this.timerIndicator.setRadiusX(10);
-        timerIndicator.setCenterX(10);
-        this.timerIndicator.setRadiusY(10);
-        this.timerIndicator.setStroke(GameColor.YELLOW);
-        this.timerIndicator.setFill(null);
-        this.timerIndicator.setStrokeWidth(3);
-        this.timerIndicator.setStrokeLineCap(StrokeLineCap.ROUND);
-        this.timerIndicator.setLength(0);
-
         setStartY(0);
         setEndY(70);
         setStroke(Color.WHITE);
         setStrokeWidth(8);
         strokeLineCapProperty().setValue(StrokeLineCap.ROUND);
+
+        initTimerGroup();
 
         healthPointGroup = new Group();
 
@@ -73,7 +67,7 @@ public class Paddle extends Line {
                 primarySound = AudioFX.SFX1;
                 primarySound.setBalance(-0.75);
                 healthPointGroup.setTranslateX(-600);
-                this.timerIndicator.setTranslateX(-630);
+                this.timerIndicator.setTranslateX(-524);
                 timerIndicator.setScaleY(-1);
                 healthPointGroup.setScaleX(-1);
                 pointsText.setTranslateX(-485);
@@ -86,7 +80,7 @@ public class Paddle extends Line {
                 primarySound = AudioFX.SFX2;
                 primarySound.setBalance(0.75);
                 healthPointGroup.setTranslateX(600);
-                this.timerIndicator.setTranslateX(630);
+                this.timerIndicator.setTranslateX(524);
                 timerIndicator.setScaleX(-1);
                 pointsText.setTranslateX(485);
                 pointsText.setTranslateY(7);
@@ -104,16 +98,48 @@ public class Paddle extends Line {
 
     // Methoden
 
+
+    public int getInverter() {
+        return inverter;
+    }
+
+    public void setInverter (int value) {
+        this.inverter = value;
+    }
+
     public Boolean intersects (Node node) {
         return this.getBoundsInParent().intersects(node.getBoundsInParent());
     }
 
-    public Arc getTimerIndicator () {
+    public Group getTimerIndicator () {
         return timerIndicator;
     }
 
-    public void increaseTimerIndicator (double length) {
-        if(length >= 0 && length <= 360) this.timerIndicator.setLength(length);
+    public void initTimerGroup () {
+        timerIndicator.getChildren().removeAll(timerIndicatorLeds);
+        timerIndicatorLeds = new ArrayList<>();
+        for (int i = 0; i < 10;i++) {
+            Rectangle rectangle = new Rectangle(8,16,getPrimaryColor());
+            rectangle.setTranslateY(i*18);
+            rectangle.setTranslateX(-50);
+            rectangle.setArcHeight(4);
+            rectangle.setArcWidth(4);
+            timerIndicatorLeds.add(rectangle);
+        }
+        timerIndicator.setOpacity(0);
+        timerIndicator.getChildren().addAll(timerIndicatorLeds);
+    }
+
+    public void increaseTimerIndicator (int length) {
+        if(length != -1 && manipulation != PaddleManipulation.LIFE) {
+            timerIndicator.setOpacity(1);
+            if(length < timerIndicatorLeds.size()) {
+                AudioFX.second.play();
+                this.timerIndicatorLeds.get(length).setFill(GameColor.DARKEN);
+            }
+        } else {
+            initTimerGroup();
+        }
     }
 
     private void addHealthPointCircles() {
@@ -128,7 +154,6 @@ public class Paddle extends Line {
             if(i % 2 != 0) {
                 y = y + 25;
                 x = 4*Math.log(1+i*0.125)+i;
-                System.out.println(x);
             }
 
             healthPointCircles.get(i).setTranslateY(y);
@@ -275,8 +300,12 @@ public class Paddle extends Line {
     }
 
     public void reset () {
+        setEndY(70);
         setTranslateY(0);
+        setInverter(1);
         resetCurrentHealthPoints();
+        setManipulation(null);
+        initTimerGroup();
     }
 
     public Integer getHealthPoints() {

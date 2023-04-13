@@ -40,6 +40,10 @@ public class PowerUpSystem extends Group {
         updatePosition();
     }
 
+    public void resetPowerUpTime () {
+        this.powerUpTime = 0;
+    }
+
     public void setPowerUp () {
         if (!powerUpSpawned && !powerUpCollected) {
             System.out.println("Power Up landet auf dem Spielfeld");
@@ -82,6 +86,11 @@ public class PowerUpSystem extends Group {
         setTranslateY(ThreadLocalRandom.current().nextInt(-270, 270 + 1));
     }
 
+    public void removeCollectedPowerUps () {
+        powerUpCollected = false;
+        resetPowerUpTime();
+    }
+
     public void shutDown() {
         ball.resetBallHits();
         this.setOpacity(1);
@@ -101,9 +110,6 @@ public class PowerUpSystem extends Group {
                 shutDown();
                 powerUpFX.play();
                 powerUpCollected = true;
-
-                // TODO: Timer für eingesammelten Power Up starten und doAction() vom PowerUp ausführen!
-                // Ende
 
                 gbd.playPowerUpAnimation(currentPlayer.getPosition());
                 System.out.println("Power Up aufgesammelt!");
@@ -126,12 +132,11 @@ public class PowerUpSystem extends Group {
 
     public void runPowerUpTimer (Paddle affectedPlayer) {
 
-        if(powerUpTime < 1000) {
-            double radius = 360 - Math.floorDiv(powerUpTime * 360,1000);
-            affectedPlayer.increaseTimerIndicator(radius);
+        if(powerUpTime <= 1000) {
+            if(powerUpTime % 100 == 0) affectedPlayer.increaseTimerIndicator(powerUpTime / 100);
             powerUpTime++;
         } else {
-            affectedPlayer.increaseTimerIndicator(0);
+            affectedPlayer.increaseTimerIndicator(-1);
             this.powerUpCollected = false;
             this.powerUpTime = 0;
             System.out.println("PowerUp-Wirkung hat nachgelassen.");
@@ -140,7 +145,7 @@ public class PowerUpSystem extends Group {
                     affectedPlayer.setEndY(70);
                     break;
                 case CONFUSE:
-                    // TODO: Umkehrung der Steuerung aufheben.
+                    affectedPlayer.setInverter(1);
                     break;
             }
             affectedPlayer.setManipulation(null);
