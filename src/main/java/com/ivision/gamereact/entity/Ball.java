@@ -77,10 +77,6 @@ public class Ball extends Circle {
         moveY();
     }
 
-    public double getBallSpeed() {
-        return ballSpeed;
-    }
-
     public void setBallSpeed(double ballSpeed) {
         this.ballSpeed = ballSpeed;
     }

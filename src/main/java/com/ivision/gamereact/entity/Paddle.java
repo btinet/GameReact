@@ -14,27 +14,19 @@ import java.util.Objects;
 public class Paddle extends Line {
 
     // Klassenattribute
-
-    protected Integer ObjectId;
     protected Color primaryColor;
     protected Color secondaryColor;
-    protected Integer px;
-    protected Integer py;
     protected int inverter = 1;
-    PaddleManipulation manipulation;
-    PaddlePosition position;
     protected Integer healthPoints;
     protected Integer currentHealthPoints;
     protected ArrayList<Circle> healthPointCircles = new ArrayList<>();
-
     protected Group timerIndicator = new Group();
-
     protected ArrayList<Rectangle> timerIndicatorLeds = new ArrayList<>();
     protected Group healthPointGroup;
     protected Integer matchPoints = 0;
     protected AudioFX primarySound;
-    protected AudioFX secondarySound;
-
+    PaddleManipulation manipulation;
+    PaddlePosition position;
     Text pointsText = new Text(String.valueOf(matchPoints));
 
 
@@ -97,30 +89,28 @@ public class Paddle extends Line {
     }
 
     // Methoden
-
-
     public int getInverter() {
         return inverter;
     }
 
-    public void setInverter (int value) {
+    public void setInverter(int value) {
         this.inverter = value;
     }
 
-    public Boolean intersects (Node node) {
+    public Boolean intersects(Node node) {
         return this.getBoundsInParent().intersects(node.getBoundsInParent());
     }
 
-    public Group getTimerIndicator () {
+    public Group getTimerIndicator() {
         return timerIndicator;
     }
 
-    public void initTimerGroup () {
+    public void initTimerGroup() {
         timerIndicator.getChildren().removeAll(timerIndicatorLeds);
         timerIndicatorLeds = new ArrayList<>();
-        for (int i = 0; i < 10;i++) {
-            Rectangle rectangle = new Rectangle(8,16,getPrimaryColor());
-            rectangle.setTranslateY(i*18);
+        for (int i = 0; i < 10; i++) {
+            Rectangle rectangle = new Rectangle(8, 16, getPrimaryColor());
+            rectangle.setTranslateY(i * 18);
             rectangle.setTranslateX(-50);
             rectangle.setArcHeight(4);
             rectangle.setArcWidth(4);
@@ -130,10 +120,10 @@ public class Paddle extends Line {
         timerIndicator.getChildren().addAll(timerIndicatorLeds);
     }
 
-    public void increaseTimerIndicator (int length) {
-        if(length != -1 && manipulation != PaddleManipulation.LIFE) {
+    public void increaseTimerIndicator(int length) {
+        if (length != -1 && manipulation != PaddleManipulation.LIFE) {
             timerIndicator.setOpacity(1);
-            if(length < timerIndicatorLeds.size()) {
+            if (length < timerIndicatorLeds.size()) {
                 AudioFX.second.play();
                 this.timerIndicatorLeds.get(length).setFill(GameColor.DARKEN);
             }
@@ -146,22 +136,22 @@ public class Paddle extends Line {
 
         int y = 0;
         double x = 0;
-        for (int i = 0;i < healthPoints;i++) {
+        for (int i = 0; i < healthPoints; i++) {
 
-            healthPointCircles.add(new Circle(10,primaryColor));
+            healthPointCircles.add(new Circle(10, primaryColor));
             healthPointGroup.getChildren().add(healthPointCircles.get(i));
 
-            if(i % 2 != 0) {
+            if (i % 2 != 0) {
                 y = y + 25;
-                x = 4*Math.log(1+i*0.125)+i;
+                x = 4 * Math.log(1 + i * 0.125) + i;
             }
 
             healthPointCircles.get(i).setTranslateY(y);
             healthPointCircles.get(i).setTranslateX(x);
 
-            if(i % 2 == 0 && i > 0) {
-                healthPointCircles.get(i).setTranslateY(-healthPointCircles.get(i-1).getTranslateY());
-                healthPointCircles.get(i).setTranslateX(healthPointCircles.get(i-1).getTranslateX());
+            if (i % 2 == 0 && i > 0) {
+                healthPointCircles.get(i).setTranslateY(-healthPointCircles.get(i - 1).getTranslateY());
+                healthPointCircles.get(i).setTranslateX(healthPointCircles.get(i - 1).getTranslateX());
             }
 
         }
@@ -170,10 +160,10 @@ public class Paddle extends Line {
 
     }
 
-    private void updateHealthPointCircles () {
+    private void updateHealthPointCircles() {
 
-        if(!Objects.equals(currentHealthPoints, healthPoints)) {
-            for (int i = healthPoints-1; i >= currentHealthPoints; i--) {
+        if (!Objects.equals(currentHealthPoints, healthPoints)) {
+            for (int i = healthPoints - 1; i >= currentHealthPoints; i--) {
                 this.healthPointGroup.getChildren().get(i).setOpacity(.2);
             }
         } else {
@@ -184,30 +174,16 @@ public class Paddle extends Line {
 
     }
 
-    public void increaseHealthPoints () {
-        if(currentHealthPoints < healthPoints) {
-            currentHealthPoints++;
-            updateHealthPointCircles();
-        }
-    }
-
-    public void decreaseHealthPoints () {
-        if(currentHealthPoints > 0) {
+    public void decreaseHealthPoints() {
+        if (currentHealthPoints > 0) {
             currentHealthPoints--;
             updateHealthPointCircles();
         }
     }
 
-    public void increaseMatchPoints () {
-            matchPoints++;
-            setPointsText(matchPoints);
-    }
-
-    public void decreaseMatchPoints () {
-        if(matchPoints > 0) {
-            matchPoints--;
-            setPointsText(matchPoints);
-        }
+    public void increaseMatchPoints() {
+        matchPoints++;
+        setPointsText(matchPoints);
     }
 
     public void resetCurrentHealthPoints() {
@@ -230,10 +206,6 @@ public class Paddle extends Line {
         return position;
     }
 
-    public void setPosition(PaddlePosition position) {
-        this.position = position;
-    }
-
     public Integer getCurrentHealthPoints() {
         return currentHealthPoints;
     }
@@ -243,63 +215,15 @@ public class Paddle extends Line {
         updateHealthPointCircles();
     }
 
-    public ArrayList<Circle> getHealthPointCircles() {
-        return healthPointCircles;
-    }
-
-    public void setHealthPointCircles(ArrayList<Circle> healthPointCircles) {
-        this.healthPointCircles = healthPointCircles;
-    }
-
     public Group getHealthPointGroup() {
         return healthPointGroup;
-    }
-
-    public void setHealthPointGroup(Group healthPointGroup) {
-        this.healthPointGroup = healthPointGroup;
-    }
-
-    public Integer getObjectId() {
-        return ObjectId;
-    }
-
-    public void setObjectId(Integer objectId) {
-        ObjectId = objectId;
     }
 
     public Color getPrimaryColor() {
         return primaryColor;
     }
 
-    public void setPrimaryColor(Color primaryColor) {
-        this.primaryColor = primaryColor;
-    }
-
-    public Color getSecondaryColor() {
-        return secondaryColor;
-    }
-
-    public void setSecondaryColor(Color secondaryColor) {
-        this.secondaryColor = secondaryColor;
-    }
-
-    public Integer getPx() {
-        return px;
-    }
-
-    public void setPx(Integer px) {
-        this.px = px;
-    }
-
-    public Integer getPy() {
-        return py;
-    }
-
-    public void setPy(Integer py) {
-        this.py = py;
-    }
-
-    public void reset () {
+    public void reset() {
         setEndY(70);
         setTranslateY(0);
         setInverter(1);
@@ -308,36 +232,8 @@ public class Paddle extends Line {
         initTimerGroup();
     }
 
-    public Integer getHealthPoints() {
-        return healthPoints;
-    }
-
-    public void setHealthPoints(Integer healthPoints) {
-        this.healthPoints = healthPoints;
-    }
-
-    public Integer getMatchPoints() {
-        return matchPoints;
-    }
-
-    public void setMatchPoints(Integer matchPoints) {
-        this.matchPoints = matchPoints;
-    }
-
     public AudioFX getPrimarySound() {
         return primarySound;
-    }
-
-    public void setPrimarySound(AudioFX primarySound) {
-        this.primarySound = primarySound;
-    }
-
-    public AudioFX getSecondarySound() {
-        return secondarySound;
-    }
-
-    public void setSecondarySound(AudioFX secondarySound) {
-        this.secondarySound = secondarySound;
     }
 
     public Text getPointsText() {

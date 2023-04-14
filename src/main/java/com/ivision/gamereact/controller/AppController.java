@@ -84,9 +84,6 @@ public class AppController implements Initializable {
     // Zusätzliches View
     PauseScreen pauseScreen;
 
-    // Fingereingabe
-    private Circle fingerCircle;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -223,14 +220,6 @@ public class AppController implements Initializable {
     }
 
     /**
-     * Tastaturabfrage
-     * @param currentScene Szene (Fenster), in der die Keyboardabfrage stattfinden soll.
-     */
-    public void setPolling(Scene currentScene) {
-        KeyPolling.getInstance().pollScene(currentScene);
-    }
-
-    /**
      * Transition setzen und einmalig sofort abspielen.
      * @param shape Form, der eine FillTransition zugeordnet werden soll.
      */
@@ -244,9 +233,9 @@ public class AppController implements Initializable {
         cursors = gamepadListener.getFingers();
         Iterator<TuioCursor> cursorIterator = cursors.iterator();
         while (cursorIterator.hasNext()) {
-            int i = root.getChildren().size();
             TuioCursor cursor = cursorIterator.next();
-            fingerCircle = new Circle(25,Color.CYAN);
+            // Fingereingabe
+            Circle fingerCircle = new Circle(25, Color.CYAN);
             fingerCircle.setTranslateX((int)(cursor.getScreenX(width)-width/2));
             fingerCircle.setTranslateY((int)(cursor.getScreenY(height)-height/2));
             if(!root.getChildren().contains(fingerCircle)) root.getChildren().add(fingerCircle);
@@ -326,6 +315,7 @@ public class AppController implements Initializable {
     public void togglePause() {
         if(gameLoop.isPaused()) {
             root.getScene().setCamera(camera);
+            pauseScreen.hideHelpText();
             pauseScreen.hidePauseText();
             pauseScreen.hideText();
             gameLoop.play();
@@ -336,6 +326,7 @@ public class AppController implements Initializable {
             }
         } else {
             gameLoop.pause();
+            pauseScreen.showHelpText();
             if(isGameOver) {
                 pauseScreen.showPauseText("Game over");
             } else {
