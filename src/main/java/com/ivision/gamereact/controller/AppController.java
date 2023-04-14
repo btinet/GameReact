@@ -14,6 +14,8 @@ import com.tuio.TuioCursor;
 import com.tuio.TuioObject;
 import javafx.animation.FillTransition;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.*;
@@ -65,7 +67,7 @@ public class AppController implements Initializable {
     public Paddle currentPlayer;
     public boolean isGameOver = false;
     boolean intro = true;
-
+    int currentMiddleCirclePosition = 0;
     PowerUpSystem powerUpSystem;
     private final TuioClient client = new TuioClient();
     private final KeyPolling keys = KeyPolling.getInstance();
@@ -314,7 +316,14 @@ public class AppController implements Initializable {
      */
     public void togglePause() {
         if(gameLoop.isPaused()) {
+            TranslateTransition middleCircleAnimation = gbd.getMoveCircleTransition();
+
+            middleCircleAnimation.setToX(0);
+            middleCircleAnimation.setFromX(currentMiddleCirclePosition);
+            middleCircleAnimation.play();
+            currentMiddleCirclePosition = 0;
             root.getScene().setCamera(camera);
+            gbd.getMiddleCircleScaleDown().play();
             pauseScreen.hideHelpText();
             pauseScreen.hidePauseText();
             pauseScreen.hideText();
@@ -326,14 +335,22 @@ public class AppController implements Initializable {
             }
         } else {
             gameLoop.pause();
-            pauseScreen.showHelpText();
-            if(isGameOver) {
-                pauseScreen.showPauseText("Game over");
-            } else {
-                pauseScreen.showPauseText("Pause");
-            }
             MusicFX.THE_GRID.play();
             MusicFX.MAZE.pause();
+            gbd.getMiddleCircleScaleUp().play();
+            gbd.getMiddleCircleScaleUp().setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    pauseScreen.showHelpText();
+                    if(isGameOver) {
+                        pauseScreen.showPauseText("Game over");
+                    } else {
+                        //pauseScreen.showPauseText("Pause");
+                    }
+                }
+            });
+
+
         }
     }
 
@@ -345,14 +362,22 @@ public class AppController implements Initializable {
         if(!ball.intersects(curt)) {
 
             powerUpSystem.shutDown();
+            TranslateTransition middleCircleAnimation = gbd.getMoveCircleTransition();
+
+            // TODO: PauseScreen Text hier setzen und erst in togglePause() anzeigen lassen!
 
             if (currentPlayer.equals(playerOne)) {
+                currentMiddleCirclePosition = 285;
+                middleCircleAnimation.setFromX(0);
+                middleCircleAnimation.setToX(285);
+
                 playerTwo.decreaseHealthPoints();
                 if (playerTwo.getCurrentHealthPoints() >= 1) {
-                    pauseScreen.showText("Rot trifft!", playerOne.getPrimaryColor());
+                    //pauseScreen.showText("Rot trifft!", playerOne.getPrimaryColor());
+
                     AudioFX.rHitSFX.play();
                 } else {
-                    pauseScreen.showText("Rot gewinnt!", playerOne.getPrimaryColor());
+                    //pauseScreen.showText("Rot gewinnt!", playerOne.getPrimaryColor());
                     AudioFX.rWinSFX.play();
                     gameOver(playerOne);
                 }
@@ -362,12 +387,16 @@ public class AppController implements Initializable {
                 cameraTranslateTransition.setFromX(-5);
                 cameraTranslateTransition.setToX(0);
             } else if (currentPlayer.equals(playerTwo)) {
+                currentMiddleCirclePosition = -285;
+                middleCircleAnimation.setFromX(0);
+                middleCircleAnimation.setToX(-285);
+
                 playerOne.decreaseHealthPoints();
                 if (playerOne.getCurrentHealthPoints() >= 1) {
-                    pauseScreen.showText("Blau trifft!", playerTwo.getPrimaryColor());
+                    //pauseScreen.showText("Blau trifft!", playerTwo.getPrimaryColor());
                     AudioFX.bHitSFX.play();
                 } else {
-                    pauseScreen.showText("Blau gewinnt!", playerTwo.getPrimaryColor());
+                    //pauseScreen.showText("Blau gewinnt!", playerTwo.getPrimaryColor());
                     AudioFX.bWinSFX.play();
                     gameOver(playerTwo);
                 }
@@ -384,6 +413,7 @@ public class AppController implements Initializable {
             } else {
                 ball.setBallAngle(1.5);
             }
+            middleCircleAnimation.play();
         }
 
         // TODO: Ball-Interaktion mit Spielern in eigene Klasse oder Methode übertragen

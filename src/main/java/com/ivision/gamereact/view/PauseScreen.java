@@ -61,7 +61,7 @@ public class PauseScreen {
         leftText.setRotate(90);
         leftText.setTranslateY(0);
         leftText.setScaleX(-1);
-        leftText.setTranslateX(0);
+        leftText.setTranslateX(-150);
 
 
         rightText.setFont(Fonts.BOLD_24.getFont());
@@ -69,7 +69,7 @@ public class PauseScreen {
         rightText.setTranslateY(0);
         rightText.setScaleX(-1);
 
-        rightText.setTranslateX(400);
+        rightText.setTranslateX(150);
 
         leftPauseText.setTranslateX(leftText.getTranslateX()+100);
         leftPauseText.setFont(Fonts.REGULAR_46.getFont());

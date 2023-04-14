@@ -2,6 +2,7 @@ package com.ivision.gamereact.view;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.FillTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -12,6 +13,17 @@ public class Transitions {
 
     public static FadeTransition createFadeTransition (int millis, Node node) {
         return createFadeTransition(millis,node,0,1);
+    }
+
+    public static ScaleTransition createScaleTransition (int millis, Node node, double from, double to) {
+        ScaleTransition transition = new ScaleTransition(Duration.millis(millis), node);
+        transition.setFromX(from);
+        transition.setFromY(from);
+        transition.setToX(to);
+        transition.setToY(to);
+        transition.setCycleCount(1);
+        transition.setAutoReverse(false);
+        return transition;
     }
 
     public static FadeTransition createFadeTransition (int millis, Node node, double from, double to) {

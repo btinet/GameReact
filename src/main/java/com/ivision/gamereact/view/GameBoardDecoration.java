@@ -5,6 +5,8 @@ import com.ivision.engine.PaddlePosition;
 import com.ivision.gamereact.ReactApplication;
 import com.ivision.gamereact.entity.Paddle;
 import javafx.animation.FillTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -31,6 +33,10 @@ public class GameBoardDecoration {
     FillTransition rightTransition;
     FillTransition leftPowerUpTransition;
     FillTransition rightPowerupTransition;
+    ScaleTransition middleCircleScaleUp;
+    ScaleTransition middleCircleScaleDown;
+
+    TranslateTransition moveCircle;
 
     public GameBoardDecoration (Pane root, Paddle playerOne, Paddle playerTwo) {
         this.root = root;
@@ -38,6 +44,9 @@ public class GameBoardDecoration {
         rightTransition =  Transitions.createFillTransition(150,strafeRight,GameColor.VIOLETT.darker(),playerOne.getPrimaryColor(),4);
         leftPowerUpTransition =  Transitions.createFillTransition(150,strafeLeft,GameColor.VIOLETT.darker(),GameColor.YELLOW,4);
         rightPowerupTransition =  Transitions.createFillTransition(150,strafeRight,GameColor.VIOLETT.darker(),GameColor.YELLOW,4);
+        middleCircleScaleUp = Transitions.createScaleTransition(200,middleCircleBig,1,3);
+        middleCircleScaleDown = Transitions.createScaleTransition(200,middleCircleBig,3,1);
+        moveCircle = Transitions.createTranslateTransition(200, middleCircleBig);
         paint();
         addToStage();
     }
@@ -89,6 +98,22 @@ public class GameBoardDecoration {
                 leftSide,
                 rightSide
         );
+    }
+
+    public Circle getMiddleCircleBig () {
+        return middleCircleBig;
+    }
+
+    public TranslateTransition getMoveCircleTransition() {
+        return moveCircle;
+    }
+
+    public ScaleTransition getMiddleCircleScaleUp() {
+        return middleCircleScaleUp;
+    }
+
+    public ScaleTransition getMiddleCircleScaleDown() {
+        return middleCircleScaleDown;
     }
 
     public void playPowerUpAnimation (PaddlePosition position) {
