@@ -37,10 +37,15 @@ public class PauseScreen {
         f11.setFill(Color.WHITE);
         space.setFill(Color.WHITE);
 
+        f1.setFont(Fonts.BOLD_12.getFont());
+        f2.setFont(Fonts.BOLD_12.getFont());
+        f11.setFont(Fonts.BOLD_12.getFont());
+        space.setFont(Fonts.BOLD_12.getFont());
+
         f1.setTranslateX(0);
         f2.setTranslateX(250);
         f11.setTranslateX(500);
-        space.setTranslateX(650);
+        space.setTranslateX(630);
 
         hilfeTextListe.add(f1);
         hilfeTextListe.add(f2);
@@ -52,16 +57,16 @@ public class PauseScreen {
         hilfeText.setScaleX(-1);
         this.root.getChildren().add(hilfeText);
 
-        leftText.setFont(Fonts.REGULAR_24.getFont());
+        leftText.setFont(Fonts.BOLD_24.getFont());
         leftText.setRotate(90);
-        leftText.setTranslateY(-5);
+        leftText.setTranslateY(0);
         leftText.setScaleX(-1);
         leftText.setTranslateX(0);
 
 
-        rightText.setFont(Fonts.REGULAR_24.getFont());
+        rightText.setFont(Fonts.BOLD_24.getFont());
         rightText.setRotate(-90);
-        rightText.setTranslateY(5);
+        rightText.setTranslateY(0);
         rightText.setScaleX(-1);
 
         rightText.setTranslateX(400);
