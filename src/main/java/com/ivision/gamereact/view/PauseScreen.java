@@ -1,7 +1,6 @@
 package com.ivision.gamereact.view;
 
 import com.ivision.engine.Fonts;
-import com.ivision.engine.GameColor;
 import javafx.animation.FadeTransition;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
@@ -118,29 +117,9 @@ public class PauseScreen {
         pauseTextTransition.play();
     }
 
-    public void showPauseText() {
-        setPauseTextOpacity(1);
-        pauseTextTransition.play();
-    }
-
     public void hidePauseText () {
         setPauseTextOpacity(0);
         pauseTextTransition.stop();
-    }
-
-    public void setPauseText (String text) {
-        leftPauseText.setText(text);
-        rightPauseText.setText(text);
-    }
-
-    public void setText (String text) {
-        leftText.setText(text);
-        rightText.setText(text);
-    }
-
-    public void setTextFill (Color color) {
-        leftText.setFill(color);
-        rightText.setFill(color);
     }
 
     public void setTextOpacity (double opacity) {
