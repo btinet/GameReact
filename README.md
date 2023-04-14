@@ -53,6 +53,8 @@ den Förderverein des Treptow-Kollegs.*
 
 - ✅ Pong React
 
+![pong_react_demo.mp4](./docs/assets/clips/pong_react_demo.gif)
+
 ## Systemvoraussetzungen
 
 - Windows-, Mac- oder Linux-basiertes Betriebssystem
