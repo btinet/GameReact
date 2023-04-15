@@ -430,14 +430,14 @@ public class AppController implements Initializable {
             playerOne.getPrimarySound().play();
             ball.increaseBallHits();
             ball.setBallAngle(-Math.sin(Math.toRadians(playerOne.getTranslateY()-ball.getTranslateY()+random))*5);
-            ball.setBallSpeed(PaddlePosition.LEFT);
+            ball.setBallSpeed(currentPlayer);
         }
         else if (ball.intersects(playerTwo)) {
             currentPlayer = playerTwo;
             playerTwo.getPrimarySound().play();
             ball.increaseBallHits();
             ball.setBallAngle(-Math.sin(Math.toRadians(playerTwo.getTranslateY()-ball.getTranslateY()+random))*5);
-            ball.setBallSpeed(PaddlePosition.RIGHT);
+            ball.setBallSpeed(currentPlayer);
         }
         // Ballinteraktion mit Seitenbanden
         if(ball.intersects(curt.getNorthBorder())) {

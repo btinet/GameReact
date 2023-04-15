@@ -17,6 +17,7 @@ public class Paddle extends Line {
     protected Color primaryColor;
     protected Color secondaryColor;
     protected int inverter = 1;
+    protected double speedFactor = 1;
     protected Integer healthPoints;
     protected Integer currentHealthPoints;
     protected ArrayList<Circle> healthPointCircles = new ArrayList<>();
@@ -95,6 +96,14 @@ public class Paddle extends Line {
 
     public void setInverter(int value) {
         this.inverter = value;
+    }
+
+    public double getSpeedFactor() {
+        return speedFactor;
+    }
+
+    public void setSpeedFactor(double speedFactor) {
+        this.speedFactor = speedFactor;
     }
 
     public Boolean intersects(Node node) {

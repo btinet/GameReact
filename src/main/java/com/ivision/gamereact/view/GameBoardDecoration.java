@@ -44,8 +44,8 @@ public class GameBoardDecoration {
         rightTransition =  Transitions.createFillTransition(150,strafeRight,GameColor.VIOLETT.darker(),playerOne.getPrimaryColor(),4);
         leftPowerUpTransition =  Transitions.createFillTransition(150,strafeLeft,GameColor.VIOLETT.darker(),GameColor.YELLOW,4);
         rightPowerupTransition =  Transitions.createFillTransition(150,strafeRight,GameColor.VIOLETT.darker(),GameColor.YELLOW,4);
-        middleCircleScaleUp = Transitions.createScaleTransition(200,middleCircleBig,1,3);
-        middleCircleScaleDown = Transitions.createScaleTransition(200,middleCircleBig,3,1);
+        middleCircleScaleUp = Transitions.createScaleTransition(200,middleCircleBig,1,2);
+        middleCircleScaleDown = Transitions.createScaleTransition(200,middleCircleBig,2,1);
         moveCircle = Transitions.createTranslateTransition(200, middleCircleBig);
         paint();
         addToStage();

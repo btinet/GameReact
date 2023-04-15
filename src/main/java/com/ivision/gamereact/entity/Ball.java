@@ -92,6 +92,19 @@ public class Ball extends Circle {
         }
     }
 
+    public void setBallSpeed(Paddle currentPlayer) {
+        double speed = 0;
+        switch (currentPlayer.getPosition()) {
+            case LEFT:
+                speed = Math.abs(ballSpeed);
+                break;
+            case RIGHT:
+                speed = -Math.abs(ballSpeed);
+                break;
+        }
+        ballSpeed = speed * currentPlayer.getSpeedFactor();
+    }
+
     public double getBallAngle() {
         return ballAngle;
     }

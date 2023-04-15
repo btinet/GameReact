@@ -50,7 +50,7 @@ public class PowerUpSystem extends Group {
 
             if(powerUp != null) getChildren().remove(powerUp.icon);
 
-            switch (ThreadLocalRandom.current().nextInt(1, 5 + 1)) {
+            switch (ThreadLocalRandom.current().nextInt(1, 6 + 1)) {
                 case 1:
                     powerUp = new PotionPowerUp();
                     break;
@@ -66,9 +66,13 @@ public class PowerUpSystem extends Group {
                 case 5:
                     powerUp = new ShufflePowerUp();
                     break;
+                case 6:
+                    powerUp = new SlowPowerUp();
+                    break;
             }
 
             getChildren().add(powerUp.icon);
+            updatePosition();
             addPowerUp();
         }
     }
@@ -145,6 +149,9 @@ public class PowerUpSystem extends Group {
                     break;
                 case CONFUSE:
                     affectedPlayer.setInverter(1);
+                    break;
+                case SPEED:
+                    affectedPlayer.setSpeedFactor(1);
                     break;
             }
             affectedPlayer.setManipulation(null);

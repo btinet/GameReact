@@ -12,5 +12,6 @@ public interface ImageFiles {
     URL stretch = ImageFiles.class.getResource("/png/icons8_toggle_full_screen_32px.png");
     URL shrink = ImageFiles.class.getResource("/png/icons8_shrink_32px.png");
     URL shuffle = ImageFiles.class.getResource("/png/icons8_decision_32px.png");
+    URL snail = ImageFiles.class.getResource("/png/icons8_snail_32px.png");
 
 }

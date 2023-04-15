@@ -4,7 +4,8 @@ public enum PaddleManipulation {
 
     WIDTH,
     CONFUSE,
-    LIFE
+    LIFE,
+    SPEED
 
 
 }
