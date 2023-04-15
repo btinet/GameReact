@@ -90,6 +90,8 @@ public class AppController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         ball.setBallSpeed(10);
+        playerOne.setSpeedFactor(ball.getBallSpeed());
+        playerTwo.setSpeedFactor(ball.getBallSpeed());
         root.setCursor(Cursor.NONE);
 
         currentPlayer = playerOne;

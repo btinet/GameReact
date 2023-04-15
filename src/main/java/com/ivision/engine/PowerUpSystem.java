@@ -151,7 +151,7 @@ public class PowerUpSystem extends Group {
                     affectedPlayer.setInverter(1);
                     break;
                 case SPEED:
-                    affectedPlayer.setSpeedFactor(1);
+                    affectedPlayer.setSpeedFactor(affectedPlayer.getSpeedFactor()*2);
                     break;
             }
             affectedPlayer.setManipulation(null);

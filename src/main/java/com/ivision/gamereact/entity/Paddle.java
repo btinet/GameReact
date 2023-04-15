@@ -17,7 +17,7 @@ public class Paddle extends Line {
     protected Color primaryColor;
     protected Color secondaryColor;
     protected int inverter = 1;
-    protected double speedFactor = 1;
+    protected double speedFactor = 0;
     protected Integer healthPoints;
     protected Integer currentHealthPoints;
     protected ArrayList<Circle> healthPointCircles = new ArrayList<>();

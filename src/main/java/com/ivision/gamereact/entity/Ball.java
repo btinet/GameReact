@@ -81,6 +81,10 @@ public class Ball extends Circle {
         this.ballSpeed = ballSpeed;
     }
 
+    public double getBallSpeed() {
+        return ballSpeed;
+    }
+
     public void setBallSpeed(PaddlePosition currentPlayer) {
         switch (currentPlayer) {
             case LEFT:
@@ -93,16 +97,14 @@ public class Ball extends Circle {
     }
 
     public void setBallSpeed(Paddle currentPlayer) {
-        double speed = 0;
         switch (currentPlayer.getPosition()) {
             case LEFT:
-                speed = Math.abs(ballSpeed);
+                ballSpeed = Math.abs(currentPlayer.getSpeedFactor());
                 break;
             case RIGHT:
-                speed = -Math.abs(ballSpeed);
+                ballSpeed = -Math.abs(currentPlayer.getSpeedFactor());
                 break;
         }
-        ballSpeed = speed * currentPlayer.getSpeedFactor();
     }
 
     public double getBallAngle() {
