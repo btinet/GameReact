@@ -420,25 +420,20 @@ public class AppController implements Initializable {
 
         // TODO: Ball-Interaktion mit Spielern in eigene Klasse oder Methode übertragen
         // Zufallsfaktor generieren
-        double random;
-        if(Math.random() < .5) {
-            random = -(Math.random()*50+5);
-        } else {
-            random = (Math.random()*50+5);
-        }
+        double random = (Math.random()*2+6);
         // Ballinteraktion mit Spielern
         if(ball.intersects(playerOne)) {
             currentPlayer = playerOne;
             playerOne.getPrimarySound().play();
             ball.increaseBallHits();
-            ball.setBallAngle(-Math.sin(Math.toRadians(playerOne.getTranslateY()-ball.getTranslateY()+random))*5);
+            ball.setBallAngle(-Math.sin(Math.toRadians(playerOne.getTranslateY()-ball.getTranslateY()))*random);
             ball.setBallSpeed(currentPlayer);
         }
         else if (ball.intersects(playerTwo)) {
             currentPlayer = playerTwo;
             playerTwo.getPrimarySound().play();
             ball.increaseBallHits();
-            ball.setBallAngle(-Math.sin(Math.toRadians(playerTwo.getTranslateY()-ball.getTranslateY()+random))*5);
+            ball.setBallAngle(-Math.sin(Math.toRadians(playerTwo.getTranslateY()-ball.getTranslateY()))*random);
             ball.setBallSpeed(currentPlayer);
         }
         // Ballinteraktion mit Seitenbanden
