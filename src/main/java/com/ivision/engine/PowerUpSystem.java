@@ -50,7 +50,7 @@ public class PowerUpSystem extends Group {
 
             if(powerUp != null) getChildren().remove(powerUp.icon);
 
-            switch (ThreadLocalRandom.current().nextInt(1, 6 + 1)) {
+            switch (ThreadLocalRandom.current().nextInt(1, 5 + 1)) {
                 case 1:
                     powerUp = new PotionPowerUp();
                     break;
