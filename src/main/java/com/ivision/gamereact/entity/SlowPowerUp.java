@@ -14,6 +14,7 @@ public class SlowPowerUp extends PowerUpItem {
 
     @Override
     public boolean doAction(Paddle affectedPlayer) {
+        // TODO: Bug, wenn Power Up abgelaufen. Ball wird nochmals langsamer.
         affectedPlayer.setSpeedFactor(affectedPlayer.getSpeedFactor()/2);
         affectedPlayer.setManipulation(PaddleManipulation.SPEED);
         System.out.println("Ball fliegt langsamer!");
