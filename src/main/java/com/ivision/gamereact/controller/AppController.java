@@ -183,6 +183,7 @@ public class AppController implements Initializable {
                     togglePause();
                 }
 
+                // START: Power Ups
                 if(playerOne.getManipulation() != null) {
                     powerUpSystem.runPowerUpTimer(playerOne);
                 }
@@ -191,7 +192,6 @@ public class AppController implements Initializable {
                     powerUpSystem.runPowerUpTimer(playerTwo);
                 }
 
-                // START: Power Ups
                 powerUpSystem.run(currentPlayer);
 
                 if(ball.triggerByBallHits()) {
@@ -256,7 +256,7 @@ public class AppController implements Initializable {
     public void getUserInput () {
 
         // Periodische Tastenabfragen
-        // z.B. keys.down(KeyCode)
+        // z.B. keys.isDown(KeyCode)
 
 
         // einmalige Tastenabfragen (innerhalb Anschlagverzögerung)
