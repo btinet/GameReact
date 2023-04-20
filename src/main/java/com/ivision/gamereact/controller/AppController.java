@@ -473,14 +473,11 @@ public class AppController implements Initializable {
                 if(!playerOne.intersects(curt.getNorthBorder())) {
                     if (playerOne.getTranslateY()-ball.getTranslateY() > 100) {
                         playerOne.setTranslateY(playerOne.getTranslateY()-10);
-                    } else
-                    if (playerOne.getTranslateY()-ball.getTranslateY() > 50) {
+                    } else if (playerOne.getTranslateY()-ball.getTranslateY() > 50) {
                         playerOne.setTranslateY(playerOne.getTranslateY()-4.5);
-                    }  else
-                    if (playerOne.getTranslateY()-ball.getTranslateY() > 10)  {
+                    }  else if (playerOne.getTranslateY()-ball.getTranslateY() > 10)  {
                         playerOne.setTranslateY(playerOne.getTranslateY()-.5);
-                    }  else
-                    if (playerOne.getTranslateY()-ball.getTranslateY() > 1) {
+                    }  else if (playerOne.getTranslateY()-ball.getTranslateY() > 1) {
                         playerOne.setTranslateY(playerOne.getTranslateY() - .1);
                     } else {
                         playerOne.setTranslateY(playerOne.getTranslateY());
@@ -491,14 +488,11 @@ public class AppController implements Initializable {
                 if(!playerOne.intersects(curt.getSouthBorder())) {
                     if (playerOne.getTranslateY()-ball.getTranslateY() < -100) {
                         playerOne.setTranslateY(playerOne.getTranslateY()+10);
-                    } else
-                    if (playerOne.getTranslateY()-ball.getTranslateY() < -50) {
+                    } else if (playerOne.getTranslateY()-ball.getTranslateY() < -50) {
                         playerOne.setTranslateY(playerOne.getTranslateY()+4.7);
-                    }  else
-                    if (playerOne.getTranslateY()-ball.getTranslateY() < -10)  {
+                    }  else if (playerOne.getTranslateY()-ball.getTranslateY() < -10)  {
                         playerOne.setTranslateY(playerOne.getTranslateY()+.5);
-                    }  else
-                    if (playerOne.getTranslateY()-ball.getTranslateY() < -1) {
+                    }  else if (playerOne.getTranslateY()-ball.getTranslateY() < -1) {
                         playerOne.setTranslateY(playerOne.getTranslateY() + .1);
                     } else {
                         playerOne.setTranslateY(playerOne.getTranslateY());
@@ -511,23 +505,23 @@ public class AppController implements Initializable {
                 if (playerOne.getInverter() > 0) {
                     if (keys.isDown(ButtonConfig.north2)) {
                         if (!playerOne.intersects(curt.getNorthBorder())) {
-                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() - 6);
+                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() - 7);
                         }
                     }
                     if (keys.isDown(ButtonConfig.south2)) {
                         if (!playerOne.intersects(curt.getSouthBorder())) {
-                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() + 6);
+                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() + 7);
                         }
                     }
                 } else {
                     if (keys.isDown(ButtonConfig.south2)) {
                         if (!playerOne.intersects(curt.getNorthBorder())) {
-                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() - 6);
+                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() - 7);
                         }
                     }
                     if (keys.isDown(ButtonConfig.north2)) {
                         if (!playerOne.intersects(curt.getSouthBorder())) {
-                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() + 6);
+                            playerOne.setTranslateY(playerOne.getInverter() * playerOne.getTranslateY() + 7);
                         }
                     }
                 }
@@ -572,23 +566,23 @@ public class AppController implements Initializable {
                 if(playerTwo.getInverter() > 0) {
                     if(keys.isDown(ButtonConfig.north)) {
                         if(!playerTwo.intersects(curt.getNorthBorder())) {
-                            playerTwo.setTranslateY(playerTwo.getTranslateY()-6);
+                            playerTwo.setTranslateY(playerTwo.getTranslateY()-7);
                         }
                     }
                     if(keys.isDown(ButtonConfig.south)) {
                         if(!playerTwo.intersects(curt.getSouthBorder())) {
-                            playerTwo.setTranslateY(playerTwo.getTranslateY()+6);
+                            playerTwo.setTranslateY(playerTwo.getTranslateY()+7);
                         }
                     }
                 } else {
                     if(keys.isDown(ButtonConfig.south)) {
                         if(!playerTwo.intersects(curt.getNorthBorder())) {
-                            playerTwo.setTranslateY(playerTwo.getTranslateY()-6);
+                            playerTwo.setTranslateY(playerTwo.getTranslateY()-7);
                         }
                     }
                     if(keys.isDown(ButtonConfig.north)) {
                         if(!playerTwo.intersects(curt.getSouthBorder())) {
-                            playerTwo.setTranslateY(playerTwo.getTranslateY()+6);
+                            playerTwo.setTranslateY(playerTwo.getTranslateY()+7);
                         }
                     }
                 }
