@@ -89,7 +89,7 @@ public class AppController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        ball.setBallSpeed(10);
+        ball.setBallSpeed(9);
         playerOne.setSpeedFactor(ball.getBallSpeed());
         playerTwo.setSpeedFactor(ball.getBallSpeed());
         root.setCursor(Cursor.NONE);

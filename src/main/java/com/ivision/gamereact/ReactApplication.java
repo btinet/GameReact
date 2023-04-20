@@ -45,12 +45,6 @@ public class ReactApplication extends Application {
         stage.show();
     }
 
-
-
-    public static Stage getStage() {
-        return stage;
-    }
-
     public static void setStage(Stage currentStage) {
         stage = currentStage;
     }
