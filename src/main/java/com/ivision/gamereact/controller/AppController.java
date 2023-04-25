@@ -1,9 +1,7 @@
 package com.ivision.gamereact.controller;
 
-import com.github.strikerx3.jxinput.XInputAxes;
-import com.github.strikerx3.jxinput.XInputButtons;
-import com.github.strikerx3.jxinput.XInputComponents;
-import com.github.strikerx3.jxinput.XInputDevice;
+import com.github.strikerx3.jxinput.*;
+import com.github.strikerx3.jxinput.enums.XInputButton;
 import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.ivision.engine.*;
 import com.ivision.gamereact.entity.Ball;
@@ -163,9 +161,21 @@ public class AppController implements Initializable {
                     XInputAxes axes = components.getAxes();
 
                     // Buttons and axes have public fields (although this is not idiomatic Java)
+                    XInputComponentsDelta delta = finalDevice.getDelta();
+
+                    XInputButtonsDelta dButtons = delta.getButtons();
+                    XInputAxesDelta dAxes = delta.getAxes();
+
+                    // Retrieve button state change
+                    if (dButtons.isPressed(XInputButton.A)) {
+                        // Button A was just pressed
+                        System.out.println("Knopf A gedrückt.");
+                    } else if (dButtons.isReleased(XInputButton.A)) {
+                        // Button A was just released
+                        System.out.println("Knopf A losgelassen.");
+                    }
 
                     // Retrieve button state
-                    if (buttons.a) { System.out.println("Knopf A gedrückt.");}
                     if (buttons.b) { System.out.println("Knopf B gedrückt.");}
                     if (buttons.x) { System.out.println("Knopf X gedrückt.");}
                     if (buttons.y) { System.out.println("Knopf Y gedrückt.");}
@@ -192,6 +202,15 @@ public class AppController implements Initializable {
                     // Retrieve axis state
                     float acceleration = axes.rt;
                     float brake = axes.lt;
+
+                    float rAxis = axes.ry;
+
+                    if(rAxis > 0.2) {
+                        System.out.println("Hoch x " + rAxis);
+                    } else if(rAxis < -0.2){
+                            System.out.println("Runter x " + rAxis);
+                    }
+
                     if(acceleration > 0)System.out.println(acceleration);
                     if(brake > 0)System.out.println(brake);
                 } else {
