@@ -205,10 +205,16 @@ public class AppController implements Initializable {
 
                     float rAxis = axes.ry;
 
+
+                    int round = Math.round(Math.abs(rAxis) * 65535);
                     if(rAxis > 0.2) {
                         System.out.println("Hoch x " + rAxis);
+                        finalDevice.setVibration(round,0);
                     } else if(rAxis < -0.2){
                             System.out.println("Runter x " + rAxis);
+                        finalDevice.setVibration(0, round);
+                    } else {
+                        finalDevice.setVibration(0, 0);
                     }
 
                     if(acceleration > 0)System.out.println(acceleration);
