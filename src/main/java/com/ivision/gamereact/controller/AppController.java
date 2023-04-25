@@ -1,5 +1,10 @@
 package com.ivision.gamereact.controller;
 
+import com.github.strikerx3.jxinput.XInputAxes;
+import com.github.strikerx3.jxinput.XInputButtons;
+import com.github.strikerx3.jxinput.XInputComponents;
+import com.github.strikerx3.jxinput.XInputDevice;
+import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.ivision.engine.*;
 import com.ivision.gamereact.entity.Ball;
 import com.ivision.gamereact.entity.Curt;
@@ -14,6 +19,7 @@ import com.tuio.TuioCursor;
 import com.tuio.TuioObject;
 import javafx.animation.FillTransition;
 import javafx.animation.TranslateTransition;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -25,9 +31,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static com.ivision.gamereact.ReactApplication.*;
 
@@ -73,6 +77,7 @@ public class AppController implements Initializable {
     private final KeyPolling keys = KeyPolling.getInstance();
 
     // Spielobjekte
+    public HashMap<ImageView,TuioObject> imageObjects = new HashMap<>();
     Paddle playerOne = new Paddle(PaddlePosition.LEFT, 5,GameColor.RED);
     Paddle playerTwo = new Paddle(PaddlePosition.RIGHT, 5, GameColor.BLUE);
     private final Ball ball = new Ball(10);
@@ -126,14 +131,20 @@ public class AppController implements Initializable {
         pauseScreen =  new PauseScreen(root);
 
         // Verarbeitung der Benutzereingabe über Reactable-Marker.
-        gamepadListener = new GamepadListener(true);
+        gamepadListener = new GamepadListener(root,true);
         gamepadListener.setController(this);
 
         // UDP-Client, der Datenpakete von Port 3333 abfängt und weiterleitet.
         client.addTuioListener(gamepadListener);
         // Verbindung herstellen und Abfrage starten.
         client.connect();
-
+        XInputDevice device = null;
+        try {
+            device = XInputDevice.getDeviceFor(0);
+        } catch (XInputNotLoadedException e) {
+            throw new RuntimeException(e);
+        }
+        XInputDevice finalDevice = device;
         gameLoop = new GameLoopTimer() {
 
             @Override
@@ -143,6 +154,57 @@ public class AppController implements Initializable {
                 getUserInput();
                 getFingerInput();
                 getEntityInteractions();
+
+                if (finalDevice.poll()) {
+                    // Retrieve the components
+                    XInputComponents components = finalDevice.getComponents();
+
+                    XInputButtons buttons = components.getButtons();
+                    XInputAxes axes = components.getAxes();
+
+                    // Buttons and axes have public fields (although this is not idiomatic Java)
+
+                    // Retrieve button state
+                    if (buttons.a) { System.out.println("Knopf A gedrückt.");}
+                    if (buttons.b) { System.out.println("Knopf B gedrückt.");}
+                    if (buttons.x) { System.out.println("Knopf X gedrückt.");}
+                    if (buttons.y) { System.out.println("Knopf Y gedrückt.");}
+                    if (buttons.lShoulder) { System.out.println("Linker Schulterbutton.");}
+                    if (buttons.rShoulder) { System.out.println("Rechter Schulterbutton.");}
+                    if (buttons.lThumb) { System.out.println("Linker Stick.");}
+                    if (buttons.rThumb) { System.out.println("Rechter Stick.");}
+                    if (buttons.start) { System.out.println("Start gedrückt.");}
+                    if (buttons.back) { System.out.println("Zurück gedrückt.");}
+                    if (buttons.left) { System.out.println("Links gedrückt.");}
+                    if (buttons.right) { System.out.println("Rechts gedrückt.");}
+                    if (buttons.up) { System.out.println("Hoch gedrückt.");}
+                    if (buttons.down) { System.out.println("Runter gedrückt.");}
+
+                    // Check if Guide button is supported
+                    if (XInputDevice.isGuideButtonSupported()) {
+                        // Use it
+                        if (buttons.guide) {
+                            // The Guide button is currently pressed
+                            System.out.println("Guide gedrückt.");
+                        }
+                    }
+
+                    // Retrieve axis state
+                    float acceleration = axes.rt;
+                    float brake = axes.lt;
+                    if(acceleration > 0)System.out.println(acceleration);
+                    if(brake > 0)System.out.println(brake);
+                } else {
+                    // Controller is not connected; display a message
+                }
+
+// This is exactly the same as above
+                finalDevice.poll();
+                if (finalDevice.isConnected()) {
+                    // ...
+                } else {
+                    // ...
+                }
 
 
 
@@ -458,6 +520,12 @@ public class AppController implements Initializable {
             ball.reflect();
         }
 
+    }
+
+    public void updateImageObjects () {
+        for (Map.Entry<ImageView,TuioObject> imageView : imageObjects.entrySet()) {
+
+        }
     }
 
     public void updatePlayer() {

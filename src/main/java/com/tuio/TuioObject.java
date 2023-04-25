@@ -18,6 +18,8 @@
 
 package com.tuio;
 
+import javafx.scene.image.ImageView;
+
 /**
  * The TuioObject class encapsulates /tuio/2Dobj TUIO objects.
  *
@@ -46,6 +48,8 @@ public class TuioObject extends TuioContainer {
 	 * Defines the ROTATING state.
 	 */ 
 	public static final int TUIO_ROTATING = 5;
+
+	protected ImageView imageView;
 	
 	/**
 	 * This constructor takes a TuioTime argument and assigns it along with the provided 
@@ -235,6 +239,14 @@ public class TuioObject extends TuioContainer {
 	 */
 	public float getRotationAccel() {
 		return rotation_accel;
+	}
+
+	public ImageView getImageView() {
+		return imageView;
+	}
+
+	public void setImageView(ImageView imageView) {
+		this.imageView = imageView;
 	}
 
 	/**

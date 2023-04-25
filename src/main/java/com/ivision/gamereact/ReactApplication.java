@@ -1,5 +1,6 @@
 package com.ivision.gamereact;
 
+import com.github.strikerx3.jxinput.XInputDevice14;
 import com.ivision.engine.KeyPolling;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -8,10 +9,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import com.github.strikerx3.jxinput.XInputDevice;
 
 import java.io.IOException;
 
 public class ReactApplication extends Application {
+
+    private com.github.strikerx3.jxinput.XInputDevice XInputDevice;
 
     // Attribute
     public static Stage stage;
@@ -23,6 +27,16 @@ public class ReactApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+
+        // Check if XInput 1.3 is available
+        if (XInputDevice.isAvailable()) {
+            System.out.println("XInput 1.3 is available on this platform");
+        }
+
+        // Check if XInput 1.4 is available
+        if (XInputDevice14.isAvailable()) {
+            System.out.println("XInput 1.4 is available on this platform");
+        }
 
         setStage(stage);
 

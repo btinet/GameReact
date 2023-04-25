@@ -1,28 +1,41 @@
 package com.ivision.gamereact.model;
 
+import com.ivision.engine.ImageFX;
+import com.ivision.engine.ImageFiles;
 import com.ivision.gamereact.controller.AppController;
 import com.tuio.TuioBlob;
 import com.tuio.TuioCursor;
 import com.tuio.TuioListener;
 import com.tuio.TuioObject;
 import com.tuio.TuioTime;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.ivision.gamereact.ReactApplication.height;
+import static com.ivision.gamereact.ReactApplication.width;
 
 public class GamepadListener implements TuioListener {
 
     private boolean verbose = false; // Konsolenausgabe ein- oder ausschalten
 
+    Pane root;
     ArrayList<TuioObject> gamepads = new ArrayList<TuioObject>();
     ArrayList<TuioCursor> fingers = new ArrayList<TuioCursor>();
     ArrayList<TuioBlob> blobs = new ArrayList<TuioBlob>();
 
     protected AppController controller;
 
-    public GamepadListener () {
+    public GamepadListener (Pane rootPane) {
+        this.root = rootPane;
     }
 
-    public GamepadListener (boolean verbose) {
+    public GamepadListener (Pane rootPane, boolean verbose) {
+        this.root = rootPane;
         this.verbose = verbose;
     }
 
@@ -66,9 +79,12 @@ public class GamepadListener implements TuioListener {
     public void addTuioObject(TuioObject tobj) {
         gamepads.add(tobj);
 
+
         if(tobj.getSymbolID() == 1) controller.playerOneIsPresent = true;
         if(tobj.getSymbolID() == 2) controller.playerTwoIsPresent = true;
-
+        if(tobj.getSymbolID() > 2) {
+            controller.imageObjects.put(tobj.getImageView(),tobj);
+        }
         if(verbose) {
             System.out.printf("Objekt mit Symbol-ID %s hinzugefügt.%n",tobj.getSymbolID());
         }
@@ -80,7 +96,9 @@ public class GamepadListener implements TuioListener {
 
         if(tobj.getSymbolID() == 1) controller.playerOneIsPresent = false;
         if(tobj.getSymbolID() == 2) controller.playerTwoIsPresent = false;
-
+        if(tobj.getSymbolID() > 2) {
+            controller.imageObjects.remove(tobj.getImageView());
+        }
         if(verbose) {
             System.out.printf("Objekt mit Symbol-ID %s entfernt.%n", tobj.getSymbolID());
         }
