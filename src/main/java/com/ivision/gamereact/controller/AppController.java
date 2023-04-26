@@ -48,7 +48,12 @@ public class AppController implements Initializable {
     public boolean playerOneIsPresent = false;
     public boolean playerTwoIsPresent = false;
     public boolean playerOneHasKeyboard = false;
+    public boolean playerTwoHasKeyboard = false;
     public boolean playerOneHasGamepad = false;
+    public boolean playerTwoHasGamepad = false;
+    public boolean gamepadOneIsPresent = false;
+    public boolean gamepadTwoIsPresent = false;
+
     public ImageView p1kbdID;
     public ImageView p2kbdID;
     public ImageView fidBlue;
@@ -62,14 +67,21 @@ public class AppController implements Initializable {
 
     {
         assert ImageFiles.fidBlue != null;
+        assert ImageFiles.xbox != null;
         fidBlue = ImageFX.getImage(ImageFiles.fidBlue);
         fidRed = ImageFX.getImage(ImageFiles.fidBlue);
     }
 
+
+    ImageView p1GamepadIcon = ImageFX.getImage(ImageFiles.Y);
+    ImageView p1GamepadPause = ImageFX.getImage(ImageFiles.A);
+    ImageView p2GamepadIcon = ImageFX.getImage(ImageFiles.Y);
+
+    ImageView p2GamepadPause = ImageFX.getImage(ImageFiles.A);
+
     public AudioFX confirm = AudioFX.confirm;
     public AudioFX cancel = AudioFX.cancel;
     public AudioFX click = AudioFX.click;
-    public boolean playerTwoHasKeyboard = false;
     public Paddle currentPlayer;
     public boolean isGameOver = false;
     boolean intro = true;
@@ -158,7 +170,11 @@ public class AppController implements Initializable {
                 getFingerInput();
                 getEntityInteractions();
 
+                toggleGamepadOneIcon();
+
                 if (finalDevice.poll()) {
+
+                    gamepadOneIsPresent = true;
                     // Retrieve the components
                     XInputComponents components = finalDevice.getComponents();
 
@@ -211,6 +227,8 @@ public class AppController implements Initializable {
                 } else {
                     // Controller is not connected; display a message
                     playerOneHasGamepad = false;
+                    gamepadOneIsPresent = false;
+
                 }
 
 // This is exactly the same as above
@@ -286,6 +304,21 @@ public class AppController implements Initializable {
 
         // Spiel starten
         gameLoop.start();
+    }
+
+    public void toggleGamepadOneIcon() {
+
+        if(gamepadOneIsPresent) {
+            if(!root.getChildren().contains(p1GamepadIcon)) {
+                p1GamepadIcon.setTranslateX(-660);
+                p1GamepadIcon.setTranslateY(80);
+                p1GamepadIcon.setRotate(90);
+                p1GamepadIcon.setOpacity(.4);
+                root.getChildren().add(p1GamepadIcon);
+            }
+        } else {
+            root.getChildren().remove(p1GamepadIcon);
+        }
     }
 
     private void gameOver(Paddle player) {
@@ -392,6 +425,11 @@ public class AppController implements Initializable {
 
     public void togglePlayerOneHasGamepad () {
         playerOneHasGamepad = !playerOneHasGamepad;
+        if(playerOneHasGamepad) {
+            p1GamepadIcon.setOpacity(1);
+        } else {
+            p1GamepadIcon.setOpacity(.4);
+        }
     }
 
     /**
@@ -400,7 +438,7 @@ public class AppController implements Initializable {
     public void togglePause() {
         if(gameLoop.isPaused()) {
             TranslateTransition middleCircleAnimation = gbd.getMoveCircleTransition();
-
+            p1GamepadIcon.setImage(ImageFX.getImage(ImageFiles.Y).getImage());
             middleCircleAnimation.setToX(0);
             middleCircleAnimation.setFromX(currentMiddleCirclePosition);
             middleCircleAnimation.play();
@@ -417,6 +455,9 @@ public class AppController implements Initializable {
                 isGameOver = false;
             }
         } else {
+            if(playerOneHasGamepad) {
+                p1GamepadIcon.setImage(ImageFX.getImage(ImageFiles.A).getImage());
+            }
             gameLoop.pause();
             MusicFX.THE_GRID.play();
             MusicFX.MAZE.pause();

@@ -13,5 +13,10 @@ public interface ImageFiles {
     URL shrink = ImageFiles.class.getResource("/png/icons8_shrink_32px.png");
     URL shuffle = ImageFiles.class.getResource("/png/icons8_decision_32px.png");
     URL snail = ImageFiles.class.getResource("/png/icons8_snail_32px.png");
+    URL xbox = ImageFiles.class.getResource("/png/xbox/icons8_xbox_48px.png");
+    URL Y = ImageFiles.class.getResource("/png/xbox/icons8_xbox_y_48px.png");
+    URL X = ImageFiles.class.getResource("/png/xbox/icons8_xbox_x_48px.png");
+    URL A = ImageFiles.class.getResource("/png/xbox/icons8_xbox_a_48px.png");
+    URL B = ImageFiles.class.getResource("/png/xbox/icons8_xbox_b_48px.png");
 
 }
