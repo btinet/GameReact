@@ -48,6 +48,7 @@ public class AppController implements Initializable {
     public boolean playerOneIsPresent = false;
     public boolean playerTwoIsPresent = false;
     public boolean playerOneHasKeyboard = false;
+    public boolean playerOneHasGamepad = false;
     public ImageView p1kbdID;
     public ImageView p2kbdID;
     public ImageView fidBlue;
@@ -55,6 +56,9 @@ public class AppController implements Initializable {
 
     boolean markerOneAdded = false;
     boolean markerTwoAdded = false;
+
+    int shortTimer = 0;
+    int playerRumbleTimer = 0;
 
     {
         assert ImageFiles.fidBlue != null;
@@ -77,6 +81,7 @@ public class AppController implements Initializable {
     // Spielobjekte
     public HashMap<ImageView,TuioObject> imageObjects = new HashMap<>();
     Paddle playerOne = new Paddle(PaddlePosition.LEFT, 5,GameColor.RED);
+    XInputDevice finalDevice;
     Paddle playerTwo = new Paddle(PaddlePosition.RIGHT, 5, GameColor.BLUE);
     private final Ball ball = new Ball(10);
     Curt curt = new Curt();
@@ -142,7 +147,7 @@ public class AppController implements Initializable {
         } catch (XInputNotLoadedException e) {
             throw new RuntimeException(e);
         }
-        XInputDevice finalDevice = device;
+        finalDevice = device;
         gameLoop = new GameLoopTimer() {
 
             @Override
@@ -167,60 +172,45 @@ public class AppController implements Initializable {
                     XInputAxesDelta dAxes = delta.getAxes();
 
                     // Retrieve button state change
-                    if (dButtons.isPressed(XInputButton.A)) {
-                        // Button A was just pressed
-                        System.out.println("Knopf A gedrückt.");
-                    } else if (dButtons.isReleased(XInputButton.A)) {
-                        // Button A was just released
-                        System.out.println("Knopf A losgelassen.");
-                    }
+
+                    if (dButtons.isPressed(XInputButton.A)) togglePause();
+                    if (dButtons.isPressed(XInputButton.Y)) togglePlayerOneHasGamepad();
+
 
                     // Retrieve button state
-                    if (buttons.b) { System.out.println("Knopf B gedrückt.");}
-                    if (buttons.x) { System.out.println("Knopf X gedrückt.");}
-                    if (buttons.y) { System.out.println("Knopf Y gedrückt.");}
-                    if (buttons.lShoulder) { System.out.println("Linker Schulterbutton.");}
-                    if (buttons.rShoulder) { System.out.println("Rechter Schulterbutton.");}
-                    if (buttons.lThumb) { System.out.println("Linker Stick.");}
-                    if (buttons.rThumb) { System.out.println("Rechter Stick.");}
-                    if (buttons.start) { System.out.println("Start gedrückt.");}
-                    if (buttons.back) { System.out.println("Zurück gedrückt.");}
-                    if (buttons.left) { System.out.println("Links gedrückt.");}
-                    if (buttons.right) { System.out.println("Rechts gedrückt.");}
-                    if (buttons.up) { System.out.println("Hoch gedrückt.");}
-                    if (buttons.down) { System.out.println("Runter gedrückt.");}
 
-                    // Check if Guide button is supported
-                    if (XInputDevice.isGuideButtonSupported()) {
-                        // Use it
-                        if (buttons.guide) {
-                            // The Guide button is currently pressed
-                            System.out.println("Guide gedrückt.");
-                        }
-                    }
 
                     // Retrieve axis state
                     float acceleration = axes.rt;
                     float brake = axes.lt;
 
                     float rAxis = axes.ry;
+                    float lyAxis = axes.ly;
 
 
-                    int round = Math.round(Math.abs(rAxis) * 65535);
-                    if(rAxis > 0.2) {
-                        System.out.println("Hoch x " + rAxis);
-                        finalDevice.setVibration(round,0);
-                    } else if(rAxis < -0.2){
-                            System.out.println("Runter x " + rAxis);
-                        finalDevice.setVibration(0, round);
-                    } else {
-                        finalDevice.setVibration(0, 0);
-                    }
 
                     if(acceleration > 0)System.out.println(acceleration);
                     if(brake > 0)System.out.println(brake);
+
+                    if(!gameLoop.isPaused() && playerOneHasGamepad) {
+                        double figure = playerOne.getTranslateY();
+                        if(playerOne.intersects(curt.getNorthBorder())) {
+                            if(lyAxis < -0.2) {
+                                playerOne.setTranslateY( figure + getAnalogSpeed(-lyAxis,playerOne) );
+                            }
+                        } else if(playerOne.intersects(curt.getSouthBorder())) {
+                            if(lyAxis > 0.2) {
+                                playerOne.setTranslateY( figure + getAnalogSpeed(-lyAxis,playerOne) );
+                            }
+                        } else if(lyAxis > 0.2 || lyAxis < -0.2) {
+                            playerOne.setTranslateY( figure + getAnalogSpeed(-lyAxis,playerOne)  );
+                        }
+                    }
+
+
                 } else {
                     // Controller is not connected; display a message
+                    playerOneHasGamepad = false;
                 }
 
 // This is exactly the same as above
@@ -400,6 +390,10 @@ public class AppController implements Initializable {
         }
     }
 
+    public void togglePlayerOneHasGamepad () {
+        playerOneHasGamepad = !playerOneHasGamepad;
+    }
+
     /**
      * Zwischen Pausen- und Spielmodus wechseln.
      */
@@ -510,6 +504,8 @@ public class AppController implements Initializable {
         double random = (Math.random()*2+6);
         // Ballinteraktion mit Spielern
         if(ball.intersects(playerOne)) {
+            playerRumbleTimer = 5;
+            finalDevice.setVibration(0, 40000);
             currentPlayer = playerOne;
             playerOne.getPrimarySound().play();
             ball.increaseBallHits();
@@ -517,6 +513,8 @@ public class AppController implements Initializable {
             ball.setBallSpeed(currentPlayer);
         }
         else if (ball.intersects(playerTwo)) {
+            playerRumbleTimer = 5;
+            finalDevice.setVibration(0, 40000);
             currentPlayer = playerTwo;
             playerTwo.getPrimarySound().play();
             ball.increaseBallHits();
@@ -525,6 +523,8 @@ public class AppController implements Initializable {
         }
         // Ballinteraktion mit Seitenbanden
         if(ball.intersects(curt.getNorthBorder())) {
+            shortTimer = 15;
+            finalDevice.setVibration(10000, 20000);
             TranslateTransition shakeNorth = new TranslateTransition(new Duration(100),camera);
             shakeNorth.setFromY(5);
             shakeNorth.setToY(0);
@@ -535,6 +535,8 @@ public class AppController implements Initializable {
             ball.reflect();
         }
         else if (ball.intersects(curt.getSouthBorder())) {
+            shortTimer = 15;
+            finalDevice.setVibration(10000, 20000);
             TranslateTransition shakeSouth = new TranslateTransition(new Duration(100),camera);
             shakeSouth.setFromY(-5);
             shakeSouth.setToY(0);
@@ -544,7 +546,15 @@ public class AppController implements Initializable {
             AudioFX.SFX3.play();
             ball.reflect();
         }
-
+        if(shortTimer > 0)
+        {
+            shortTimer--;
+        } else if (playerRumbleTimer > 0)
+        {
+            playerRumbleTimer--;
+        } else {
+            finalDevice.setVibration(0, 0);
+        }
     }
 
     public void updateImageObjects () {
@@ -561,7 +571,7 @@ public class AppController implements Initializable {
 
 
         if(!playerOneIsPresent) {
-            if(!playerOneHasKeyboard) {
+            if(!playerOneHasKeyboard && !playerOneHasGamepad) {
                 // CPU-Steuerung für Spieler 1
                 if(!playerOne.intersects(curt.getNorthBorder())) {
                     if (playerOne.getTranslateY()-ball.getTranslateY() > 100) {
@@ -750,6 +760,10 @@ public class AppController implements Initializable {
 
         double x = Math.sin(Math.toRadians(angleDegrees-90));
         return currentPlayer.getInverter() * x * 12;
+    }
+
+    private double getAnalogSpeed(float axis, Paddle currentPlayer) {
+        return currentPlayer.getInverter() * axis * 12;
     }
 
     /**
