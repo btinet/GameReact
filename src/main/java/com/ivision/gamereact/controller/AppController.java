@@ -146,7 +146,7 @@ public class AppController implements Initializable {
         pauseScreen =  new PauseScreen(root);
 
         // Verarbeitung der Benutzereingabe über Reactable-Marker.
-        gamepadListener = new GamepadListener(root,true);
+        gamepadListener = new GamepadListener(root,verbose);
         gamepadListener.setController(this);
 
         // UDP-Client, der Datenpakete von Port 3333 abfängt und weiterleitet.
@@ -197,16 +197,11 @@ public class AppController implements Initializable {
 
 
                     // Retrieve axis state
-                    float acceleration = axes.rt;
-                    float brake = axes.lt;
-
-                    float rAxis = axes.ry;
                     float lyAxis = axes.ly;
 
 
 
-                    if(acceleration > 0)System.out.println(acceleration);
-                    if(brake > 0)System.out.println(brake);
+
 
                     if(!gameLoop.isPaused() && playerOneHasGamepad) {
                         double figure = playerOne.getTranslateY();
@@ -228,10 +223,12 @@ public class AppController implements Initializable {
                     // Controller is not connected; display a message
                     playerOneHasGamepad = false;
                     gamepadOneIsPresent = false;
+                    assert ImageFiles.Y != null;
+                    p1GamepadIcon.setImage(ImageFX.getImage(ImageFiles.Y).getImage());
 
                 }
 
-// This is exactly the same as above
+                // This is exactly the same as above
                 finalDevice.poll();
                 if (finalDevice.isConnected()) {
                     // ...
@@ -310,10 +307,12 @@ public class AppController implements Initializable {
 
         if(gamepadOneIsPresent) {
             if(!root.getChildren().contains(p1GamepadIcon)) {
-                p1GamepadIcon.setTranslateX(-660);
-                p1GamepadIcon.setTranslateY(80);
+                p1GamepadIcon.setTranslateX(-620);
+                p1GamepadIcon.setScaleX(.15);
+                p1GamepadIcon.setScaleY(.15);
+                p1GamepadIcon.setTranslateY(120);
                 p1GamepadIcon.setRotate(90);
-                p1GamepadIcon.setOpacity(.4);
+                p1GamepadIcon.setOpacity(1);
                 root.getChildren().add(p1GamepadIcon);
             }
         } else {
@@ -426,9 +425,11 @@ public class AppController implements Initializable {
     public void togglePlayerOneHasGamepad () {
         playerOneHasGamepad = !playerOneHasGamepad;
         if(playerOneHasGamepad) {
-            p1GamepadIcon.setOpacity(1);
+            assert ImageFiles.Y3 != null;
+            p1GamepadIcon.setImage(ImageFX.getImage(ImageFiles.Y3).getImage());
         } else {
-            p1GamepadIcon.setOpacity(.4);
+            assert ImageFiles.Y != null;
+            p1GamepadIcon.setImage(ImageFX.getImage(ImageFiles.Y).getImage());
         }
     }
 
@@ -438,7 +439,7 @@ public class AppController implements Initializable {
     public void togglePause() {
         if(gameLoop.isPaused()) {
             TranslateTransition middleCircleAnimation = gbd.getMoveCircleTransition();
-            p1GamepadIcon.setImage(ImageFX.getImage(ImageFiles.Y).getImage());
+
             middleCircleAnimation.setToX(0);
             middleCircleAnimation.setFromX(currentMiddleCirclePosition);
             middleCircleAnimation.play();
@@ -455,9 +456,6 @@ public class AppController implements Initializable {
                 isGameOver = false;
             }
         } else {
-            if(playerOneHasGamepad) {
-                p1GamepadIcon.setImage(ImageFX.getImage(ImageFiles.A).getImage());
-            }
             gameLoop.pause();
             MusicFX.THE_GRID.play();
             MusicFX.MAZE.pause();
@@ -766,7 +764,8 @@ public class AppController implements Initializable {
                     }
                     break;
                 default:
-                    System.out.println("Es sind nur Marker der IDs 1 und 2 erlaubt!");
+                    if(verbose) System.out.println("Es sind nur Marker der IDs 1 und 2 erlaubt!");
+                    break;
             }
         }
 

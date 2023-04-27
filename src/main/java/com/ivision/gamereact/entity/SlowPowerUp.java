@@ -6,6 +6,8 @@ import com.ivision.engine.PaddleManipulation;
 
 import java.util.Objects;
 
+import static com.ivision.gamereact.ReactApplication.verbose;
+
 public class SlowPowerUp extends PowerUpItem {
 
     public SlowPowerUp() {
@@ -17,7 +19,7 @@ public class SlowPowerUp extends PowerUpItem {
         // TODO: Bug, wenn Power Up abgelaufen. Ball wird nochmals langsamer.
         affectedPlayer.setSpeedFactor(affectedPlayer.getSpeedFactor()/2);
         affectedPlayer.setManipulation(PaddleManipulation.SPEED);
-        System.out.println("Ball fliegt langsamer!");
+        if(verbose) System.out.println("Ball fliegt langsamer!");
         return true;
     }
 }

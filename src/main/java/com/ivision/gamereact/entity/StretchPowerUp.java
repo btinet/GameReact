@@ -6,6 +6,8 @@ import com.ivision.engine.PaddleManipulation;
 
 import java.util.Objects;
 
+import static com.ivision.gamereact.ReactApplication.verbose;
+
 public class StretchPowerUp extends PowerUpItem {
 
     public StretchPowerUp () {
@@ -16,7 +18,7 @@ public class StretchPowerUp extends PowerUpItem {
     public boolean doAction(Paddle affectedPlayer) {
         affectedPlayer.setEndY(100);
         affectedPlayer.setManipulation(PaddleManipulation.WIDTH);
-        System.out.println("Gewachsen!");
+        if(verbose) System.out.println("Gewachsen!");
         return true;
     }
 

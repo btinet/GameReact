@@ -1,23 +1,15 @@
 package com.ivision.gamereact.model;
 
-import com.ivision.engine.ImageFX;
-import com.ivision.engine.ImageFiles;
+
 import com.ivision.gamereact.controller.AppController;
 import com.tuio.TuioBlob;
 import com.tuio.TuioCursor;
 import com.tuio.TuioListener;
 import com.tuio.TuioObject;
 import com.tuio.TuioTime;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import static com.ivision.gamereact.ReactApplication.height;
-import static com.ivision.gamereact.ReactApplication.width;
 
 public class GamepadListener implements TuioListener {
 

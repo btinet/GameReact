@@ -6,6 +6,8 @@ import com.ivision.engine.PaddleManipulation;
 
 import java.util.Objects;
 
+import static com.ivision.gamereact.ReactApplication.verbose;
+
 public class PotionPowerUp extends PowerUpItem {
 
     public PotionPowerUp () {
@@ -16,7 +18,7 @@ public class PotionPowerUp extends PowerUpItem {
     public boolean doAction(Paddle affectedPlayer) {
         affectedPlayer.resetCurrentHealthPoints();
         affectedPlayer.setManipulation(PaddleManipulation.LIFE);
-        System.out.println("Lebenspunkte aufgefrischt!");
+        if(verbose) System.out.println("Lebenspunkte aufgefrischt!");
         return true;
     }
 }

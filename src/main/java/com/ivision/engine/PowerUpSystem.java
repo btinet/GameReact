@@ -11,6 +11,8 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.ivision.gamereact.ReactApplication.verbose;
+
 public class PowerUpSystem extends Group {
 
     Pane root;
@@ -45,7 +47,7 @@ public class PowerUpSystem extends Group {
 
     public void setPowerUp () {
         if (!powerUpSpawned && !powerUpCollected) {
-            System.out.println("Power Up landet auf dem Spielfeld");
+            if(verbose) System.out.println("Power Up landet auf dem Spielfeld");
             ball.resetBallHits();
 
             if(powerUp != null) getChildren().remove(powerUp.icon);
@@ -101,7 +103,7 @@ public class PowerUpSystem extends Group {
         powerUpSpawned = false;
         startTime = 0;
         root.getChildren().remove(this);
-        System.out.println("Power-Up-System zurückgesetzt!");
+        if(verbose) System.out.println("Power-Up-System zurückgesetzt!");
 
     }
 
@@ -115,12 +117,12 @@ public class PowerUpSystem extends Group {
                 powerUpCollected = true;
 
                 gbd.playPowerUpAnimation(currentPlayer.getPosition());
-                System.out.println("Power Up aufgesammelt!");
+                if(verbose) System.out.println("Power Up aufgesammelt!");
                 doAction(currentPlayer);
             }
         } else {
             if (powerUpSpawned) {
-                System.out.println("Power Up verschwunden!");
+                if(verbose) System.out.println("Power Up verschwunden!");
                 shutDown();
             }
 
@@ -142,7 +144,7 @@ public class PowerUpSystem extends Group {
             affectedPlayer.increaseTimerIndicator(-1);
             this.powerUpCollected = false;
             this.powerUpTime = 0;
-            System.out.println("PowerUp-Wirkung hat nachgelassen.");
+            if(verbose) System.out.println("PowerUp-Wirkung hat nachgelassen.");
             switch (affectedPlayer.getManipulation()) {
                 case WIDTH:
                     affectedPlayer.setEndY(70);

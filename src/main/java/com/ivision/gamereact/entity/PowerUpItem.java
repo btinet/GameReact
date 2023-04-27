@@ -3,6 +3,8 @@ package com.ivision.gamereact.entity;
 import com.ivision.engine.PowerUp;
 import javafx.scene.image.ImageView;
 
+import static com.ivision.gamereact.ReactApplication.verbose;
+
 public abstract class PowerUpItem implements PowerUp {
 
     public ImageView icon;
@@ -36,7 +38,7 @@ public abstract class PowerUpItem implements PowerUp {
 
     @Override
     public boolean doAction(Paddle affectedPlayer) {
-        System.out.println("Standard Power Up ausgeführt!");
+        if(verbose) System.out.println("Standard Power Up ausgeführt!");
         return true;
     }
 }

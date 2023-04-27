@@ -6,6 +6,8 @@ import javafx.scene.input.KeyCode;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.ivision.gamereact.ReactApplication.verbose;
+
 public class KeyPolling {
     private static Scene scene;
     private static final Set<KeyCode> keysCurrentlyDown = new HashSet<>();
@@ -43,7 +45,7 @@ public class KeyPolling {
 
     public boolean isPressed(KeyCode keyCode) {
         if(keysCurrentlyDown.contains(keyCode)) {
-            System.out.println(this);
+            if(verbose) System.out.println(this);
             keysCurrentlyDown.remove(keyCode);
 
             return true;
