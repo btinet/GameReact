@@ -27,6 +27,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.stage.Screen;
 import javafx.util.Duration;
 import java.net.URL;
 import java.util.*;
@@ -349,8 +350,8 @@ public class AppController implements Initializable {
             TuioCursor cursor = cursorIterator.next();
             // Fingereingabe
             Circle fingerCircle = new Circle(25, Color.CYAN);
-            fingerCircle.setTranslateX((int)(cursor.getScreenX(width)-width/2));
-            fingerCircle.setTranslateY((int)(cursor.getScreenY(height)-height/2));
+            fingerCircle.setTranslateX((int)(cursor.getScreenX((int) (Screen.getPrimary().getBounds().getWidth()))-(Screen.getPrimary().getBounds().getWidth()/2)));
+            fingerCircle.setTranslateY((int)(cursor.getScreenY((int) (Screen.getPrimary().getBounds().getHeight()))-(Screen.getPrimary().getBounds().getHeight()/2)));
             if(!root.getChildren().contains(fingerCircle)) root.getChildren().add(fingerCircle);
             setAndPlayFillTransition(fingerCircle);
             click.play();
