@@ -74,6 +74,7 @@ public class GamepadListener implements TuioListener {
 
         if(tobj.getSymbolID() == 1) controller.playerOneIsPresent = true;
         if(tobj.getSymbolID() == 2) controller.playerTwoIsPresent = true;
+        if(tobj.getSymbolID() == 12) controller.a1IsPresent = true;
         if(tobj.getSymbolID() > 2) {
             controller.imageObjects.put(tobj.getImageView(),tobj);
         }
@@ -88,6 +89,7 @@ public class GamepadListener implements TuioListener {
 
         if(tobj.getSymbolID() == 1) controller.playerOneIsPresent = false;
         if(tobj.getSymbolID() == 2) controller.playerTwoIsPresent = false;
+        if(tobj.getSymbolID() == 12) controller.a1IsPresent = false;
         if(tobj.getSymbolID() > 2) {
             controller.imageObjects.remove(tobj.getImageView());
         }

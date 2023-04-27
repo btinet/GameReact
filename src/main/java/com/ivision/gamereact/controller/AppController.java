@@ -4,6 +4,7 @@ import com.github.strikerx3.jxinput.*;
 import com.github.strikerx3.jxinput.enums.XInputButton;
 import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import com.ivision.engine.*;
+import com.ivision.gamereact.entity.AudioPlayer;
 import com.ivision.gamereact.entity.Ball;
 import com.ivision.gamereact.entity.Curt;
 import com.ivision.gamereact.entity.Paddle;
@@ -25,6 +26,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Screen;
@@ -54,6 +56,11 @@ public class AppController implements Initializable {
     public boolean playerTwoHasGamepad = false;
     public boolean gamepadOneIsPresent = false;
     public boolean gamepadTwoIsPresent = false;
+
+    public boolean a1IsPresent = false;
+
+    // Test Music Media
+    AudioPlayer a1 = new AudioPlayer(MusicFX.MAZE);
 
     public ImageView p1kbdID;
     public ImageView p2kbdID;
@@ -167,6 +174,13 @@ public class AppController implements Initializable {
             public void handle(long now) {
                 super.handle(now);
 
+                if(a1IsPresent) {
+                    if(!root.getChildren().contains(a1)) root.getChildren().add(a1);
+                } else {
+                    root.getChildren().remove(a1);
+                }
+
+                updateTools();
                 getUserInput();
                 getFingerInput();
                 getEntityInteractions();
@@ -603,12 +617,23 @@ public class AppController implements Initializable {
         }
     }
 
+    public void updateTools() {
+        for (TuioObject marker : gamepadListener.getGamepads()) {
+            switch (marker.getSymbolID()) {
+                case 12:
+                    a1.setTranslateX((int)(marker.getScreenX((int) (Screen.getPrimary().getBounds().getWidth()))-(Screen.getPrimary().getBounds().getWidth()/2)));
+                    a1.setTranslateY((int)(marker.getScreenY((int) (Screen.getPrimary().getBounds().getHeight()))-(Screen.getPrimary().getBounds().getHeight()/2)));
+                    a1.setRotate(marker.getAngleDegrees());
+                    break;
+            }
+        }
+    }
+
     public void updatePlayer() {
 
         ball.move();
         // Aktive Marker ermitteln.
         gamepads = gamepadListener.getGamepads();
-
 
         if(!playerOneIsPresent) {
             if(!playerOneHasKeyboard && !playerOneHasGamepad) {
@@ -739,28 +764,28 @@ public class AppController implements Initializable {
                 case 1:
                     double figure = playerOne.getTranslateY();
                     if(playerOne.intersects(curt.getNorthBorder())) {
-                        if(getSpeed(gamepad.getAngleDegrees(),playerOne) > 0) {
+                        if(getSpeed(gamepad.getAngleDegrees(),playerOne) > 0.4) {
                             playerOne.setTranslateY( figure + getSpeed(gamepad.getAngleDegrees(),playerOne) );
                         }
                     } else if(playerOne.intersects(curt.getSouthBorder())) {
-                        if(getSpeed(gamepad.getAngleDegrees(),playerOne) < 0) {
+                        if(getSpeed(gamepad.getAngleDegrees(),playerOne) < -0.4) {
                             playerOne.setTranslateY( figure + getSpeed(gamepad.getAngleDegrees(),playerOne) );
                         }
-                    } else {
+                    } else if(getSpeed(gamepad.getAngleDegrees(),playerOne) < -0.4 || getSpeed(gamepad.getAngleDegrees(),playerOne) > 0.4){
                         playerOne.setTranslateY( figure + getSpeed(gamepad.getAngleDegrees(),playerOne)  );
                     }
                     break;
                 case 2:
                     double figure2 = playerTwo.getTranslateY();
                     if(playerTwo.intersects(curt.getNorthBorder())) {
-                        if(getSpeed(gamepad.getAngleDegrees(),playerTwo) > 0) {
+                        if(getSpeed(gamepad.getAngleDegrees(),playerTwo) > 0.4) {
                             playerTwo.setTranslateY( figure2 + getSpeed(gamepad.getAngleDegrees(),playerTwo));
                         }
                     } else if(playerTwo.intersects(curt.getSouthBorder())) {
-                        if(getSpeed(gamepad.getAngleDegrees(),playerTwo) < 0) {
+                        if(getSpeed(gamepad.getAngleDegrees(),playerTwo) < -0.4) {
                             playerTwo.setTranslateY( figure2 + getSpeed(gamepad.getAngleDegrees(),playerTwo));
                         }
-                    } else {
+                    } else if(getSpeed(gamepad.getAngleDegrees(),playerTwo) < -0.4 || getSpeed(gamepad.getAngleDegrees(),playerTwo) > 0.4){
                         playerTwo.setTranslateY( figure2 + getSpeed(gamepad.getAngleDegrees(),playerTwo));
                     }
                     break;
@@ -799,7 +824,7 @@ public class AppController implements Initializable {
      */
     private double getSpeed(float angleDegrees, Paddle currentPlayer) {
 
-        double x = Math.sin(Math.toRadians(angleDegrees-90));
+        double x = 2*Math.sin(Math.toRadians(angleDegrees-90));
         return currentPlayer.getInverter() * x * 12;
     }
 
