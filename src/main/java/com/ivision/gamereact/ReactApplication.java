@@ -24,7 +24,7 @@ public class ReactApplication extends Application {
     public static int width = 1400;
     public static int height = 860;
     public static String title = "GameReact";
-    public static boolean verbose = true;
+    public static boolean verbose = false;
 
     @Override
     public void start(Stage stage) throws IOException {

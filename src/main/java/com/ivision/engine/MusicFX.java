@@ -9,7 +9,8 @@ import java.util.Objects;
 public enum MusicFX {
 
     MAZE ("/wav/tmp_maze2.stm.mp3"),
-    THE_GRID ("/wav/tmp_lc_grid.stm.mp3");
+    THE_GRID ("/wav/tmp_lc_grid.stm.mp3"),
+    HACKING ("/wav/tmp_hacking.stm.mp3");
 
     private final MediaPlayer mediaPlayer;
 

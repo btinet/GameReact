@@ -60,7 +60,7 @@ public class AppController implements Initializable {
     public boolean a1IsPresent = false;
 
     // Test Music Media
-    AudioPlayer a1 = new AudioPlayer(MusicFX.MAZE);
+    AudioPlayer a1 = new AudioPlayer(MusicFX.HACKING,"Tron Legacy - Hacking");
 
     public ImageView p1kbdID;
     public ImageView p2kbdID;
@@ -369,8 +369,9 @@ public class AppController implements Initializable {
             if(!root.getChildren().contains(fingerCircle)) root.getChildren().add(fingerCircle);
             setAndPlayFillTransition(fingerCircle);
             click.play();
+            a1.touch(fingerCircle);
             cursorIterator.remove();
-            togglePause();
+            //togglePause();
         }
     }
 
@@ -472,7 +473,7 @@ public class AppController implements Initializable {
             }
         } else {
             gameLoop.pause();
-            MusicFX.THE_GRID.play();
+            MusicFX.THE_GRID.pause();
             MusicFX.MAZE.pause();
             gbd.getMiddleCircleScaleUp().play();
             gbd.getMiddleCircleScaleUp().setOnFinished(new EventHandler<ActionEvent>() {

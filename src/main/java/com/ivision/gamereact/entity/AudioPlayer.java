@@ -10,6 +10,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 
 public class AudioPlayer extends Group {
 
@@ -24,16 +26,29 @@ public class AudioPlayer extends Group {
     ImageView fastForwards = ImageFX.getImage(ImageFiles.next);
     ImageView forwards = ImageFX.getImage(ImageFiles.next);
     ImageView muteAudio = ImageFX.getImage(ImageFiles.stop);
+
+    Circle playCircle = new Circle(20,GameColor.YELLOW);
     Rectangle board = new Rectangle(800,400, Color.TRANSPARENT);
     Rectangle panel = new Rectangle(400,220,GameColor.DARKEN);
 
-    public AudioPlayer (MusicFX audio) {
+    Text titel = new Text();
+
+    public AudioPlayer (MusicFX audio, String titel) {
+        this.titel.setText(titel);
+        this.titel.setFont(Fonts.BOLD_18.getFont());
+        this.titel.setFill(Color.WHITE);
+        this.titel.setTranslateX(100);
+        this.titel.setTranslateY(-50);
         fastForwards.setTranslateX(70);
-        pausePlay.setTranslateX(140);
-        stop.setTranslateX(210);
+        stop.setTranslateX(140);
+        pausePlay.setTranslateX(210);
+        playCircle.setTranslateX(210);
+        pausePlay.setScaleX(1);
         fastBackwards.setTranslateX(280);
 
         mediaBarGroup.getChildren().addAll(
+                playCircle,
+                this.titel,
                 fastBackwards,
                 pausePlay,
                 stop,
@@ -41,13 +56,14 @@ public class AudioPlayer extends Group {
         );
         anchor.setTranslateX(400);
         anchor.setTranslateY(200);
+        panel.setTranslateX(400);
         panel.setTranslateY(90);
         panel.setArcHeight(40);
         panel.setArcWidth(40);
         panel.setEffect(new Blend());
         this.audio = audio;
-        mediaBarGroup.setTranslateY(120);
-        mediaBarGroup.setTranslateX(-20);
+        mediaBarGroup.setTranslateY(220);
+        mediaBarGroup.setTranslateX(420);
         mediaBarGroup.setScaleX(-1);
         getChildren().addAll(
                 board,
@@ -55,6 +71,43 @@ public class AudioPlayer extends Group {
                 mediaBarGroup,
                 anchor
         );
+        getAudio().play();
+    }
+
+    public ImageView getBackwards() {
+        return backwards;
+    }
+
+    public ImageView getFastBackwards() {
+        return fastBackwards;
+    }
+
+    public ImageView getStop() {
+        return stop;
+    }
+
+    public Circle getPausePlay() {
+        return playCircle;
+    }
+
+    public void touch(Shape shape) {
+        if(shape.getBoundsInParent().intersects(pausePlay.localToScene(pausePlay.getBoundsInLocal()))) {
+            getAudio().play();
+            System.out.println("Trifft Play!");
+        }
+        if(shape.getBoundsInParent().intersects(stop.getBoundsInParent())) getAudio().stop();
+    }
+
+    public ImageView getFastForwards() {
+        return fastForwards;
+    }
+
+    public ImageView getForwards() {
+        return forwards;
+    }
+
+    public ImageView getMuteAudio() {
+        return muteAudio;
     }
 
     public MusicFX getAudio() {
