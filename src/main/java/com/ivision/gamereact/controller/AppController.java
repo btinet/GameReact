@@ -143,7 +143,7 @@ public class AppController implements Initializable {
         try {
             device = XInputDevice.getDeviceFor(0);
         } catch (XInputNotLoadedException e) {
-            throw new RuntimeException(e);
+            System.out.println("Xinput wird nicht unterstuezt.");
         }
         finalDevice = device;
         gameLoop = new GameLoopTimer() {

@@ -29,15 +29,17 @@ public class ReactApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        // Check if XInput 1.3 is available
-        if (XInputDevice.isAvailable() && verbose) {
-            System.out.println("XInput 1.3 is available on this platform");
+        // TODO: check if xinput is available, otherwise do not invoke it.
+
+        if(System.getProperty("os.name").equals("Linux")) {
+            System.out.println("Xinput wird nicht unterstuezt.");
+        } else {
+            // Check if XInput 1.4 is available
+            if (XInputDevice14.isAvailable()) {
+                System.out.println("XInput 1.4 is available on this platform");
+            }
         }
 
-        // Check if XInput 1.4 is available
-        if (XInputDevice14.isAvailable() && verbose) {
-            System.out.println("XInput 1.4 is available on this platform");
-        }
 
         setStage(stage);
 
