@@ -72,6 +72,8 @@ Es ist möglich, diese Software mit einem herkömmlichen Computer mit einem
 oder mehreren Bildschirmen sowie Beamern zu verwenden. Das beste Ergebnis
 wird allerdings mit der dedizierten **iVision**-Hardware erzielt.
 
+![Schematische Darstellung](./docs/assets/images/interface/schema_seite.jpg)
+
 ## Getting started
 
 Lade das aktuellste Release herunter, um direkt zu starten. Achte darauf,

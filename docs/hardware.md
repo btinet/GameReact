@@ -15,6 +15,7 @@ Informationen über Position und Rotationswinkel gibt.
 Je nach Marker-Typ kann das Feedback zusätzliche Eingabefelder enthalten. Etwa eine
 Mediaplayer-Steuerung oder ein Folienindikator.
 
+![Schematische Darstellung](./assets/images/interface/schema_oben.jpg)
+
 ### Präsentationsfolien
 
-![position_indicator_a.png](./assets/images/screenshots/position_indicator_a.png)
