@@ -32,8 +32,8 @@ den Förderverein des Treptow-Kollegs.*
 
 ### To do
 
-- 🚧 Funktionen der Power Ups implementieren (Pong React)
 - 🚧 Responsive Content Layout (RCL)
+- 🚧 Menüführung per Touch-Eingaben
 - 🚧 Feedback-Indikator (Präsentationsfolien)
 - 🚧 Feedback-Beamer Output
 - 🚧 Videointegration
@@ -43,11 +43,11 @@ den Förderverein des Treptow-Kollegs.*
 ### Ready
 
 - ✅ Power Up System (Pong React)
-- ✅ Organisation nach Klassen, zur besseren Lesbarkeit und Wartung des Programmcodes
 - ✅ Game Engine
 - ✅ XBOX Gamepad-Steuerung (Pong React)
 - ✅ Keyboard User Input
 - ✅ ReacTIVision User Input
+- ✅ Finger-Touch-Eingaben
 
 ### Games
 
