@@ -1,6 +1,7 @@
 package com.ivision.gamereact.entity;
 
 import com.ivision.engine.*;
+import com.ivision.gamereact.controller.AppController;
 import javafx.scene.Group;
 import javafx.scene.effect.Blend;
 import javafx.scene.image.ImageView;
@@ -27,13 +28,16 @@ public class AudioPlayer extends Group {
     ImageView forwards = ImageFX.getImage(ImageFiles.next);
     ImageView muteAudio = ImageFX.getImage(ImageFiles.stop);
 
+    AppController controller;
+
     Circle playCircle = new Circle(20,GameColor.YELLOW);
     Rectangle board = new Rectangle(800,400, Color.TRANSPARENT);
     Rectangle panel = new Rectangle(400,220,GameColor.DARKEN);
 
     Text titel = new Text();
 
-    public AudioPlayer (MusicFX audio, String titel) {
+    public AudioPlayer (MusicFX audio, String titel, AppController controller) {
+        this.controller = controller;
         this.titel.setText(titel);
         this.titel.setFont(Fonts.BOLD_18.getFont());
         this.titel.setFill(Color.WHITE);
@@ -105,6 +109,7 @@ public class AudioPlayer extends Group {
             System.out.println("Knopf getroffen!");
             if(getAudio().isPlaying()) {
                 getAudio().stop();
+                controller.startPong();
             } else {
                 getAudio().play();
             }

@@ -60,7 +60,7 @@ public class AppController implements Initializable {
     public boolean a1IsPresent = false;
 
     // Test Music Media
-    AudioPlayer a1 = new AudioPlayer(MusicFX.HACKING,"Tron Legacy - Hacking");
+    AudioPlayer a1 = new AudioPlayer(MusicFX.HACKING,"Tron Legacy - Hacking",this);
 
     public ImageView p1kbdID;
     public ImageView p2kbdID;
@@ -124,34 +124,12 @@ public class AppController implements Initializable {
 
         currentPlayer = playerOne;
 
-        Rectangle background = new Rectangle(2500,2500,GameColor.VIOLETT);
-
         // Spielfeld auf Bühne platzieren
-        root.getChildren().addAll(
-                background,
-                curt
-        );
 
         // Spielfeld dekorieren
         gbd = new GameBoardDecoration(root, playerOne, playerTwo);
 
-        // Spielfiguren, Banden und Anzeigen platzieren
-        root.getChildren().addAll(
-                playerOne.getPointsText(),
-                playerTwo.getPointsText(),
-                playerOne,
-                playerTwo,
-                ball,
-                curt.getNorthBorder(),
-                curt.getSouthBorder(),
-                playerOne.getHealthPointGroup(),
-                playerTwo.getHealthPointGroup(),
-                playerOne.getTimerIndicator(),
-                playerTwo.getTimerIndicator()
-        );
-
         powerUpSystem = new PowerUpSystem(root,ball, gbd);
-        pauseScreen =  new PauseScreen(root);
 
         // Verarbeitung der Benutzereingabe über Reactable-Marker.
         gamepadListener = new GamepadListener(root,verbose);
@@ -183,8 +161,6 @@ public class AppController implements Initializable {
                 updateTools();
                 getUserInput();
                 getFingerInput();
-                getEntityInteractions();
-
                 toggleGamepadOneIcon();
 
                 if (finalDevice.poll()) {
@@ -283,12 +259,16 @@ public class AppController implements Initializable {
             @Override
             public void tick(float secondsSinceLastFrame) {
 
+
+
                 // Intro Audio abspielen, danach nicht mehr!
                 if(intro) {
                     if (!isGameOver) AudioFX.pongReactSFX.play();
                     intro = false;
                     togglePause();
                 }
+
+                if(!gameLoop.isPaused()) getEntityInteractions();
 
                 // START: Power Ups
                 if(playerOne.getManipulation() != null) {
@@ -454,6 +434,39 @@ public class AppController implements Initializable {
         }
     }
 
+    public void startPong () {
+
+        Rectangle background = new Rectangle(2500,2500,GameColor.VIOLETT);
+
+        root.getChildren().clear();
+        root.getChildren().addAll(
+                background,
+                curt
+        );
+
+        gbd.addToStage();
+
+
+
+        // Spielfiguren, Banden und Anzeigen platzieren
+        root.getChildren().addAll(
+                playerOne.getPointsText(),
+                playerTwo.getPointsText(),
+                playerOne,
+                playerTwo,
+                ball,
+                curt.getNorthBorder(),
+                curt.getSouthBorder(),
+                playerOne.getHealthPointGroup(),
+                playerTwo.getHealthPointGroup(),
+                playerOne.getTimerIndicator(),
+                playerTwo.getTimerIndicator()
+        );
+
+
+        pauseScreen =  new PauseScreen(root);
+    }
+
     /**
      * Zwischen Pausen- und Spielmodus wechseln.
      */
@@ -484,7 +497,7 @@ public class AppController implements Initializable {
             gbd.getMiddleCircleScaleUp().setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    pauseScreen.showHelpText();
+
                     if(isGameOver) {
                         pauseScreen.showPauseText("Game over");
                     } else {

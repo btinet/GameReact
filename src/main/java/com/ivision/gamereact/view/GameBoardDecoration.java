@@ -48,7 +48,6 @@ public class GameBoardDecoration {
         middleCircleScaleDown = Transitions.createScaleTransition(200,middleCircleBig,2,1);
         moveCircle = Transitions.createTranslateTransition(200, middleCircleBig);
         paint();
-        addToStage();
     }
 
     private void paint () {
@@ -87,7 +86,7 @@ public class GameBoardDecoration {
         rightSide.setFill(Color.TRANSPARENT);
     }
 
-    private void addToStage () {
+    public void addToStage () {
         root.getChildren().addAll(
                 strafeLeft,
                 strafeRight,
