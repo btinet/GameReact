@@ -5,6 +5,11 @@
 
 ## Bauplan
 
+Der schematische Aufbau ist relativ simpel. Er umfasst eine Tischplatte, die
+aus frosted Plexiglas besteht, sowie eine Kamera (IR 850 nm) und einen Beamer,
+der das optische Feedback durch Rückprojektion auf der Tischplatte anzeigt.
+
+![Schematische Darstellung](./assets/images/interface/schema_seite.jpg)
 
 ## Interface
 
