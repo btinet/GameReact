@@ -28,6 +28,10 @@ public enum MusicFX {
         mediaPlayer.play();
     }
 
+    public boolean isPlaying() {
+        return mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
+    }
+
     public void pause() {mediaPlayer.pause();}
 
     public void stop() {mediaPlayer.stop();}

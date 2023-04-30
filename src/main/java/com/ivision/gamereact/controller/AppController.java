@@ -351,10 +351,10 @@ public class AppController implements Initializable {
      * Transition setzen und einmalig sofort abspielen.
      * @param shape Form, der eine FillTransition zugeordnet werden soll.
      */
-    public void setAndPlayFillTransition(Shape shape) {
+    public FillTransition setAndPlayFillTransition(Shape shape) {
         FillTransition fingerTransition = Transitions.createFillTransition(200,shape,GameColor.YELLOW,GameColor.YELLOW_ALPHA_0,1);
         fingerTransition.setAutoReverse(false);
-        fingerTransition.play();
+        return fingerTransition;
     }
 
     public void getFingerInput () {
@@ -366,10 +366,15 @@ public class AppController implements Initializable {
             Circle fingerCircle = new Circle(25, Color.CYAN);
             fingerCircle.setTranslateX((int)(cursor.getScreenX((int) (Screen.getPrimary().getBounds().getWidth()))-(Screen.getPrimary().getBounds().getWidth()/2)));
             fingerCircle.setTranslateY((int)(cursor.getScreenY((int) (Screen.getPrimary().getBounds().getHeight()))-(Screen.getPrimary().getBounds().getHeight()/2)));
-            if(!root.getChildren().contains(fingerCircle)) root.getChildren().add(fingerCircle);
-            setAndPlayFillTransition(fingerCircle);
+            root.getChildren().add(fingerCircle);
+
+            a1.touch(fingerCircle,stageWidth,stageHeight);
+
+            FillTransition ft = setAndPlayFillTransition(fingerCircle);
+            ft.setOnFinished(event -> root.getChildren().remove(fingerCircle));
+            ft.play();
             click.play();
-            a1.touch(fingerCircle);
+            //root.getChildren().remove(fingerCircle);
             cursorIterator.remove();
             //togglePause();
         }
@@ -622,7 +627,7 @@ public class AppController implements Initializable {
         for (TuioObject marker : gamepadListener.getGamepads()) {
             switch (marker.getSymbolID()) {
                 case 12:
-                    a1.setTranslateX((int)(marker.getScreenX((int) (Screen.getPrimary().getBounds().getWidth()))-(Screen.getPrimary().getBounds().getWidth()/2)));
+                    a1.setTranslateX((int)(marker.getScreenX((int) (Screen.getPrimary().getBounds().getWidth()))-(Screen.getPrimary().getBounds().getWidth()/2))+100);
                     a1.setTranslateY((int)(marker.getScreenY((int) (Screen.getPrimary().getBounds().getHeight()))-(Screen.getPrimary().getBounds().getHeight()/2)));
                     a1.setRotate(marker.getAngleDegrees());
                     break;

@@ -3,15 +3,15 @@ package com.ivision.gamereact.entity;
 import com.ivision.engine.*;
 import javafx.scene.Group;
 import javafx.scene.effect.Blend;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+
+import static com.ivision.gamereact.ReactApplication.height;
+import static com.ivision.gamereact.ReactApplication.width;
 
 public class AudioPlayer extends Group {
 
@@ -47,12 +47,11 @@ public class AudioPlayer extends Group {
         fastBackwards.setTranslateX(280);
 
         mediaBarGroup.getChildren().addAll(
-                playCircle,
-                this.titel,
                 fastBackwards,
-                pausePlay,
                 stop,
-                fastForwards
+                pausePlay,
+                fastForwards,
+                this.titel
         );
         anchor.setTranslateX(400);
         anchor.setTranslateY(200);
@@ -86,16 +85,31 @@ public class AudioPlayer extends Group {
         return stop;
     }
 
-    public Circle getPausePlay() {
-        return playCircle;
+    public ImageView getPausePlay() {
+        return pausePlay;
     }
 
-    public void touch(Shape shape) {
-        if(shape.getBoundsInParent().intersects(pausePlay.localToScene(pausePlay.getBoundsInLocal()))) {
-            getAudio().play();
-            System.out.println("Trifft Play!");
+    public void touch(Shape shape,double sx, double sy) {
+
+        // TODO: Für jedes aktive Feld Koordinaten ermitteln und vergleichen.
+        // TODO: foreach in eigene Methode auslagern.
+
+        double fx = shape.getBoundsInParent().getCenterX()+width/2;
+        double fy = shape.getBoundsInParent().getCenterY()+height/2;
+        double px = getPausePlay().localToScene(getPausePlay().getBoundsInLocal()).getCenterX()-(sx);
+        double py = getPausePlay().localToScene(getPausePlay().getBoundsInLocal()).getCenterY()-(sy);
+
+        System.out.printf("Finger (%s|%s) und Play(%s|%s)%n",fx,fy,px,py);
+
+        if(Math.abs(fx-px) < 25 && Math.abs(fy-py) < 25) {
+            System.out.println("Knopf getroffen!");
+            if(getAudio().isPlaying()) {
+                getAudio().stop();
+            } else {
+                getAudio().play();
+            }
         }
-        if(shape.getBoundsInParent().intersects(stop.getBoundsInParent())) getAudio().stop();
+
     }
 
     public ImageView getFastForwards() {
