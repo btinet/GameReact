@@ -1,4 +1,4 @@
-package com.ivision.gamereact.entity;
+package com.ivision.gamereact.entity.pong;
 
 import com.ivision.engine.PowerUp;
 import javafx.scene.image.ImageView;

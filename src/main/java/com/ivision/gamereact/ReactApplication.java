@@ -29,14 +29,12 @@ public class ReactApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        // TODO: check if xinput is available, otherwise do not invoke it.
-
-        if(System.getProperty("os.name").equals("Linux")) {
-            System.out.println("Xinput wird nicht unterstuezt.");
-        } else {
+        if(System.getProperty("os.name").contains("Windows")) {
+            System.out.println("Xinput wird unterstützt.");
             // Check if XInput 1.4 is available
             if (XInputDevice14.isAvailable()) {
-                System.out.println("XInput 1.4 is available on this platform");
+                System.out.println("XInput 1.4 ist verfügbar.");
+                // TODO: Input Listener instanziieren (nicht mehr im AppController).
             }
         }
 

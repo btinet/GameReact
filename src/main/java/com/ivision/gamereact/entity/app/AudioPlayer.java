@@ -1,4 +1,4 @@
-package com.ivision.gamereact.entity;
+package com.ivision.gamereact.entity.app;
 
 import com.ivision.engine.*;
 import com.ivision.gamereact.controller.AppController;

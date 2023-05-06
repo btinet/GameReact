@@ -1,6 +1,7 @@
-package com.ivision.gamereact.view;
+package com.ivision.gamereact.view.pong;
 
 import com.ivision.engine.Fonts;
+import com.ivision.gamereact.view.Transitions;
 import javafx.animation.FadeTransition;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;

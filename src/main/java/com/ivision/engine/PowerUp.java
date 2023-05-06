@@ -1,6 +1,6 @@
 package com.ivision.engine;
 
-import com.ivision.gamereact.entity.Paddle;
+import com.ivision.gamereact.entity.pong.Paddle;
 import javafx.scene.image.ImageView;
 
 public interface PowerUp {

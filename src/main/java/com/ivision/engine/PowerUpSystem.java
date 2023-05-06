@@ -1,8 +1,8 @@
 package com.ivision.engine;
 
 
-import com.ivision.gamereact.entity.*;
-import com.ivision.gamereact.view.GameBoardDecoration;
+import com.ivision.gamereact.entity.pong.*;
+import com.ivision.gamereact.view.pong.GameBoardDecoration;
 import com.ivision.gamereact.view.Transitions;
 import javafx.animation.FadeTransition;
 import javafx.scene.Group;

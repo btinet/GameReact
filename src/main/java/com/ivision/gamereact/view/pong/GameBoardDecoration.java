@@ -1,9 +1,10 @@
-package com.ivision.gamereact.view;
+package com.ivision.gamereact.view.pong;
 
 import com.ivision.engine.GameColor;
 import com.ivision.engine.PaddlePosition;
 import com.ivision.gamereact.ReactApplication;
-import com.ivision.gamereact.entity.Paddle;
+import com.ivision.gamereact.entity.pong.Paddle;
+import com.ivision.gamereact.view.Transitions;
 import javafx.animation.FillTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;

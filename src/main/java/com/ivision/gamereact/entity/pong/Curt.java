@@ -1,4 +1,4 @@
-package com.ivision.gamereact.entity;
+package com.ivision.gamereact.entity.pong;
 
 import com.ivision.engine.GameColor;
 import javafx.scene.paint.Color;
