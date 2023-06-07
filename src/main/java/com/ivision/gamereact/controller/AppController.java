@@ -294,6 +294,7 @@ public class AppController implements Initializable {
 
         // Spiel starten
         gameLoop.start();
+        startPong();
     }
 
     public void toggleGamepadOneIcon() {
@@ -346,7 +347,7 @@ public class AppController implements Initializable {
             fingerCircle.setTranslateY((int)(cursor.getScreenY((int) (Screen.getPrimary().getBounds().getHeight()))-(Screen.getPrimary().getBounds().getHeight()/2)));
             root.getChildren().add(fingerCircle);
 
-            a1.touch(fingerCircle,stageWidth,stageHeight);
+            //a1.touch(fingerCircle,stageWidth,stageHeight);
 
             FillTransition ft = setAndPlayFillTransition(fingerCircle);
             ft.setOnFinished(event -> root.getChildren().remove(fingerCircle));
@@ -354,7 +355,7 @@ public class AppController implements Initializable {
             click.play();
             //root.getChildren().remove(fingerCircle);
             cursorIterator.remove();
-            //togglePause();
+            togglePause();
         }
     }
 
@@ -489,7 +490,7 @@ public class AppController implements Initializable {
             }
         } else {
             gameLoop.pause();
-            MusicFX.THE_GRID.pause();
+            MusicFX.THE_GRID.play();
             MusicFX.MAZE.pause();
             gbd.getMiddleCircleScaleUp().play();
             gbd.getMiddleCircleScaleUp().setOnFinished(new EventHandler<ActionEvent>() {

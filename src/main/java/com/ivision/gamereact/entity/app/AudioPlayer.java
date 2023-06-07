@@ -74,7 +74,7 @@ public class AudioPlayer extends Group {
                 mediaBarGroup,
                 anchor
         );
-        getAudio().play();
+        //getAudio().play();
     }
 
     public ImageView getBackwards() {

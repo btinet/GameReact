@@ -61,8 +61,8 @@ public class Paddle extends Line {
                 primarySound.setBalance(-0.75);
                 healthPointGroup.setTranslateX(-600);
                 this.timerIndicator.setTranslateX(-524);
-                timerIndicator.setScaleY(-1);
-                healthPointGroup.setScaleX(-1);
+                timerIndicator.setScaleY(1);
+                healthPointGroup.setScaleX(1);
                 pointsText.setTranslateX(-485);
                 pointsText.setTranslateY(-7);
                 pointsText.setRotate(90);
@@ -74,7 +74,7 @@ public class Paddle extends Line {
                 primarySound.setBalance(0.75);
                 healthPointGroup.setTranslateX(600);
                 this.timerIndicator.setTranslateX(524);
-                timerIndicator.setScaleX(-1);
+                timerIndicator.setScaleX(1);
                 pointsText.setTranslateX(485);
                 pointsText.setTranslateY(7);
                 pointsText.setRotate(-90);
@@ -85,7 +85,7 @@ public class Paddle extends Line {
         pointsText.setTextAlignment(TextAlignment.CENTER);
         pointsText.setFont(Fonts.REGULAR_46.getFont());
         pointsText.setFill(Color.WHITE);
-        pointsText.setScaleX(-1);
+        pointsText.setScaleX(1);
 
     }
 
