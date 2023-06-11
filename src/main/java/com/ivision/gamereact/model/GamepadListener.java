@@ -16,9 +16,9 @@ public class GamepadListener implements TuioListener {
     private boolean verbose = false; // Konsolenausgabe ein- oder ausschalten
 
     Pane root;
-    ArrayList<TuioObject> gamepads = new ArrayList<TuioObject>();
-    ArrayList<TuioCursor> fingers = new ArrayList<TuioCursor>();
-    ArrayList<TuioBlob> blobs = new ArrayList<TuioBlob>();
+    ArrayList<TuioObject> gamepads = new ArrayList<>();
+    ArrayList<TuioCursor> fingers = new ArrayList<>();
+    ArrayList<TuioBlob> blobs = new ArrayList<>();
 
     protected AppController controller;
 

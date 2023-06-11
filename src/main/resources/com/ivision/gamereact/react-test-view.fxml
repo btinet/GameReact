@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane fx:id="root" fx:controller="com.ivision.gamereact.controller.TestController" xmlns:fx="http://javafx.com/fxml">
+
+</BorderPane>

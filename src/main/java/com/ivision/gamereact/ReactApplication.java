@@ -41,7 +41,8 @@ public class ReactApplication extends Application {
 
         setStage(stage);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(ReactApplication.class.getResource("react-main-view.fxml"));
+        // FXMLLoader fxmlLoader = new FXMLLoader(ReactApplication.class.getResource("react-main-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ReactApplication.class.getResource("react-test-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
         KeyPolling.getInstance().pollScene(scene);
 
