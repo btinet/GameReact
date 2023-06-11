@@ -23,7 +23,6 @@ public class TestController extends TuioClient implements Initializable {
     private Pane root;
     private final KeyPolling keys = KeyPolling.getInstance();
     private MarkerListener listener;
-    private GameLoopTimer timer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -33,7 +32,7 @@ public class TestController extends TuioClient implements Initializable {
         addTuioListener(this.listener);
         connect();
 
-        this.timer = new GameLoopTimer() {
+        GameLoopTimer timer = new GameLoopTimer() {
             @Override
             public void tick(float secondsSinceLastFrame) {
                 updateObjects();

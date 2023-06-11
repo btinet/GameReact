@@ -12,10 +12,10 @@ import java.util.HashMap;
 public class MarkerListener implements TuioListener {
 
     private boolean verbose = false;
-    private HashMap<TuioObject, Group> objectShapes = new HashMap<>();
+    private final HashMap<TuioObject, Group> objectShapes = new HashMap<>();
 
     public MarkerListener() {
-
+        new MarkerListener(false);
     }
 
     public MarkerListener(boolean verbose) {
