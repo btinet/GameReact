@@ -52,6 +52,9 @@ public class MarkerListener implements TuioListener {
         Rectangle rectangle = new Rectangle(150,150, Color.BLACK);
         rectangle.setArcWidth(40);
         rectangle.setArcHeight(40);
+        rectangle.setX(-75);
+        rectangle.setY(-75);
+
         Text symbolID = new Text("Symbol-ID: " + tobj.getSymbolID());
         Text sessionID = new Text("Session-ID: " + tobj.getSessionID());
 

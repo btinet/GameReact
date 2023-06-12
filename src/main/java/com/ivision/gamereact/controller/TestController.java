@@ -51,8 +51,6 @@ public class TestController extends TuioClient implements Initializable {
             TuioObject marker = entry.getKey();
             Group group = entry.getValue();
             Rectangle rectangle = (Rectangle) group.getChildren().get(0);
-            rectangle.setX(-75);
-            rectangle.setY(-75);
             rectangle.setRotate(marker.getAngleDegrees());
             group.setTranslateX(root.getWidth()*marker.getX());
             group.setTranslateY(root.getHeight()*marker.getY());
