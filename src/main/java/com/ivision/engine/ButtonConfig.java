@@ -5,6 +5,7 @@ import javafx.scene.input.KeyCode;
 public interface ButtonConfig {
 
     KeyCode toggleFullscreen = KeyCode.F11;
+    KeyCode toggleCalibrationGrid = KeyCode.F12;
     KeyCode toggleP1 = KeyCode.F1;
     KeyCode toggleP2 = KeyCode.F2;
     KeyCode saveGame = KeyCode.F5;

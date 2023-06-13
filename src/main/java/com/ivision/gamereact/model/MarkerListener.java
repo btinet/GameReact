@@ -1,5 +1,6 @@
 package com.ivision.gamereact.model;
 
+import com.ivision.gamereact.entity.module.GuiModel;
 import com.tuio.*;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 public class MarkerListener implements TuioListener {
 
     private boolean verbose = false;
+    private final GuiModel model = new GuiModel();
     private final HashMap<TuioObject, Group> objectShapes = new HashMap<>();
 
     public MarkerListener() {
@@ -48,12 +50,12 @@ public class MarkerListener implements TuioListener {
 
     @Override
     public void addTuioObject(TuioObject tobj) {
-        Group rGroup = new Group();
-        Rectangle rectangle = new Rectangle(150,150, Color.BLACK);
+        Group rGroup = this.model.getModule(tobj.getSymbolID());
+        Rectangle rectangle = new Rectangle(100,100, Color.RED);
         rectangle.setArcWidth(40);
         rectangle.setArcHeight(40);
-        rectangle.setX(-75);
-        rectangle.setY(-75);
+        rectangle.setX(-50);
+        rectangle.setY(-50);
 
         Text symbolID = new Text("Symbol-ID: " + tobj.getSymbolID());
         Text sessionID = new Text("Session-ID: " + tobj.getSessionID());
