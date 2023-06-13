@@ -10,9 +10,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Transform;
 
 import java.net.URL;
 import java.util.*;
@@ -22,7 +25,7 @@ import static com.ivision.gamereact.ReactApplication.stage;
 public class TestController extends TuioClient implements Initializable {
 
     @FXML
-    private Pane root;
+    private BorderPane root;
     private final KeyPolling keys = KeyPolling.getInstance();
     private MarkerListener listener;
 
@@ -94,6 +97,7 @@ public class TestController extends TuioClient implements Initializable {
             TuioObject marker = entry.getKey();
             Group group = entry.getValue();
 
+            /*
             for (Object object:
                  group.getChildren()) {
                 if (object instanceof Rectangle)
@@ -101,7 +105,12 @@ public class TestController extends TuioClient implements Initializable {
                     ((Rectangle)object).setRotate(marker.getAngleDegrees());
                 }
             }
+             */
 
+
+            //group.getTransforms().add(Transform.rotate(marker.getAngle(), 0,0));
+
+            group.setRotate(marker.getAngleDegrees());
             group.setTranslateX(root.getWidth()*marker.getX());
             group.setTranslateY(root.getHeight()*marker.getY());
 

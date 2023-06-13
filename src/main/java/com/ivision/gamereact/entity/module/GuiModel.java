@@ -23,8 +23,8 @@ public class GuiModel {
 
     private void registerModules () {
         this.modules.putAll(Map.of(
-                1, new TextModule(1),
-                2, new TextModule(2)
+                1, new TextModule(1,"GameReact ist interaktiv!"),
+                2, new TextModule(2,"Es ist non-linear und\nfolgt deinen Gedanken!")
         ));
     }
 

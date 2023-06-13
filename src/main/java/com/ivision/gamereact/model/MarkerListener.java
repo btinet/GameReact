@@ -71,8 +71,6 @@ public class MarkerListener implements TuioListener {
         sessionID.setFill(Color.BLUE);
 
         rGroup.getChildren().add(rectangle);
-        rGroup.getChildren().add(symbolID);
-        rGroup.getChildren().add(sessionID);
 
         if (!this.objectShapes.containsKey(tobj)) this.objectShapes.put(tobj,rGroup);
 
