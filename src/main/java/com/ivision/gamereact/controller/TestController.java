@@ -68,7 +68,6 @@ public class TestController extends TuioClient implements Initializable {
                     setAlignment = true;
                 }
 
-
                 updateObjects();
                 getUserInput();
             }
@@ -110,7 +109,9 @@ public class TestController extends TuioClient implements Initializable {
 
             //group.getTransforms().add(Transform.rotate(marker.getAngle(), 0,0));
 
-            group.setRotate(marker.getAngleDegrees());
+            group.getTransforms().clear();
+            group.getTransforms().add(Transform.rotate(marker.getAngleDegrees(), 0,0));
+
             group.setTranslateX(root.getWidth()*marker.getX());
             group.setTranslateY(root.getHeight()*marker.getY());
 
@@ -140,9 +141,7 @@ public class TestController extends TuioClient implements Initializable {
 
     }
 
-    @FXML
     protected void toggleFullscreen() {
-
         stage.setFullScreen(!stage.isFullScreen());
         horizontalLine.setWidth(stage.getWidth());
         horizontalLine.setTranslateY(stage.getHeight()/2);

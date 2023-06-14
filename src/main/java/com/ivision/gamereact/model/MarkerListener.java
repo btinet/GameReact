@@ -1,12 +1,18 @@
 package com.ivision.gamereact.model;
 
+import com.ivision.engine.GameColor;
 import com.ivision.gamereact.entity.module.GuiModel;
+import com.ivision.gamereact.view.Transitions;
 import com.tuio.*;
+import javafx.animation.FillTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Transition;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Transform;
 
 import java.util.HashMap;
 
@@ -30,6 +36,9 @@ public class MarkerListener implements TuioListener {
 
     @Override
     public void updateTuioObject(TuioObject tobj) {
+        Group group = objectShapes.get(tobj);
+
+
 
     }
 
@@ -51,11 +60,17 @@ public class MarkerListener implements TuioListener {
     @Override
     public void addTuioObject(TuioObject tobj) {
         Group rGroup = this.model.getModule(tobj.getSymbolID());
-        Rectangle rectangle = new Rectangle(100,100, Color.RED);
-        rectangle.setArcWidth(40);
-        rectangle.setArcHeight(40);
-        rectangle.setX(-50);
-        rectangle.setY(-50);
+
+
+
+        Rectangle rectangle = new Rectangle(120,120, GameColor.BLUE);
+        rectangle.setArcWidth(20);
+        rectangle.setArcHeight(20);
+        rectangle.setX(-60);
+        rectangle.setY(-60);
+
+        Transitions.createFadeTransition(100,rectangle,0,1,1).playFromStart();
+
 
         Text symbolID = new Text("Symbol-ID: " + tobj.getSymbolID());
         Text sessionID = new Text("Session-ID: " + tobj.getSessionID());
@@ -72,7 +87,9 @@ public class MarkerListener implements TuioListener {
 
         rGroup.getChildren().add(rectangle);
 
-        if (!this.objectShapes.containsKey(tobj)) this.objectShapes.put(tobj,rGroup);
+        if (!this.objectShapes.containsKey(tobj)) {
+            this.objectShapes.put(tobj,rGroup);
+        }
 
         if(verbose) {
             System.out.printf("Objekt mit Symbol-ID %s hinzugefügt.%n",tobj.getSymbolID());

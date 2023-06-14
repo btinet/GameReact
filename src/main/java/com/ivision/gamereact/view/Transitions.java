@@ -15,6 +15,15 @@ public class Transitions {
         return createFadeTransition(millis,node,0,1);
     }
 
+    public static FadeTransition createFadeTransition (int millis, Node node, double from, double to,int cycleCount) {
+        FadeTransition transition = new FadeTransition(Duration.millis(millis), node);
+        transition.setFromValue(from);
+        transition.setToValue(to);
+        transition.setCycleCount(cycleCount);
+        transition.setAutoReverse(true);
+        return transition;
+    }
+
     public static ScaleTransition createScaleTransition (int millis, Node node, double from, double to) {
         ScaleTransition transition = new ScaleTransition(Duration.millis(millis), node);
         transition.setFromX(from);
@@ -22,7 +31,7 @@ public class Transitions {
         transition.setToX(to);
         transition.setToY(to);
         transition.setCycleCount(1);
-        transition.setAutoReverse(false);
+        transition.setAutoReverse(true);
         return transition;
     }
 
