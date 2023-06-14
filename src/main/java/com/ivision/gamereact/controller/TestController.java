@@ -96,21 +96,13 @@ public class TestController extends TuioClient implements Initializable {
             TuioObject marker = entry.getKey();
             Group group = entry.getValue();
 
-            /*
-            for (Object object:
-                 group.getChildren()) {
-                if (object instanceof Rectangle)
-                {
-                    ((Rectangle)object).setRotate(marker.getAngleDegrees());
-                }
+            try {
+                group.getTransforms().clear();
+                group.getTransforms().add(Transform.rotate(marker.getAngleDegrees(), 0,0));
+            } catch (ConcurrentModificationException e) {
+                System.out.println(e.getMessage());
             }
-             */
 
-
-            //group.getTransforms().add(Transform.rotate(marker.getAngle(), 0,0));
-
-            group.getTransforms().clear();
-            group.getTransforms().add(Transform.rotate(marker.getAngleDegrees(), 0,0));
 
             group.setTranslateX(root.getWidth()*marker.getX());
             group.setTranslateY(root.getHeight()*marker.getY());

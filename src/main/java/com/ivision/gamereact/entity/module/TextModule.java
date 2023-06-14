@@ -32,8 +32,8 @@ public class TextModule extends Group {
         Double cHeight = textElement.getBoundsInLocal().getHeight();
 
         Rectangle background = new Rectangle(cWidth+padding,cHeight+padding,GameColor.DARKEN);
-        background.setArcHeight(20);
-        background.setArcWidth(20);
+        background.setArcHeight(10);
+        background.setArcWidth(10);
         background.setTranslateX(80);
         textElement.setTranslateY(-cHeight/2);
         background.setTranslateY(-(cHeight+padding)/2);

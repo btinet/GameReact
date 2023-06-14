@@ -69,9 +69,6 @@ public class MarkerListener implements TuioListener {
         rectangle.setX(-60);
         rectangle.setY(-60);
 
-        Transitions.createFadeTransition(100,rectangle,0,1,1).playFromStart();
-
-
         Text symbolID = new Text("Symbol-ID: " + tobj.getSymbolID());
         Text sessionID = new Text("Session-ID: " + tobj.getSessionID());
 
